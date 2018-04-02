@@ -2,7 +2,7 @@ module Main where
 
 import qualified Data.Aeson as Aeson
 
-import AWSLambda
+import AWSLambda (lambdaMain)
 
 main = lambdaMain handler
 
