@@ -21,7 +21,6 @@ description:         Please see the README on Github at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
-- serverless-haskell
 
 library:
   source-dirs: src
@@ -36,6 +35,8 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - blogger
+    - aeson
+    - serverless-haskell
 
 tests:
   blogger-test:
