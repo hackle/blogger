@@ -1,0 +1,16 @@
+service: blogger
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: ap-southeast-2
+  state: prod
+
+functions:
+  blog:
+    handler: blogger.blogger-exe
+    # Here, mypackage is the Haskell package name and myfunc is the executable
+    # name as defined in the Cabal file
+
+plugins:
+  - serverless-haskell
