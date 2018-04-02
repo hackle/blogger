@@ -1,0 +1,7 @@
+.stack-work/
+blog.cabal
+*~
+node_modules
+.serverless
+.stack-work
+*.cabal
