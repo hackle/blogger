@@ -9,6 +9,10 @@ provider:
 functions:
   blog:
     handler: blogger.blogger-exe
+    events:
+      - http:
+          path: /{name}
+          method: get
     # Here, mypackage is the Haskell package name and myfunc is the executable
     # name as defined in the Cabal file
 

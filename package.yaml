@@ -36,6 +36,9 @@ executables:
     dependencies:
     - blogger
     - aeson
+    - lens
+    - text
+    - unordered-containers
     - serverless-haskell
 
 tests:
