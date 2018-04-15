@@ -23,7 +23,7 @@ type ArticleName = String
 
 makePage :: HtmlBody -> H.Html
 makePage body = H.docTypeHtml $ do
-  H.head $ do
+  H.head $
     H.title "hackmann's blog"
   H.body $ do
     H.h1 "hackmann"
