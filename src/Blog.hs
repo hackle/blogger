@@ -21,14 +21,17 @@ readArticle fn = do
 type HtmlBody = H.Html
 type ArticleName = String
 
-htmlPage :: HtmlBody -> H.Html
-htmlPage body = H.docTypeHtml $ do
+makePage :: HtmlBody -> H.Html
+makePage body = H.docTypeHtml $ do
   H.head $ do
-    H.title "hackmann"
-  H.body body
+    H.title "hackmann's blog"
+  H.body $ do
+    H.h1 "hackmann"
+    H.span "experienced imperative programmer turned functional advocate"
+    body
 
 renderPage :: HtmlBody -> Text
-renderPage body = LT.toStrict $ renderHtml (htmlPage body)
+renderPage body = LT.toStrict $ renderHtml (makePage body)
 
 getArticlePath :: ArticleName -> IO FilePath
 getArticlePath an = do
