@@ -18,10 +18,11 @@ success body = responseOK
     & agprsHeaders `over` HashMap.insert "content-type" "text/html"
     
 pageIndex :: APIGatewayProxyRequest Text -> IO (APIGatewayProxyResponse Text)
-pageIndex request = 
+pageIndex request = do
+  putStrLn $ "path: " ++ unpack (request ^. agprqPath)
   case HashMap.lookup "name" (request ^. agprqPathParameters) of
     Just name -> do
-      articlePath <- getArticlePath $ unpack name
+      articlePath <- getArticlePath "Index" (unpack name)
       article <- readArticle articlePath
-      return $ maybe responseNotFound success article
+      return $ success article
     Nothing -> return responseNotFound

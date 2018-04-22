@@ -2,22 +2,27 @@
 
 module Main where
 
-import Blog (readArticle)
+import Blog (getArticlePath, cannotFindDefaultArticle)
 import Test.Hspec
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 -- import qualified Text.Blaze.Html5 as BH
 import Data.Text.Lazy (unpack)
+import Data.List (isSuffixOf)
 
 main :: IO ()
 main = hspec spec
 
 spec :: Spec
 spec = 
-    describe "get articles" $ do
+    describe "get article path" $ do
         it "get a proper file" $ do
-            article <- readArticle "./src/raw/about.md"
-            maybe (pure ()) (\art -> unpack (renderHtml art) `shouldSatisfy` (not.null)) article
+            filePath <- getArticlePath "blah" "about" -- blah does not exist
+            filePath `shouldSatisfy` ("about.md" `isSuffixOf`)
         
-        it "null for non existent" $ do
-            article <- readArticle "./src/raw/non-existent.md"
-            maybe [] (const "blah") article `shouldSatisfy` null
+        it "can default to a file" $ do
+            filePath <- getArticlePath "about" "blah" -- blah does not exist
+            putStrLn filePath
+            filePath `shouldSatisfy` ("about.md" `isSuffixOf`)
+
+        it "will fail if even default does not exist" $ 
+            getArticlePath "blah" "halb" `shouldThrow` errorCall cannotFindDefaultArticle

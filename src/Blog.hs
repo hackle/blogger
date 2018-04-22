@@ -15,29 +15,35 @@ import Data.Text
 
 type HtmlBody = H.Html
 type ArticleName = String
+type DefaultArticleName = ArticleName
+type ValidFilePath = FilePath
 
-readArticle :: FilePath -> IO (Maybe Html)
+cannotFindDefaultArticle :: String
+cannotFindDefaultArticle = "Cannot find default article"
+
+readArticle :: ValidFilePath -> IO Html
 readArticle fn = do 
-  valid <- doesFileExist fn
-  if not valid
-    then return Nothing
-    else do
-      content <- IOT.readFile fn
-      return $ Just $ markdown def content
+    content <- IOT.readFile fn
+    return $ markdown def content
 
 makePage :: HtmlBody -> H.Html
 makePage body = H.docTypeHtml $ do
   H.head $
     H.title "hackmann's blog"
   H.body $ do
-    H.h1 "hackmann"
+    H.h1 $
+      H.a ! href "index" $ "hackmann"
     H.span "experienced imperative programmer turned functional advocate"
     body
 
 renderPage :: HtmlBody -> Text
 renderPage body = LT.toStrict $ renderHtml (makePage body)
 
-getArticlePath :: ArticleName -> IO FilePath
-getArticlePath an = do
+getArticlePath :: DefaultArticleName -> ArticleName -> IO FilePath
+getArticlePath def an = do
   cd <- getCurrentDirectory
-  return $ cd ++ "/src/raw/" ++ an ++ ".md"
+  let fp = cd ++ "/src/raw/" ++ an ++ ".md"
+  valid <- doesFileExist fp
+  if valid 
+    then return fp 
+    else getArticlePath (error cannotFindDefaultArticle) def
