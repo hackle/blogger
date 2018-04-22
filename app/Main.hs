@@ -5,7 +5,7 @@ import           AWSLambda.Events.APIGateway
 import           Control.Lens
 import qualified Data.HashMap.Strict         as HashMap
 import           Data.Semigroup
-import           Data.Text                   (Text, unpack)
+import           Data.Text                   (Text, unpack, toLower)
 import Blog
 import Text.Blaze.Html
 
@@ -18,11 +18,10 @@ success body = responseOK
     & agprsHeaders `over` HashMap.insert "content-type" "text/html"
     
 pageIndex :: APIGatewayProxyRequest Text -> IO (APIGatewayProxyResponse Text)
-pageIndex request = do
-  putStrLn $ "path: " ++ unpack (request ^. agprqPath)
-  case HashMap.lookup "name" (request ^. agprqPathParameters) of
-    Just name -> do
-      articlePath <- getArticlePath "Index" (unpack name)
-      article <- readArticle articlePath
-      return $ success article
-    Nothing -> return responseNotFound
+pageIndex request =
+  let path = HashMap.lookup "name" (request ^. agprqPathParameters)
+      name = maybe "index" toLower path
+      in do
+        articlePath <- getArticlePath "index" (unpack name)
+        article <- readArticle articlePath
+        return $ success article
