@@ -8,18 +8,22 @@ import qualified Data.Text.Lazy.IO as IOT
 import qualified Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Html.Renderer.Text
-import Control.Monad (forM_)
+import Control.Monad (forM_, guard)
 import qualified Data.Text.Lazy as LT
 import System.Directory
 import Data.Text
 
-readArticle :: FilePath -> IO Html
-readArticle fn = do 
-    content <- IOT.readFile fn
-    return $ markdown def content
-
 type HtmlBody = H.Html
 type ArticleName = String
+
+readArticle :: FilePath -> IO (Maybe Html)
+readArticle fn = do 
+  valid <- doesFileExist fn
+  if not valid
+    then return Nothing
+    else do
+      content <- IOT.readFile fn
+      return $ Just $ markdown def content
 
 makePage :: HtmlBody -> H.Html
 makePage body = H.docTypeHtml $ do

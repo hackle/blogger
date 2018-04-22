@@ -45,6 +45,7 @@ executables:
     - text
     - unordered-containers
     - serverless-haskell
+    - blaze-html
 
 tests:
   blogger-test:
