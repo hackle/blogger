@@ -29,6 +29,8 @@ library:
     - blaze-html
     - text
     - directory
+    - transformers
+    - mtl
 
 executables:
   blogger-exe:
@@ -46,6 +48,7 @@ executables:
     - unordered-containers
     - serverless-haskell
     - blaze-html
+    - transformers
 
 tests:
   blogger-test:
