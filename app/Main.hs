@@ -15,21 +15,16 @@ import Control.Applicative
 main :: IO ()
 main = apiGatewayMain pageIndex
 
-success :: BasePath -> Html -> APIGatewayProxyResponse Text
-success base body = responseOK 
-    & responseBody ?~ renderPage body base
+success :: Styles -> Html -> APIGatewayProxyResponse Text
+success styles body = responseOK 
+    & responseBody ?~ renderPage styles body
     & agprsHeaders `over` HashMap.insert "content-type" "text/html"
-
-tryLoad :: BasePath -> FilePath -> IO (APIGatewayProxyResponse Text)
-tryLoad base path = do
-    f1 <- runMaybeT $ loadArticle path
-    if isJust f1 
-        then return $ success "" (fromJust f1)
-        else success base <$> (mkArticlePath "index" >>= readArticle)
 
 pageIndex :: APIGatewayProxyRequest Text -> IO (APIGatewayProxyResponse Text)
 pageIndex request = do
     let urlPath = request ^. agprqPath
     putStrLn (unpack urlPath)
     let path = HashMap.lookup "name" (request ^. agprqPathParameters)
-    tryLoad urlPath (maybe "" unpack path)
+    article <- loadArticle "index" (unpack $ fromMaybe "index" path)
+    styles <- loadStyles
+    return $ success styles article

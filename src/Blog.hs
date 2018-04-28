@@ -21,6 +21,7 @@ type DefaultArticleName = ArticleName
 type ValidFilePath = FilePath
 type BasePath = Text
 type CurrentDirectory = FilePath
+type Styles = Html
 
 cannotFindDefaultArticle :: String
 cannotFindDefaultArticle = "Cannot find default article"
@@ -30,32 +31,36 @@ readArticle fn = do
     content <- IOT.readFile fn
     return $ markdown def content
 
-makePage :: HtmlBody -> BasePath -> H.Html
-makePage body base = H.docTypeHtml $ do
+makePage :: Styles -> HtmlBody -> H.Html
+makePage styles body = H.docTypeHtml $ do
   H.head $ do
     H.title "hackman"
-    H.base ! href (H.toValue base)
     H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
-    H.link ! rel "stylesheet" ! href "src/styles.css"
+    H.style styles 
   H.body ! class_ "markdown-body" $ do
     H.h1 $
       H.a ! class_ "title" ! href "index" $ "hackman"
     H.span "Between the abstractions I want and the abstractions I get" ! class_ "subtitle" 
     body
 
-renderPage :: HtmlBody -> BasePath -> Text
-renderPage body base = LT.toStrict $ renderHtml (makePage body base)
+renderPage :: Styles -> HtmlBody -> Text
+renderPage styles body = LT.toStrict $ renderHtml (makePage styles body)
 
 mkArticlePath :: ArticleName -> IO FilePath
 mkArticlePath an = do
   cd <- getCurrentDirectory
   return $ cd ++ "/src/raw/" ++ an ++ ".md"
 
-loadArticle :: ArticleName -> MaybeT IO Html
-loadArticle an = do 
-  fp <- lift $ mkArticlePath an
-  valid <- lift $ doesFileExist fp
+loadArticle :: DefaultArticleName -> ArticleName -> IO Html
+loadArticle def an = do 
+  fp <- mkArticlePath an
+  valid <- doesFileExist fp
   if valid 
-    then lift $ readArticle fp
-    else MaybeT $ return Nothing
+    then readArticle fp
+    else loadArticle undefined def
     
+loadStyles :: IO Html
+loadStyles = do
+  cd <- getCurrentDirectory
+  body <- IOT.readFile (cd ++ "/src/styles.css")
+  return $ toHtml body
