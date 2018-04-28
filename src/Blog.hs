@@ -33,12 +33,14 @@ readArticle fn = do
 makePage :: HtmlBody -> BasePath -> H.Html
 makePage body base = H.docTypeHtml $ do
   H.head $ do
-    H.title "hackmann's blog"
+    H.title "hackman"
     H.base ! href (H.toValue base)
-  H.body $ do
+    H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
+    H.link ! rel "stylesheet" ! href "src/styles.css"
+  H.body ! class_ "markdown-body" $ do
     H.h1 $
-      H.a ! href "index" $ "hackmann"
-    H.span "experienced imperative programmer turned functional advocate"
+      H.a ! class_ "title" ! href "index" $ "hackman"
+    H.span "Between the abstractions I want and the abstractions I get" ! class_ "subtitle" 
     body
 
 renderPage :: HtmlBody -> BasePath -> Text

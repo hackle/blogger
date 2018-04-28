@@ -6,3 +6,7 @@ This is where I'd share my learning, currently on
 
 This blog is based on the [serverless-haskell](https://github.com/seek-oss/serverless-haskell) project.
 
+```haskell
+    let x = 0:1:zipWith (+) x (tail x)
+```
+
