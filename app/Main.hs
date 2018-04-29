@@ -15,9 +15,9 @@ import Control.Applicative
 main :: IO ()
 main = apiGatewayMain pageIndex
 
-success :: Styles -> Html -> APIGatewayProxyResponse Text
-success styles body = responseOK 
-    & responseBody ?~ renderPage styles body
+success :: BasePath -> Styles -> Html -> APIGatewayProxyResponse Text
+success base styles body = responseOK 
+    & responseBody ?~ renderPage base styles body
     & agprsHeaders `over` HashMap.insert "content-type" "text/html"
 
 pageIndex :: APIGatewayProxyRequest Text -> IO (APIGatewayProxyResponse Text)
@@ -25,6 +25,7 @@ pageIndex request = do
     let urlPath = request ^. agprqPath
     putStrLn (unpack urlPath)
     let path = HashMap.lookup "name" (request ^. agprqPathParameters)
+    let urlBase = fromMaybe "/" $ HashMap.lookup "url_base" (request ^. agprqStageVariables)
     article <- loadArticle "index" (unpack $ fromMaybe "index" path)
     styles <- loadStyles
-    return $ success styles article
+    return $ success urlBase styles article

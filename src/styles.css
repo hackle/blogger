@@ -13,9 +13,11 @@
 }
 
 .title {
-
+    text-decoration: none;
+    color: #6ac81e;
 }
 
 .subtitle {
-    
+    color: darkgreen;
+    font-style: italic;
 }

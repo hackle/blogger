@@ -1,3 +1,3 @@
 ## index
 
-* [About me](about)
+* [About me](/about)

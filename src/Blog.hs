@@ -31,20 +31,21 @@ readArticle fn = do
     content <- IOT.readFile fn
     return $ markdown def content
 
-makePage :: Styles -> HtmlBody -> H.Html
-makePage styles body = H.docTypeHtml $ do
+makePage :: BasePath -> Styles -> HtmlBody -> H.Html
+makePage base styles body = H.docTypeHtml $ do
   H.head $ do
     H.title "hackman"
+    H.base ! href (toValue base)
     H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
     H.style styles 
   H.body ! class_ "markdown-body" $ do
-    H.h1 $
-      H.a ! class_ "title" ! href "index" $ "hackman"
-    H.span "Between the abstractions I want and the abstractions I get" ! class_ "subtitle" 
+    H.h1 ! class_ "title" $
+      H.a ! href "/" $ "hackman"
+    H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle" 
     body
 
-renderPage :: Styles -> HtmlBody -> Text
-renderPage styles body = LT.toStrict $ renderHtml (makePage styles body)
+renderPage :: BasePath -> Styles -> HtmlBody -> Text
+renderPage base styles body = LT.toStrict $ renderHtml (makePage base styles body)
 
 mkArticlePath :: ArticleName -> IO FilePath
 mkArticlePath an = do
