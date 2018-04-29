@@ -12,9 +12,14 @@
     }
 }
 
-.title {
+.title a:link,
+.title a:visited,
+.title a:hover,
+.title a:active
+{
     text-decoration: none;
     color: #6ac81e;
+    font-weight: normal;
 }
 
 .subtitle {
