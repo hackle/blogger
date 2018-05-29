@@ -26,6 +26,14 @@ pageIndex request = do
     putStrLn (unpack urlPath)
     let path = HashMap.lookup "name" (request ^. agprqPathParameters)
     let urlBase = fromMaybe "/" $ HashMap.lookup "url_base" (request ^. agprqStageVariables)
-    article <- loadArticle "index" (unpack $ fromMaybe "index" path)
-    styles <- loadStyles
-    return $ success urlBase styles article
+    let tryLoadPath = case path of
+                        Nothing -> return Nothing
+                        Just p -> loadArticle $ unpack p
+    try1 <- tryLoadPath
+    try2 <- loadArticle "index"
+    let article = try1 <|> try2
+    case article of
+        Nothing -> error "Cannot even load the index, this is terrible"
+        Just content -> do
+            styles <- loadStyles
+            return $ success urlBase styles content

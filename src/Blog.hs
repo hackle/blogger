@@ -52,13 +52,13 @@ mkArticlePath an = do
   cd <- getCurrentDirectory
   return $ cd ++ "/src/raw/" ++ an ++ ".md"
 
-loadArticle :: DefaultArticleName -> ArticleName -> IO Html
-loadArticle def an = do 
-  fp <- mkArticlePath an
+loadArticle :: ArticleName -> IO (Maybe Html)
+loadArticle artName = do 
+  fp <- mkArticlePath artName
   valid <- doesFileExist fp
   if valid 
-    then readArticle fp
-    else loadArticle undefined def
+    then Just <$> readArticle fp
+    else return Nothing
     
 loadStyles :: IO Html
 loadStyles = do
