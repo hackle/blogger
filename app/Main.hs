@@ -28,7 +28,7 @@ pageIndex request = do
     let urlBase = fromMaybe "/" $ HashMap.lookup "url_base" (request ^. agprqStageVariables)
     let tryLoadPath = case path of
                         Nothing -> return Nothing
-                        Just p -> loadArticle $ unpack p
+                        Just p -> loadArticle $ unpack p -- improve? Maybe string -> (string -> IO Maybe string) -> IO Maybe string
     try1 <- tryLoadPath
     try2 <- loadArticle "index"
     let article = try1 <|> try2

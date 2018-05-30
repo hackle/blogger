@@ -14,6 +14,7 @@ import System.Directory
 import Data.Text
 import Control.Monad.Trans.Maybe
 import Control.Monad.Trans
+import qualified Data.List as List
 
 type HtmlBody = H.Html
 type ArticleName = String
@@ -26,6 +27,11 @@ type Styles = Html
 cannotFindDefaultArticle :: String
 cannotFindDefaultArticle = "Cannot find default article"
 
+articleDir :: IO FilePath
+articleDir = do
+  cd <- getCurrentDirectory
+  return $ cd ++ "/src/raw/"  
+
 readArticle :: ValidFilePath -> IO Html
 readArticle fn = do 
     content <- IOT.readFile fn
@@ -34,7 +40,7 @@ readArticle fn = do
 makePage :: BasePath -> Styles -> HtmlBody -> H.Html
 makePage base styles body = H.docTypeHtml $ do
   H.head $ do
-    H.title "hackman"
+    H.title "Hackle's blog"
     H.base ! href (toValue base)
     H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
     H.style styles 
@@ -49,8 +55,8 @@ renderPage base styles body = LT.toStrict $ renderHtml (makePage base styles bod
 
 mkArticlePath :: ArticleName -> IO FilePath
 mkArticlePath an = do
-  cd <- getCurrentDirectory
-  return $ cd ++ "/src/raw/" ++ an ++ ".md"
+  cd <- articleDir
+  return $ cd ++ an ++ ".md"
 
 loadArticle :: ArticleName -> IO (Maybe Html)
 loadArticle artName = do 
@@ -59,6 +65,23 @@ loadArticle artName = do
   if valid 
     then Just <$> readArticle fp
     else return Nothing
+
+posts :: [FilePath]
+posts = [
+    "setup-haskell.md"
+    , "modeling.md"
+    , "linq.md"
+    , "lens-csharp.md"
+    ]
+
+loadIndex :: IO Html
+loadIndex = do
+  cd <- articleDir
+  files <- getDirectoryContents cd
+  let blogs = List.filter (\f -> elem f posts) files
+  let articles = List.map (\p -> IOT.readFile (cd ++ p)) blogs
+  contents <- sequence articles
+  return $ toHtml (List.foldl1 LT.append contents)
     
 loadStyles :: IO Html
 loadStyles = do
