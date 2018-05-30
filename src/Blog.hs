@@ -45,8 +45,8 @@ makePage base styles body = H.docTypeHtml $ do
     H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
     H.style styles 
   H.body ! class_ "markdown-body" $ do
-    H.h1 ! class_ "title" $
-      H.a ! href "/" $ "hackman"
+    H.title ! class_ "title" $
+      H.a ! href "" $ "hackman"
     H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle" 
     body
 
@@ -80,8 +80,8 @@ loadIndex = do
   files <- getDirectoryContents cd
   let blogs = List.filter (\f -> elem f posts) files
   let articles = List.map (\p -> IOT.readFile (cd ++ p)) blogs
-  contents <- sequence articles
-  return $ toHtml (List.foldl1 LT.append contents)
+  bodies <- sequence articles
+  return $ mconcat ((markdown def) <$> bodies)
     
 loadStyles :: IO Html
 loadStyles = do
