@@ -66,22 +66,14 @@ loadArticle artName = do
     then Just <$> readArticle fp
     else return Nothing
 
-posts :: [FilePath]
-posts = [
-    "setup-haskell.md"
-    , "modeling.md"
-    , "linq.md"
-    , "lens-csharp.md"
-    ]
-
 loadIndex :: IO Html
 loadIndex = do
   cd <- articleDir
   files <- getDirectoryContents cd
-  let blogs = List.filter (\f -> elem f posts) files
+  let blogs = List.filter (`elem` posts) files
   let articles = List.map (\p -> IOT.readFile (cd ++ p)) blogs
   bodies <- sequence articles
-  return $ mconcat ((markdown def) <$> bodies)
+  return $ mconcat (markdown def <$> bodies)
     
 loadStyles :: IO Html
 loadStyles = do
