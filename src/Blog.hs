@@ -15,17 +15,26 @@ import Data.Text
 import Control.Monad.Trans.Maybe
 import Control.Monad.Trans
 import qualified Data.List as List
+import Data.Maybe
+import Control.Applicative
+import Template
+import Contents
 
 type HtmlBody = H.Html
 type ArticleName = String
 type DefaultArticleName = ArticleName
 type ValidFilePath = FilePath
-type BasePath = Text
 type CurrentDirectory = FilePath
 type Styles = Html
-
-cannotFindDefaultArticle :: String
-cannotFindDefaultArticle = "Cannot find default article"
+  
+loadPage :: FilePath -> Maybe FilePath -> IO Text
+loadPage urlBase path = do
+    let loadPath = case path of
+                    Nothing -> return Nothing
+                    Just p -> loadArticle p
+    single <- loadPath
+    index <- loadIndex
+    renderPage urlBase (fromMaybe index single)
 
 articleDir :: IO FilePath
 articleDir = do
@@ -36,22 +45,6 @@ readArticle :: ValidFilePath -> IO Html
 readArticle fn = do 
     content <- IOT.readFile fn
     return $ markdown def content
-
-makePage :: BasePath -> Styles -> HtmlBody -> H.Html
-makePage base styles body = H.docTypeHtml $ do
-  H.head $ do
-    H.title "Hackle's blog"
-    H.base ! href (toValue base)
-    H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
-    H.style styles 
-  H.body ! class_ "markdown-body" $ do
-    H.title ! class_ "title" $
-      H.a ! href "" $ "hackman"
-    H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle" 
-    body
-
-renderPage :: BasePath -> Styles -> HtmlBody -> Text
-renderPage base styles body = LT.toStrict $ renderHtml (makePage base styles body)
 
 mkArticlePath :: ArticleName -> IO FilePath
 mkArticlePath an = do
@@ -74,7 +67,13 @@ loadIndex = do
   let articles = List.map (\p -> IOT.readFile (cd ++ p)) blogs
   bodies <- sequence articles
   return $ mconcat (markdown def <$> bodies)
-    
+
+renderPage :: FilePath -> H.Html -> IO Text
+renderPage base content = do
+    styles <- loadStyles
+    let html = fromTemplate (toValue base) content styles
+    return $ LT.toStrict (renderHtml html)
+
 loadStyles :: IO Html
 loadStyles = do
   cd <- getCurrentDirectory
