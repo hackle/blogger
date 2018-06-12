@@ -13,8 +13,8 @@ module Contents where
         where
             toSlug = fmap ((\c -> if c == ' ' then '-' else c).toLower)
 
-    contents :: [ContentEntry]
-    contents = reverse $ toEntry <$> [
+    blogContents :: [ContentEntry]
+    blogContents = reverse $ toEntry <$> [
         ("Setting up an AWS Lambda with serverless-haskell", "setup-haskell.md")
         , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
         , ("Linq revisited", "linq-revisited.md")

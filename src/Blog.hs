@@ -27,12 +27,9 @@ type ValidFilePath = FilePath
 type CurrentDirectory = FilePath
 type Styles = Html
   
-loadPage :: FilePath -> Maybe FilePath -> IO Text
+loadPage :: FilePath -> Maybe String -> IO Text
 loadPage urlBase path = do
-    let loadPath = case path of
-                    Nothing -> return Nothing
-                    Just p -> loadArticle p
-    single <- loadPath
+    single <- sequence $ loadArticle <$> path
     index <- loadIndex
     renderPage urlBase (fromMaybe index single)
 
@@ -51,22 +48,21 @@ mkArticlePath an = do
   cd <- articleDir
   return $ cd ++ an ++ ".md"
 
-loadArticle :: ArticleName -> IO (Maybe Html)
+loadArticle :: ArticleName -> IO Html
 loadArticle artName = do 
   fp <- mkArticlePath artName
-  valid <- doesFileExist fp
-  if valid 
-    then Just <$> readArticle fp
-    else return Nothing
+  readArticle fp
 
 loadIndex :: IO Html
 loadIndex = do
-  cd <- articleDir
-  files <- getDirectoryContents cd
-  let blogs = List.filter (`elem` posts) files
-  let articles = List.map (\p -> IOT.readFile (cd ++ p)) blogs
-  bodies <- sequence articles
-  return $ mconcat (markdown def <$> bodies)
+  fullOfLatest <- loadArticle $ getFile latest
+  return $ mconcat (fullOfLatest:links) where
+    (latest:rest) = blogContents
+    links = List.map mkLink rest
+    mkLink :: ContentEntry -> H.Html
+    mkLink entry = 
+      H.a ! href (toValue $ getSlug entry) $
+        H.h2 (toMarkup $ getTitle entry)
 
 renderPage :: FilePath -> H.Html -> IO Text
 renderPage base content = do
