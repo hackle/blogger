@@ -3,20 +3,21 @@
     min-width: 200px;
     max-width: 980px;
     margin: 0 auto;
-    padding: 45px;
+    padding: 0 45px;
 }
 
 @media (max-width: 767px) {
     .markdown-body {
-        padding: 15px;
+        padding: 0 15px;
     }
 }
 
-.title a:link,
-.title a:visited,
-.title a:hover,
-.title a:active
+a.title:link,
+a.title:visited,
+a.title:hover,
+a.title:active
 {
+    font-size: 32px;
     text-decoration: none;
     color: #6ac81e;
     font-weight: normal;

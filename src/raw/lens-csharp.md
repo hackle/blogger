@@ -1,1 +1,6 @@
-# What does Lens look like in C# really?
+Is it 
+```
+Foo?.Bar
+```
+
+But what about get?

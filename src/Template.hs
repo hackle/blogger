@@ -16,7 +16,8 @@ fromTemplate base body styles = H.docTypeHtml $ do
         H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
         H.style styles 
     H.body ! class_ "markdown-body" $ do
-        H.title ! class_ "title" $
-            H.a ! href "" $ "hackman"
-        H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle" 
+        H.header $ do
+            H.a ! class_ "title" ! href "" $ "hackman"
+            H.br
+            H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle" 
         body

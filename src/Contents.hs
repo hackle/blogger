@@ -11,7 +11,7 @@ module Contents where
     toEntry (artTitle, fPath) =
         Entry artTitle fPath (toSlug artTitle)
         where
-            toSlug = fmap ((\c -> if c == ' ' then '-' else c).toLower)
+            toSlug = fmap ((\c -> if c `elem` ['a'..'z'] then c else '-').toLower)
 
     blogContents :: [ContentEntry]
     blogContents = reverse $ toEntry <$> [
@@ -20,4 +20,9 @@ module Contents where
         , ("Linq revisited", "linq-revisited.md")
         , ("Lens in C#, really?", "lens-csharp.md")
         , ("Lens in TypeScript", "lens-typescript.md")
+        ]
+
+    siteContents :: [ContentEntry]
+    siteContents = (blogContents ++) $ toEntry <$> [
+        ("About hackman", "about.md")
         ]

@@ -1,5 +1,3 @@
-# about hackman
-
 I must have borrowed the term "hackman" from a random friend - it's kind of catchy.
 
 "Between the abstractions we need and the abstractions we get" is a phrase I borrowed the mighty and hilarious Erik Meijer, particularly, [this talk](https://www.youtube.com/watch?v=NKeHrApPWlo)

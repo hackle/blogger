@@ -29,8 +29,8 @@ type Styles = Html
   
 loadPage :: FilePath -> Maybe FilePath -> IO Text
 loadPage urlBase path = do
-    let entry = path >>= \p -> List.find (\e -> p == getSlug e) blogContents
-    single <- sequence $ loadArticle . getFile <$> entry
+    let entry = path >>= \p -> List.find (\e -> p == getSlug e) siteContents
+    single <- sequence $ loadArticle <$> entry
     index <- loadIndex
     renderPage urlBase (fromMaybe index single)
 
@@ -39,24 +39,21 @@ articleDir = do
   cd <- getCurrentDirectory
   return $ cd ++ "/src/raw/"  
 
-readArticle :: ValidFilePath -> IO Html
-readArticle fn = do 
-    content <- IOT.readFile fn
-    return $ markdown def content
-
 mkArticlePath :: ArticleName -> IO FilePath
 mkArticlePath an = do
   cd <- articleDir
   return $ cd ++ an
 
-loadArticle :: ArticleName -> IO Html
-loadArticle artName = do 
-  fp <- mkArticlePath artName
-  readArticle fp
+loadArticle :: ContentEntry -> IO Html
+loadArticle entry = do 
+  fp <- mkArticlePath $ getFile entry
+  content <- IOT.readFile fp
+  return $ mconcat [ pageTitle, markdown def content ] where
+    pageTitle = H.h1 $ toMarkup (getTitle entry)
 
 loadIndex :: IO Html
 loadIndex = do
-  fullOfLatest <- loadArticle $ getFile latest
+  fullOfLatest <- loadArticle latest
   return $ mconcat (fullOfLatest:links) where
     (latest:rest) = blogContents
     links = List.map mkLink rest
