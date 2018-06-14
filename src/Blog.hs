@@ -27,9 +27,10 @@ type ValidFilePath = FilePath
 type CurrentDirectory = FilePath
 type Styles = Html
   
-loadPage :: FilePath -> Maybe String -> IO Text
+loadPage :: FilePath -> Maybe FilePath -> IO Text
 loadPage urlBase path = do
-    single <- sequence $ loadArticle <$> path
+    let entry = path >>= \p -> List.find (\e -> p == getSlug e) blogContents
+    single <- sequence $ loadArticle . getFile <$> entry
     index <- loadIndex
     renderPage urlBase (fromMaybe index single)
 
@@ -46,7 +47,7 @@ readArticle fn = do
 mkArticlePath :: ArticleName -> IO FilePath
 mkArticlePath an = do
   cd <- articleDir
-  return $ cd ++ an ++ ".md"
+  return $ cd ++ an
 
 loadArticle :: ArticleName -> IO Html
 loadArticle artName = do 
