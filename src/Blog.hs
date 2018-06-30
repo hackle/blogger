@@ -54,13 +54,14 @@ loadArticle entry = do
 loadIndex :: IO Html
 loadIndex = do
   fullOfLatest <- loadArticle latest
-  return $ mconcat (fullOfLatest:links) where
+  return $ mconcat (fullOfLatest:previously:links) where
     (latest:rest) = blogContents
+    previously = H.h3 "Previously"
     links = List.map mkLink rest
     mkLink :: ContentEntry -> H.Html
-    mkLink entry = 
-      H.a ! href (toValue $ getSlug entry) $
-        H.h2 (toMarkup $ getTitle entry)
+    mkLink entry = do
+        H.a ! href (toValue $ getSlug entry) $ toMarkup (getTitle entry)
+        H.br
 
 renderPage :: FilePath -> H.Html -> IO Text
 renderPage base content = do
