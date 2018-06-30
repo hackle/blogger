@@ -18,8 +18,9 @@ module Contents where
         ("Setting up an AWS Lambda with serverless-haskell", "setup-haskell.md")
         , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
         , ("Linq revisited", "linq-revisited.md")
-        , ("Lens in C#, really?", "lens-csharp.md")
-        , ("Lens in TypeScript", "lens-typescript.md")
+        , ("A lens-look-alike in C#?", "lens-csharp.md")
+        , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")
+        , ("No-loss JSON serializer", "no-loss-serializer.md")
         ]
 
     siteContents :: [ContentEntry]
