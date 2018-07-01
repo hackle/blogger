@@ -1,19 +1,24 @@
-## What I want
-I want an isomorphic serializer, whose serialize and deserialize functions are complementary.
+## What I want - the specification
+What if we have a pair of serialize and deserialize functions that are isomorphic, or in this case, that are totally complementary.
 
 ```haskell
 serialize . deserialize == id
 -- also
 deserialize . serialize == id
 ```
-and follows
+so that
 
 ```haskell
 str == serialize (deserialize str)
+```
+That is, **EVEN IF** str has extra information that's not deserialize-able!
+
+Of course also this - already true for most serializers
+```
 object == deserialize (serialize object)
 ```
 ## What I get
-The problem is, an ordinary deserialize function does not preserve information that's extra to the given schema. Consider
+An ordinary deserialize function does not preserve information that's extra to the given schema. Consider
 
 ```C#
 void Main()
