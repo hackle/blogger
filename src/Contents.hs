@@ -20,7 +20,7 @@ module Contents where
         , ("Linq revisited", "linq-revisited.md")
         , ("A lens-look-alike in C#?", "lens-csharp.md")
         , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")
-        , ("No-loss JSON serializer", "no-loss-serializer.md")
+        , ("An idea: data-preserving JSON deserializer", "no-loss-serializer.md")
         ]
 
     siteContents :: [ContentEntry]
