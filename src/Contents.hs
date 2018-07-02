@@ -23,7 +23,8 @@ module Contents where
         , ("An idea: data-preserving JSON deserializer", "no-loss-serializer.md")
         ]
 
+    about :: ContentEntry
+    about = toEntry ("About hackman", "about.md")
+
     siteContents :: [ContentEntry]
-    siteContents = (blogContents ++) $ toEntry <$> [
-        ("About hackman", "about.md")
-        ]
+    siteContents = about:blogContents
