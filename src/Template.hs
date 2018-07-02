@@ -5,6 +5,7 @@ module Template where
 import Text.Blaze.Html5
 import qualified Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes as A
+import Contents (about, getSlug)
 
 type HtmlBody = H.Html
 
@@ -21,3 +22,5 @@ fromTemplate base body styles = H.docTypeHtml $ do
             H.br
             H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle" 
         body
+        H.hr
+        H.a ! href (toValue $ getSlug about) $ "About me and this blog, or get in touch"

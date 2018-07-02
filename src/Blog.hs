@@ -44,22 +44,17 @@ mkArticlePath an = do
   cd <- articleDir
   return $ cd ++ an
 
-footerLink :: Html
-footerLink = do
-  H.hr
-  H.a ! href (toValue $ getSlug about) $ "About me"
-
 loadArticle :: ContentEntry -> IO Html
 loadArticle entry = do 
   fp <- mkArticlePath $ getFile entry
   content <- IOT.readFile fp
-  return $ mconcat [ pageTitle, markdown def content, footerLink ] where
+  return $ mconcat [ pageTitle, markdown def content ] where
     pageTitle = H.h1 $ toMarkup (getTitle entry)
 
 loadIndex :: IO Html
 loadIndex = do
   fullOfLatest <- loadArticle latest
-  return $ mconcat (fullOfLatest:previously:links ++ [ footerLink ]) where
+  return $ mconcat (fullOfLatest:previously:links) where
     (latest:rest) = blogContents
     previously = H.h3 "Previously"
     links = List.map mkLink rest
