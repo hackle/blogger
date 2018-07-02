@@ -1,18 +1,9 @@
-I must have borrowed the term "hackman" from a random friend - it's kind of catchy.
+Hi - thanks for opening this blog. My name is Hackle Wayne and "hackman" is one of those things that I have no idea when I picked up - but it's kind of catchy.
 
-"Between the abstractions we need and the abstractions we get" is a phrase I borrowed the mighty and hilarious Erik Meijer, particularly, [this talk](https://www.youtube.com/watch?v=NKeHrApPWlo)
+"Between the abstractions we need and the abstractions we get" is a phrase I borrowed from the mighty and hilarious Erik Meijer, particularly, [this talk](https://www.youtube.com/watch?v=NKeHrApPWlo)
 
-I am an experienced programmer with (self-alleged) good command and experience in object-oriented programming, and currently endevouring to become proficient in the brave old world of functional programming, amongst a few other things.
+I am a programmer and I enjoy programming a lot. At work I use a lot of C# and TypeScript, but with my own time I particularly enjoy using (and learning) Haskell and the likes of F#.
 
-In partciular I will share my learning on things such as
+The setup of this blog is based on the excellent [serverless-haskell](https://github.com/seek-oss/serverless-haskell) project. You'll find a write-up for how I managed to wire everything up.
 
-* Haskell
-* F# 
-* and the above applied to the AWS platform
-
-The setup of this blog is based on the [serverless-haskell](https://github.com/seek-oss/serverless-haskell) project.
-
-```haskell
-    let x = 0:1:zipWith (+) x (tail x)
-```
-
+If you ever want to get in touch, this is my email address but reversed: moc.liamtoh@welkcah
