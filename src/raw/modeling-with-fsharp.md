@@ -1,9 +1,30 @@
-## Your models might not be strong enough
+It's an open secret that languages with expressive type systems can make domain modeling much easier. Because I work in C# a lot, F# is a natural choice to try.
 
-## Start with F#
+## A strong model
 
-## Define Arbitraries
+My personal criteria is that if a model can survive the marauding of QuickCheck, then it must be strong.
 
-## Translate to C#
+For example, if we are to model payment methods including cash, bank deposit, and credit card. A typical object oriented language falls short immediately:
 
-## Is it good enough yet?
+```C#
+interface IPayment
+{
+    public string CreditCardNumber { get; set; }
+}
+
+class CreditCardPayment : IPayment
+{
+    public string CreditCardNumber { get; set; } // not applicable!
+}
+```
+
+But with a good type system it's almost trivial,
+
+```F#
+type CreditCardInfo = { CardNumber: int; SecurityCode: int }
+type Payment = Cash | Deposit | CreditCard of CreditCardInfo
+```
+
+## What's the benefit?
+
+Amongst many other benefits, usually a stronger model requires less code for validation, and therefore less unit testing.

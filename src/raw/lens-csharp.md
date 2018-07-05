@@ -65,13 +65,14 @@ Look at our specification,
 
 ```C#
 SafeUpdater.For<Person>(p => p.Address.Street).Update(person, "Queen")
-``` 
+```
 
 to avoid null reference with 
 
 ```C#
 p => p.Address.Street
 ```
+
 we'll have to make it safe, or, to conditionally apply each dot, obviously, we need to make it an expression tree.
 
 So the idea is - parse the expression tree, and evaluate each member access conditionally, if we can get to the end of the expression without any null values, then set through a PropertyInfo, otherwise (if there null before we reach the end) return and stop trying.
