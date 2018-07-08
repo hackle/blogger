@@ -29,10 +29,18 @@ type Styles = Html
   
 loadPage :: FilePath -> Maybe FilePath -> IO Text
 loadPage urlBase path = do
-    let entry = path >>= \p -> List.find (\e -> p == getSlug e) siteContents
-    single <- sequence $ loadArticle <$> entry
-    index <- loadIndex
-    renderPage urlBase (fromMaybe index single)
+        single <- loadArticle toLoad 
+        renderPage urlBase $ mconcat (single:seeAlso:otherBlogEntries)
+        where
+          entry = path >>= \p -> List.find (\e -> p == getSlug e) siteContents
+          (latestArticle:_) = blogContents
+          toLoad = fromMaybe latestArticle entry
+          seeAlso = H.h4 "See also:"
+          otherBlogEntries = List.map mkLink (List.filter (toLoad /=) blogContents)
+          mkLink :: ContentEntry -> H.Html
+          mkLink entry = do
+              H.a ! href (toValue $ getSlug entry) $ toMarkup (getTitle entry)
+              H.br
 
 articleDir :: IO FilePath
 articleDir = do
@@ -50,18 +58,6 @@ loadArticle entry = do
   content <- IOT.readFile fp
   return $ mconcat [ pageTitle, markdown def content ] where
     pageTitle = H.h1 $ toMarkup (getTitle entry)
-
-loadIndex :: IO Html
-loadIndex = do
-  fullOfLatest <- loadArticle latest
-  return $ mconcat (fullOfLatest:previously:links) where
-    (latest:rest) = blogContents
-    previously = H.h3 "Previously"
-    links = List.map mkLink rest
-    mkLink :: ContentEntry -> H.Html
-    mkLink entry = do
-        H.a ! href (toValue $ getSlug entry) $ toMarkup (getTitle entry)
-        H.br
 
 renderPage :: FilePath -> H.Html -> IO Text
 renderPage base content = do

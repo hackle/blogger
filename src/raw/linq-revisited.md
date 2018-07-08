@@ -18,7 +18,7 @@ var firstValid = Infinity.Of(_ => Console.ReadLine()).First(val => Convert.ToInt
 
 While it may seems a bit vague to some, it's actually quite easy to read. I like how expressive this is.
 
-Here is the implementation - if you can get rid of the mutation in a simple way, please do let me know!
+Here is the implementation - if you can get rid of the mutation in a simpler way, please do let me know!
 
 ```C#
 public static class Infinity

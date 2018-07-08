@@ -5,7 +5,7 @@ module Contents where
     data ContentEntry = Entry { getTitle::ArticleTitle
                                 , getFile:: FilePath
                                 , getSlug:: String
-                                }
+                                } deriving Eq
 
     toEntry :: (ArticleTitle, FilePath) -> ContentEntry
     toEntry (artTitle, fPath) =
