@@ -30,7 +30,7 @@ type Styles = Html
 loadPage :: FilePath -> Maybe FilePath -> IO Text
 loadPage urlBase path = do
         single <- loadArticle toLoad 
-        renderPage urlBase $ mconcat (single:seeAlso:otherBlogEntries)
+        renderPage (getTitle toLoad) urlBase $ mconcat (single:seeAlso:otherBlogEntries)
         where
           entry = path >>= \p -> List.find (\e -> p == getSlug e) siteContents
           (latestArticle:_) = blogContents
@@ -59,10 +59,10 @@ loadArticle entry = do
   return $ mconcat [ pageTitle, markdown def content ] where
     pageTitle = H.h1 $ toMarkup (getTitle entry)
 
-renderPage :: FilePath -> H.Html -> IO Text
-renderPage base content = do
+renderPage :: ArticleTitle -> FilePath -> H.Html -> IO Text
+renderPage articleTitle base content = do
     styles <- loadStyles
-    let html = fromTemplate (toValue base) content styles
+    let html = fromTemplate articleTitle (toValue base) content styles
     return $ LT.toStrict (renderHtml html)
 
 loadStyles :: IO Html
