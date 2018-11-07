@@ -21,6 +21,7 @@ module Contents where
         -- , ("A lens look-alike (really a nested data updater) in C#?", "lens-csharp.md")
         , ("An idea: data-preserving JSON deserializer", "no-loss-serializer.md")
         , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")
+        , ("Fin", "fin.md")
         ]
 
     about :: ContentEntry
