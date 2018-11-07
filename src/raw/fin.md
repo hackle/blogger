@@ -108,5 +108,44 @@ Next let's count how many values can we construct for a certain ``Fin`` type.
 From what limited I have learnt from Idris, is to always try the base case first. so
 
 ```idris
+*Data\Fin> the (Fin 0) FZ
+(input):1:1-14:When checking argument value to function Prelude.Basics.the:
+        Type mismatch between
+                Fin (S k) (Type of FZ)
+        and
+                Fin 0 (Expected type)
 
+        Specifically:
+                Type mismatch between
+                        S k
+                and
+                        0
 ```
+
+Well, if ``FZ`` cannot work, then ``FS FZ`` won't either. It seems ``Fin 0`` can have no values. Which makes good sense in the context of our function ``indexFin`` - an empty ``Vect`` has no value, thus cannot return anything for any index.
+
+(Hold on - don't you want to try ``indexFin`` with an empty Vect?)
+
+Let's try ``Fin 1``:
+```Idris
+*Data\Fin> the (Fin 1) FZ
+FZ : Fin 1
+*Data\Fin> the (Fin 1) (FS FZ)
+(input):1:14-18:When checking an application of constructor Data.Fin.FS:
+        Type mismatch between
+                Fin (S k) (Type of FZ)
+        and
+                Fin 0 (Expected type)
+
+        Specifically:
+                Type mismatch between
+                        S k
+                and
+                        0
+```
+So ``Fin 1`` can have 1 value only, which is ``FZ``, and ``Fin 2``, 2 values, ``FZ`` and ``FS FZ``. ``Fin 3``, 3. It's all making sense now isnt' it?
+
+## Summary
+``Fin`` is a super clever type that by leaving its type parameter to interpretation, limit the number of values that a certain type can have. There is a good name to call these allowed values: **inhabitants**.
+
+Well I didn't think it would take me so long to explain ``Fin``! But rest assured, it took me much longer to grok the whole thing and reach my WOW moment.
