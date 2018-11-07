@@ -15,12 +15,13 @@ fromTemplate articleTitle base body styles = H.docTypeHtml $ do
         H.title $ toHtml (articleTitle ++ " | Hackle's blog")
         H.base ! href base
         H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
-        H.style styles 
+        H.style styles
+        H.meta ! name "viewport" ! content "width=device-width, initial-scale=1.0"
     H.body ! class_ "markdown-body" $ do
         H.header $ do
-            H.a ! class_ "title" ! href "" $ "hackman"
+            H.a ! class_ "title" ! href "" $ "Hackle's blog"
             H.br
-            H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle" 
+            H.span "between the abstractions we want and the abstractions we get." ! class_ "subtitle"
         body
         H.hr
         H.a ! href (toValue $ getSlug about) $ "About me and this blog, or get in touch"
