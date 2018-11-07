@@ -98,8 +98,15 @@ Take the above example, try to figure out the type of ``FZ`` in each example?
 
 take ``the (Fin 4) 3`` as an example. The REPL interprets it as ```FS (FS (FS FZ)) : Fin 4```, if we reverse-engineer a bit, ``FZ`` would have to be ``Fin 1``, so ``FS FZ`` is of type ``Fin 2`` and so on.
 
-Now your turn to try ``Fin 5`` and ``Fin 6`` - and you'll find ``FZ`` 
+Now your turn to try ``Fin 5`` and ``Fin 6`` - and you'll find ``FZ`` is interpreted as ``Fin 2`` and ``Fin 3`` respectively.
+
+Getting closer...
 
 ## Finite set
+Next let's count how many values can we construct for a certain ``Fin`` type.
 
-You'd possibly think now - what about ``Fin 0``
+From what limited I have learnt from Idris, is to always try the base case first. so
+
+```idris
+
+```
