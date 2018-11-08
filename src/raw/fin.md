@@ -14,7 +14,7 @@ data Fin : (n : Nat) -> Type where
 You'll find ``Fin`` has two constructors, and ``FS`` is defined recursively in terms of ``FZ``. Nothing fancy, except...
 
 ## the first shock
-The acute observers will soon find, although this type has a parameter in ``(n : Nat)``, neither of its constructors takes any parameter. In another word, we cannot construct a value for this type!
+The acute observers will soon find, although this type has a parameter in ``(n : Nat)``, neither of its constructors takes any parameter. In another word, we cannot construct a value for this type! (Edit: actually we can, by passing in an argument for the implicit the type parameter, such as ``FZ {k=0}``)
 
 Try this in the Idris REPL:
 
@@ -56,11 +56,11 @@ Given a ``Vect`` of length n, the ``indexFin`` will not take any invalid index t
                 3 is not strictly less than 3
 ```
 
- Note how Idris converts numerics to ``Fin`` values, which begs the question, what are 3, 0, 3 in ``Fin``?
+Note how Idris converts numerics to ``Fin`` values, which begs the question, what are 3, 0, 3 in ``Fin``?
 
- ## a sliver of light!
+## A sliver of light
 
- Still with the REPL, let's try this:
+Still with the REPL, let's try this:
 ```Idris
 *fin> the (Fin 4) 3
 FS (FS FZ) : Fin 4

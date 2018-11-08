@@ -22,6 +22,7 @@ module Contents where
         , ("An idea: data-preserving JSON deserializer", "no-loss-serializer.md")
         , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")
         , ("Fin", "fin.md")
+        , ("Coding an alternative Vect.index, Type-Driven Development in Idris", "index-fin-alternative.md")
         ]
 
     about :: ContentEntry
