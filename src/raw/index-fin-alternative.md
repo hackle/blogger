@@ -1,4 +1,6 @@
-In [Fin](/fin) we've seen a version of type-safe indexFin which once compiled, gurantees to return a valid element from a vector.
+## indexFin and Fin
+
+In [Fin](/fin) we've seen a version of type-safe indexFin (which is basically a copy of the ``index`` function defined in ``Data.Vect``) which once compiles, guarantees to return a valid element from a vector.
 
 ```Idris
 import Data.Fin
@@ -24,20 +26,21 @@ Which is simply called as such:
 
 Out of sheer curiosity - can we have an alternative to this?
 
-Suppose I can prove an index argument is less than the length of the vector, I should be able to achieve the same type-safety?
+Suppose I can prove an index argument is less than the length of the vector, I should be able to get the same type-safety?
 
-## the type
+## The type for ``elementAt``
 
 ```Idris
 elementAt : (idx: Nat) -> Vect (S n) a -> { auto prf: n `GTE` idx } -> a
 ```
 A few interesting things:
+
 * the length of the vector is ``S n`` rather than simply ``n``, which is an Idris way of saying **this vect must not be empty**
 * we pass in an auto proof **n `GTE` idx** which means ``idx`` must be within bound.
 
 (Read more about [auto proof here](http://docs.idris-lang.org/en/latest/tutorial/miscellany.html))
 
-I don't know about you but I feel this is so super expressive!
+I don't know about you but I feel pretty impressed (by Idris and myself) how expressive the types alone can be!
 
 ## the code
 
@@ -58,7 +61,7 @@ elementAt Z (x :: xs) = ?elementAt_rhs_2
 elementAt (S k) (x :: xs) = ?elementAt_rhs_3
 ```
 
-Next we'll do a proof search on the second hole, ``elementAt_rhs_2``, as expected, ``x`` is returned, which makes sense - if the ``idx`` is ``0``, then we should return the very first element in the list, so far so good!
+Next we'll do a proof search on the hole ``elementAt_rhs_2``, as expected, ``x`` is returned, which makes sense - if the ``idx`` is ``0``, then we should return the very first element in the list. So far so good!
 
 ```Idris
 elementAt : (idx: Nat) -> Vect (S n) a -> { auto prf: n `GTE` idx } -> a
@@ -66,9 +69,9 @@ elementAt Z (x :: xs) = x
 elementAt (S k) (x :: xs) = ?elementAt_rhs_3
 ```
 
-Now if we also do a proof search on ``elementAt_rhs_3``, we get ``x`` as well - which is in the correct type, but won't make much sense to us.
+Now if we also do a proof search on ``elementAt_rhs_3``, we get ``x`` as well - which is in the correct type, but won't make much sense for our function.
 
-When in doubt, type search. Now we get:
+When in doubt, type search. Idris tells us:
 
 ```Idris
 a : Type
@@ -81,9 +84,9 @@ prf : LTE (S k) n
 elementAt_rhs_3 : a
 ```
 
-There is a proof ``LTE (S k) n`` that tells us ``S k`` is less than or equal to ``n``. Apparently this is just another form of ```n `GTE` idx```, as ``S k`` is one form of ``n``. Informative, but not very helpful.
+There is a proof ``LTE (S k) n`` that tells us ``S k`` is less than or equal to ``n``. Apparently this is just another form of ```n `GTE` idx``` (``S k`` is one form of ``idx``). Informative, but not very helpful.
 
-The only way I see how - is just to return ``elementAt k xs``. Seems reasonable right? Both the index and the size of the vector decrease by one, in another word, we are just using good-old recursion. So we get:
+To jump the gun here, the only way I see how - is just to return ``elementAt k xs``. Seems reasonable right? Both the index and the size of the vector decrease by one, in another word, we are just using good-old recursion. So we get:
 
 ```Idris
 elementAt : (idx: Nat) -> Vect (S n) a -> { auto prf: n `GTE` idx } -> a
@@ -101,8 +104,11 @@ When checking argument prf to Main.elementAt:
         Can't find a value of type
                 LTE k n
 ```
+This is telling us we need to prove that ``k`` is less than or equal to ``n``. But we already have ``GTE n (S k)``?
 
-This is telling us we need to prove that ``k`` is less than or equal to ``n``. But we already have ``GTE n (S k)``? Honestly I don't know what to do except bringing the existing proof to scope. But the compiler still gives the same error.
+While I think surely this makes perfect sense, Idris does not understand that if ``idx <= n + 1`` then ``idx - 1 <= n ``. We have to prove it to Idris.
+
+A bit lost, and honestly I don't know what to do except bringing the ``auto prf`` proof to scope. But the compiler still gives the same error.
 
 ```Idris
 
@@ -111,7 +117,7 @@ elementAt Z (x :: xs) = x
 elementAt (S k) (x :: xs) {prf} = let x1 = elementAt k xs in ?elementAt_rhs_3
 ```
 
-Still lost, the only thing left to do, is to case split on ``prf``, before that though, I have to revert the prevous step, and I get:
+Still lost, the only thing left to do, is to case split on ``prf``, before that though, I have to revert the previous step, now I get:
 
 ```Idris
 elementAt : (idx: Nat) -> Vect (S n) a -> { auto prf: n `GTE` idx } -> a
@@ -119,7 +125,7 @@ elementAt Z (x :: xs) = x
 elementAt (S k) (x :: xs) {prf = (LTESucc y)} = ?elementAt_rhs_1
 ```
 
-And a type search on the hole returns:
+Now a type search on the hole returns:
 
 ```idris
 a : Type
@@ -133,8 +139,9 @@ elementAt_rhs_1 : a
 ```
 
 A few things to note here
+
 * the only way the ``prf`` can be constructed, is ``LTESucc y``, which by the name of it, means it's a successive definition over another proof ``y``
-* and the type of ``y`` is ``LTE k right``, mind ``S right`` is the length of ``xs``. Surely that's proof enough that we can call ``elementAt`` recursively now?
+* and the type of ``y`` is ``LTE k right``, and ``S right`` is the length of ``xs``. Previously we needed to prove ``LTE k n``, and ``n`` is the length of ``xs`` too. That means we've found our proof now!?
 
 ```Idris
 elementAt : (idx: Nat) -> Vect (S n) a -> { auto prf: n `GTE` idx } -> a
@@ -157,7 +164,16 @@ Ah, now it compiles! Let's see if it really works?
                 LTE 3 2
 ```
 
-Yes, it works!
+Yes, it does!
 
 ## Summary
 The Idris compiler is so powerful that if we express our problems well enough in types, it can guide us to a solution by giving us very useful information every step of the way.
+
+## Further reading
+For ``List``, there is also an ``index`` function defined as such:
+```Idris
+index : (n : Nat) ->
+                    (xs : List a) ->
+                    {auto ok : InBounds n xs} -> a
+```
+Note there is an auto proof ``ok``? What's different is that a ``Vect`` has a length in its type, but a ``List`` does not, so how does ``List`` do it? And can the same proof be used for ``Vect``? Why or why not?
