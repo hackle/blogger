@@ -232,3 +232,5 @@ It may seem a bit ungainly to leave an ``undefined`` at the end, but since it cl
 At first look, ``callCC`` might not be for the faint-hearted, but as we look closer and closer, there is no magic (although almost indistinguishable from it!) but a clever usage of ``Monad``.
 
 In trying to comprehend it, Equational Reasoning proves a powerful tool to me. Unfortunately this is not the case for non-pure functions / languages. What that means to me - all the more reason for us to use pure languages like Haskell, or if that's not immediately possible, try to write as much pure code as we can!
+
+(You'll find all the source code for this article [here](https://github.com/hackle/blogger/blob/master/src/sample/callcc.hs): )
