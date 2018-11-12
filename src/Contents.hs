@@ -26,7 +26,7 @@ module Contents where
         ]
 
     about :: ContentEntry
-    about = toEntry ("About hackman", "about.md")
+    about = toEntry ("About Hackle's blog", "about.md")
 
     siteContents :: [ContentEntry]
     siteContents = about:blogContents
