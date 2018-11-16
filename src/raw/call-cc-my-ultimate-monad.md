@@ -106,7 +106,7 @@ I won't blame you if you find this a bit overwhelming... but in all honesty, I s
 
 My gut feeling is - out these 2 applications, one of them is redundant.
 
-Now I am not really one of these super smart people who can decode this, so I will need a dumb way to find out what's going on. In Haskell, luckily, thanks to purity, mostly of the time we can just use **[Equational Reasoning](https://wiki.haskell.org/Equational_reasoning_examples)**.
+Now I am not really one of these super smart people who can decode this, so I will need a dumb way to find out what's going on. In Haskell, luckily, thanks to purity, mostly of the time we can just use **[Equational Reasoning](http://www.haskellforall.com/2013/12/equational-reasoning.html)**.
 
 ## Equational Reasoning
 

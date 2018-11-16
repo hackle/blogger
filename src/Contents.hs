@@ -24,6 +24,7 @@ module Contents where
         , ("Fin", "fin.md")
         , ("Coding an alternative Vect.index, Type-Driven Development in Idris", "index-fin-alternative.md")
         , ("callCC in Haskell, my ultimate Monad", "call-cc-my-ultimate-monad.md")
+        , ("My take on (unit) testing", "my-take-on-unit-testing.md")
         ]
 
     about :: ContentEntry
