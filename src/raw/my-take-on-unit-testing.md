@@ -1,102 +1,87 @@
-There must have been a million different opinions on unit testing, I won't be the least surprised if you have yours, and you should really think twice before you get a load of mine... and bear in mind that my opinion on unit testing has been an constantly evolving one. However, here it goes.
+Make no mistake - any form of testing is better than no testing at all. However, for professional software development, some forms of testing are more efficient than others for certain scenarios. I'll name some common practices in testing and share a few of my thoughts.
 
-(I also notice this is getting way too long so it's possibly a good idea to fork this out to different posts. to-do.)
+## developers are not to be trusted for their code
 
-## testing through U.I. why not?
+Don't be upset by this - I am a developer and I don't trust myself for my own code. Like many other developers, I am an optimist when it comes my code. But also like many others, I had to eat my own words time and time again as a result of over-confident.
 
-(Only) testing through U.I., a surprisingly popular practice - possibly also widely criticised for - and my thoughts? It's good, but not quite good enough.
+To save my blushes, unit testing forces me to reason with my code, so instead of relying on blind faith, I find myself asking "does it really work? have I prove it?" so I check that's indeed the case, before the work is handed to the next person.
 
-### we should all be testing and any testing is good!
+Experiences tell me that it's much cheaper to writing a few unit tests before I call something "done" and hand it off, than having the work rejected Quality Assurance, product management or much worse end-users - in fact, the longer the delay, the more expensive it becomes.
 
-You can be one of the few privileged that work with dedicated testers, or be one of the many impoverished working with no testers and your boss is the product owner, quality assurance, marketing, sales, H.R. and accountant, there is one thing that applies to all of us in software and that is non-negotiable: we should all be testing! Either via refreshing the browser after every build, or debugging and pulling your hair hour for something mysteriously going wrong.
+## testing everything through U.I. may be fine, but too expensive
 
-While you definitely shouldn't feel bad if you test everything through the browser or on real device or the simulator (in fact you should be proud that you are testing your product at all), be advised that that are times that testing through U.I. is not the most efficient way to validate your code / product.
+There is nothing wrong with the practice of testing through user interface, the question is rather, when and when not?
 
-### testing through U.I. when it makes sense
+For example if the task at hand is heavy in styling, then it's only natural to bring up the U.I. It's visual, and therefore most intuitive.
 
-The times that testing through U.I. is absolutely necessary and is certainly good practice, is when the focus is on styling and user experience. There is no substation for putting yourself in the customers' shoes and going through the exact same journey as the customers.
+However if one is dealing with tasks rich in branching of logic, as complexity grows exponentially, testing through U.I. quickly becomes inefficient. One would need to navigate the whole application (if there is an application at all) to get to the code under test. The feedback cycle is typically long.
 
-### and when it is not enough
+Unit testing offers a much shorter feedback cycle to validate the algorithms in our code. And it's much cheaper, therefore we can afford to write more of them.
 
-It would be terribly inefficient if one is working on tasks in business domain that is usually full of branching of logic. I trust that you know such concepts like [Cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity), you'd have learned that complexity of software grows exponentially. That is to say, every time you add only ``one`` innocent new condition to a domain with ``n`` existing conditions, chances are, you are adding extra ``n`` extra scenarios.
+At the right time we still need to test through U.I. as it's an integral part of any product, but only when we are working on the U.I. itself.
 
-That is if you only change one component of your domain - if you change inter-dependent components, the complexity multiplies. Say one component has ``8`` scenarios that depend on another scenario with ``8`` scenarios, chances are that we are possibly dealing with ``64`` scenarios in total, now try test each scenario by refreshing your browser? (Believe me this is not wild imagination - I've dealt with domain ``much`` more complex than this).
-
-Some typical problems with this approach can be:
-
-* testing through U.I. can be unwieldy considering building the software, reload the application, and navigate to the specific functionality
-* it gets tedious, time-consuming, and almost impossible to exhaust all possibilities as software becomes more and more complex
-* it's not always reliable and deterministic as the environment can impact the process: connectivity, D.B. changes, user interaction, U.I glitches, anything can go wrong, etc. etc.
-
-Enters unit testing - when the domain becomes complex in business logic, unit testing helps a lot in that
-
-* done properly, it's deterministic and therefore offers high confidence
-* it shorten the feedback cycle therefore it's more efficient
-* it's much cheaper than manually testing therefore less time-consuming
-
-## developers - not to be trusted :(
-
-Don't be upset if you are a developer when you read this - I am also a developer and I completely stand by this statement.
-
-Over-confidence is not a unusual symptom for a lot of developers, and when you hear a developer says something ``should`` work, or when they give an estimate, just smile and nod, or ask, "this is great! But how do we test this?"
-
-I've been countless situations when I had absolute faith in my code without validating it, either through manual testing or unit testing, only to find out later that my presumptions were based on nothingness. What I wished I could have done, was to have verified my assumptions in a demonstrably way. What better ways to verify my code?
-
-Manual testing, while it seems the obvious choice and the most intuitive way, suffers from being fragile and tedious to repeat.
-
-Unit testing, on the other hand, is more formal and easier to repeat, and if done properly, serves as a persistent way to validate that code works as required.
-
-> Unit testing forces developers to reason with their code
-
-Blind faith rarely helps, hard cold unit tests serve us much better.
+So my advice is if you are a professional developer, and are currently testing most of your code through U.I. then try to suppress that urge, and find another method with a shorter feedback cycle, for example, unit testing.
 
 ## it's more than a defence against tempering
 
 A usual, but weak argument for unit testing, is that unit testing is necessary because "_what is somebody deleted this line of code?_"
 
-Well, if that's all the purpose of unit testing, why don't we simply keep a copy of the code, and compare the present code against the copy that we keep? Certainly that is more efficient and accurate than manually written and much different code?
+This may frighten people into agreement and action, but if that's all there is to unit testing, why don't we simply keep a copy of the code, and compare the present code against the copy that we keep? Certainly that is more efficient and accurate than manually written and much different code?
 
-A stronger reason for unit testing, or any form of testing really, is to validate that our code really does what we want it to do. What best way to do that? By giving the code different inputs, and compare the outputs against expectations. One way to call these sets of input, output and expectations, is ``specification``.
+A stronger reason for unit testing, or any form of testing really, is to validate that our code really does what we want it to do.
+
+What better way to do that than by running the code with different inputs, and comparing the outputs against expectations? Such input, output and expectations, can be called ``specifications``.
 
 Specifications matter a lot, and the stronger the better.
 
-You may think by ``stronger`` I mean more stringent, and therefore more complex. That may be only half true. Stringent possibly, and complex mostly probably not. What's more likely, is that the stronger a specification is, the simpler it is.
+You may think by ``stronger`` I mean more stringent, and therefore more complex. That may be only half true. Stringent maybe, but complex mostly probably not. What's more likely is that the stronger a specification is, the simpler it will be.
 
-A good example is ``idempotence`` - it's a simple concept, but I have not seen it usually validated. Do you have stringent testing against the PUT methods of your API endpoints? By ``stringent`` I mean, running hundreds if not thousands of test cases against the endpoints under test? (This might not be unit test now, but the idea holds).
+A good example is ``idempotence`` - it's a simple concept, but I have not seen it usually validated. Do you have stringent testing against the PUT methods of your API endpoints? By running hundreds if not thousands of test cases against the endpoints under test? (This can be beyond the scope of unit testing, but the idea holds).
 
 ## purity is key!
 
-We'd be amiss if we talk about specification without mentioning purity, as purity, or ``pure function``, is defined [here](https://en.wikipedia.org/wiki/Pure_function):
+We'd be amiss if we talk about specification without mentioning purity, or ``pure function``, which is defined [here](https://en.wikipedia.org/wiki/Pure_function):
 
 > In computer programming, a pure function is a function that has the following properties:
 > Its return value is the same for the same arguments (no variation with local static variables, non-local variables, mutable reference arguments or input streams from I/O devices).
 > Its evaluation has no side effects (no mutation of local static variables, non-local variables, mutable reference arguments or I/O streams).
 
-For pure functions, unit testing is as simple as giving different inputs and expecting corresponding output - just how we want it!
+If a function is pure, unit testing is as simple as giving inputs and expecting corresponding output, as the noises of I/O and mutation are kept out.
 
-But mutation and statefulness dampens matters for us - does that ring a bell? Let me remind us some teaching or practices in the industry:
+I/O can be either out of our control, or hard / tedious to set up. Mutation often makes our code less reasonable.
 
-* I/O cannot be unit tested (possibly because they are not pure?)
-* singletons / stateful services are hard to unit test (again possibly because they are not pure?)
-* U.I. is hard to unit test
+This does also remind me of some teaching or practices in the industry:
+
+* I/O rich code cannot be easily unit tested - possibly because they are not pure
+* singletons / stateful services are hard to unit test- not pure
+* U.I. is hard to unit test - not pure either
 
 Also recommended to read about
 * [referential transparency](https://en.wikipedia.org/wiki/Referential_transparency)
 * [equational reasoning](http://www.haskellforall.com/2013/12/equational-reasoning.html)
 
-## write more pure functions
+## how to write more pure functions? static method to the rescue!
 
-I would consider this a given for any form of pure (or non-pure) functional programming - but in fact, even for any imperative languages this holds true. Purity makes code more reasonable. But you might be questioning, _HOW?_
+I would consider this a given for any form of pure (or non-pure) functional programming - but believe me the benefit of pure functions hold for any programming languages as purity makes code more reasonable. Now you might be questioning, _BUT HOW?_
 
-How? If the language I use is object oriented, how do I write functions at all?
+For example, I use C# a lot, which is object oriented and the concept of function is not even valid in idiomatic C# code - how do I write ``functions`` to start with? Let alone pure functions?
 
-You might find this controversial, but I'd encourage you to write more ``static`` methods!
+The answer is simple - just write ``static`` methods!
 
-Why not? ``static`` methods are basically functions as they cannot rely on the state of any instance, and the class name virtually becomes a namespace; they cannot utilise such abused patterns as D.I., so mutating states becomes much harder (it's still very much possible of course), so most of the time, they are easier if they only rely on input to produce output, and therefore pure!
+``static`` methods are basically functions as they cannot rely on the state of any instance, and the class name virtually becomes a namespace.
 
-Read Mark Seemann's excellent post on [Dependency Rejection](http://blog.ploeh.dk/2017/02/02/dependency-rejection/)
+For static methods, mutating states becomes much harder (although still very much possible). More likely, they just take inputs and produce output, and possibly stay pure.
 
-About time we move away from D.I. and embrace purity!
+I/O and state mutation are still essential. But to make our code more reasonable, it's a good idea to build complex logic in a pure fashion, and bring them together when I/O is needed.
+
+A good pattern is to represent I/O in the simplest-possible code, and not to unit test it, as such code would be hard to unit test anyway. (Though other forms of testing then become necessary).
+
+> “There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult.”
+> ― C. A. R. (Tony) Hoare
+
+Once you go down this path, soon you'll also find that less and less mocking is needed as less and less interfaces are created, which inevitably means you have less and less code. Not surprisingly, you'll be using less and less Dependency Injection. While your code becomes easier to test and therefore more thoroughly validated.
+
+Also read Mark Seemann's excellent post on [Dependency Rejection](http://blog.ploeh.dk/2017/02/02/dependency-rejection/)
 
 ## randomness is not your enemy
 
@@ -104,24 +89,6 @@ There are extremely powerful tools that help us generating test cases for testin
 
 An often-heard argument against use of such excellent tools, is that they make tests not deterministic.
 
-Well if we consider _produce the same output for the same input_ as a characteristic of a pure function, then using random / generated input does not break that characteristic at all, on the contrary, it helps us to validate such characteristics.
+If we consider _producing the same output for the same input_ as the essence of [determinism](https://en.wikipedia.org/wiki/Deterministic_algorithm), then using random / generated input does not break that, what's deterministic remains deterministic - on the contrary, such tools helps us to validate such characteristics by giving input that we would otherwise struggle to come up with.
 
-The reason it upsets some of us could be that we are afraid that any failures cannot be reproduced and leaving us with mysterious errors - which of course is not a real problem as these tools give us details as what input is really given, and what kind of input results in failed tests.
-
-If you are in the habit of testing, then be happy, don't be afraid, when you see a failed test. It means there is a chance to improve your code or your test, either way, your software benefits. Therefore embrace the above-mentioned tools - they help us to fail fast and fail loud.
-
-## test driven design, really?
-
-At one point in history, or should I say presently, there was / is belief that testing can drive good design. While this may seem true for some at a small scale, it may disappoint most of us most of the time.
-
-I my opinion, there is no substation for architecture or vision, and if there is, unit testing is certainly not it. Any form or testing is but a way to validate that the architecture or design is correct or implemented properly, and nothing more.
-
-While setting forth the specifications for a design in the forms of test cases, we are only demonstrating our best reasoning in our design, which might or might not be exhaustive. You'll have better luck with a language which has totality support, such as ``Idris``, but most probably not for lesser languages.
-
-Quoted Dijkstra:
-
-> Testing shows the presence, not the absence of bugs
-
-Unit testing only goes as far as our best reasoning, and no further.
-
-Its unquestionable value is in forcing us to ask ourselves - what if? how about? The value of testing lies right there - it forces us to think harder about our design, and by thinking harder, we usually end up making improvements.
+Also if you are in the habit of testing, then be happy, don't be afraid, when you see a failed test. It means there is a chance to improve your code or your test, either way, your software benefits. Therefore embrace the such tools as AutoFixture and QuickCheck - they help us to fail fast and fail loud.
