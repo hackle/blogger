@@ -1,5 +1,7 @@
 Make no mistake - any form of testing is better than no testing at all. However, for professional software development, some forms of testing are more efficient than others for certain scenarios. I'll name some common practices in testing and share a few of my thoughts.
 
+You'll find my view is heavily biased towards functional programming - the predictable me.
+
 ## developers are not to be trusted for their code
 
 Don't be upset by this - I am a developer and I don't trust myself for my own code. Like many other developers, I am an optimist when it comes my code. But also like many others, I had to eat my own words time and time again as a result of over-confident.
