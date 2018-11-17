@@ -83,9 +83,25 @@ Once you go down this path, soon you'll also find that less and less mocking is 
 
 Also read Mark Seemann's excellent post on [Dependency Rejection](http://blog.ploeh.dk/2017/02/02/dependency-rejection/)
 
+## what does a good unit test look like?
+
+If one has success at writing pure functions, then unit testing becomes fairly simple, and most probably data-driven. Simple because there is no longer much need to set up all sorts of mocks. Data-driven because the output of pure functions depend only on the input.
+
+So the main task of unit testing consists in finding meaningful and representative (if not exhaustive) sets of input and output.
+
+## test first or later?
+
+If tests are written first, they are more like specifications - we set forth the requirements before any production code is written, and then we write code to satisfy such specs.
+
+I like this style very much as it forces me to think ahead and think in a structured way.
+
+Indeed, a lot of software's problems come from jumping right into coding without a clear plan first.
+
+With this said, it's not a bad thing to write tests later - I believe any form of testing is useful.
+
 ## randomness is not your enemy
 
-There are extremely powerful tools that help us generating test cases for testing our code (again not just for unit testing), such as [AutoFixture](https://github.com/AutoFixture/AutoFixture) which was started by Mark Seemann and I had the honour to contribute to, and [QuickCheck](http://hackage.haskell.org/package/QuickCheck), and [FsCheck](https://fscheck.github.io/FsCheck/), a F# port of QuickCheck.
+We talked about finding meaningful and exhaustive sets of input and output, which is easier said than done. Despair not, there are extremely powerful tools that help us generating test cases for testing our code (again not just for unit testing), such as [AutoFixture](https://github.com/AutoFixture/AutoFixture) which was started by Mark Seemann and I had the honour to contribute to, and [QuickCheck](http://hackage.haskell.org/package/QuickCheck), and [FsCheck](https://fscheck.github.io/FsCheck/), a F# port of QuickCheck.
 
 An often-heard argument against use of such excellent tools, is that they make tests not deterministic.
 
