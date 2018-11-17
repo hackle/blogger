@@ -76,8 +76,8 @@ I/O and state mutation are still essential. But to make our code more reasonable
 
 A good pattern is to represent I/O in the simplest-possible code, and not to unit test it, as such code would be hard to unit test anyway. (Though other forms of testing then become necessary).
 
-> “There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult.”
-> ― C. A. R. (Tony) Hoare
+> "There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult."
+> C. A. R. (Tony) Hoare
 
 Once you go down this path, soon you'll also find that less and less mocking is needed as less and less interfaces are created, which inevitably means you have less and less code. Not surprisingly, you'll be using less and less Dependency Injection. While your code becomes easier to test and therefore more thoroughly validated.
 
