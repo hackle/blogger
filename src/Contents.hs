@@ -17,7 +17,7 @@ module Contents where
     blogContents = reverse $ toEntry <$> [
         ("Setting up an AWS Lambda with serverless-haskell", "setup-haskell.md")
         -- , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
-        , ("Linq first, Linq always", "linq-revisited.md")
+        , ("LINQ, infinity, laziness and oh mine!", "linq-tips.md")
         -- , ("A lens look-alike (really a nested data updater) in C#?", "lens-csharp.md")
         , ("An idea: data-preserving JSON deserializer", "no-loss-serializer.md")
         , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")

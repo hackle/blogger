@@ -13,7 +13,7 @@ str == serialize (deserialize str)
 ```
 That is, **EVEN IF** str has extra information that's not deserialize-able!
 
-Of course also this - already true for most serializers
+Of course also this - already true (or almost) for most serializers
 ```
 object == deserialize (serialize object)
 ```
@@ -22,7 +22,7 @@ An ordinary deserialize function does not preserve information that's extra to t
 
 ```C#
 void Main()
-{	
+{
 	var source = "{\"Title\": \"Bar\", \"Age\": 21 }";
 
 	Console.WriteLine(JsonConvert.SerializeObject(JsonConvert.DeserializeObject<Foo>(source)) == source);
@@ -44,11 +44,11 @@ However, consider this contrived example
 4. deserializes it, and modifies it
 5. and serializes it again to a JSON string, and HTTP PUT the request to **/api/foos/321.json**
 
-Now suppose the schema of **Foo** changes on the API, say from one field only 
+Now suppose the schema of **Foo** changes on the API, say from one field only
 ```
 { Title: "Bar" }
 ```
-to two fields 
+to two fields
 ```
 { Title: "Bar", Age: 21 }
 ```
