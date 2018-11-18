@@ -5,9 +5,9 @@ One thing that I wasted too much time on, is trying to set up the stack for deve
 
 Instead I got everything working within an hour or so in Ubuntu. No major problems.
 
-## Do not use the Haskell Platform
+## you don't need the Haskell Platform
 
-I am still confused as to where and when to or not to use the Haskell Platform. There seems to be a gap between how Stack works and how the Platform advocates.
+Honestly I am still confused as to where and when to or not to use the Haskell Platform. There seems to be a gap between how Stack works and how the Platform advocates.
 
 In this case though, stick with Stack is easier - only meaningful change I need to make is to set **resolver: lts-9.1** in the stack.yaml file. "stack install" took care of everything.
 
@@ -16,3 +16,14 @@ In this case though, stick with Stack is easier - only meaningful change I need 
 Yes that's right - unfortunately. Due to some strange cock-up with particular versions above GHC 8.1+, GHC-Mod will end up eating up a lot of memory, and for me, eventually freeze up my Ubuntu virtual machine.
 
 I then switched to [GHCID](https://github.com/ndmitchell/ghcid), much lighter, running on command line, but man that makes life much easier.
+
+## lambda-idris?
+
+Under the hood, serverless-haskell wraps an executable, which in theory can be written in language, and mostly certainly Idris?
+
+This can be simply a matter of porting some of the code into Idris. Considerations are,
+
+* finding equivalent libraries for JSON serialization, http, ~~lens~~ (hail the Idris record syntax!)
+* coding the data types - such [execellent groundwork](http://hackage.haskell.org/package/amazonka-core) will be sorely missed
+
+Considering the amount of work, it seems reasonable to start lean - so watch this space for **lambda-idris**.
