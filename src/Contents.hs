@@ -23,7 +23,7 @@ module Contents where
         , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")
         , ("Fin", "fin.md")
         , ("Coding an alternative Vect.index, Type-Driven Development in Idris", "index-fin-alternative.md")
-        , ("callCC in Haskell, my ultimate Monad", "call-cc-my-ultimate-monad.md")
+        , ("callCC in Haskell, and my ultimate Monad", "call-cc-my-ultimate-monad.md")
         , ("My take on (unit) testing", "my-take-on-unit-testing.md")
         ]
 

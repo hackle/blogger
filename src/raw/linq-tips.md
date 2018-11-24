@@ -6,12 +6,12 @@ There are fascinating things with LINQ that can elude even the most experienced 
 
 We start with infinity.
 
-```C#
+```csharp
     var infinity = Infinity.Of(index => index); // the index can be useful
     // 0, 1, 2, 3 ...
 
     infinity.Take(10);
-    // 10 elements    
+    // 10 elements
 
     infinity.Take(100000);
     // 100000 elements
@@ -19,18 +19,18 @@ We start with infinity.
 
 Or, what's a fluent way to validate a password with 3 tries?
 
-```C#
+```csharp
 		var authenticated = Infinity.Of(_ => {
 			Console.WriteLine("What's the password?");
 			return Console.ReadLine();
-		}).Take(3).Any(pass => pass == "boss");    
+		}).Take(3).Any(pass => pass == "boss");
 ```
 
 Isn't this magical? Well in fact it's only a simple use of laziness, or, the deferred execution model of LINQ.
 
 Here is the implementation!
 
-```C#
+```csharp
 public static class Infinity
 {
     public static IEnumerable<T> Of<T>(Func<int, T> f)
@@ -62,7 +62,7 @@ While this does save us from undesired effects of LINQ, it basically reduces LIN
 
 As an example, if we had evaluated Infinity eagerly, we wouldn't have been able to write the password validator:
 
-```C#
+```csharp
 Infinity.Of(_ => {
   Console.WriteLine("What's the password?");
   return Console.ReadLine();
@@ -84,7 +84,7 @@ In the example below, `ToArray()` becomes necessary (or even essential).
 
 Assume that `GetPeople()` returns `IEnumerable<Person>`, which once evaluated, will call DB to query for a collection of `Person`.
 
-```C#
+```csharp
 
 public IEnumerable<Person> Get()
 {
@@ -105,7 +105,7 @@ Developers who are used to `for` loops would usually try to shoehorn LINQ into l
 
 For example: update people's profile and stop on any error.
 
-```C#
+```csharp
 people.FirstOrDefault(person => {
   if (updateProfileInDb(person))
     return true; // failed, exit loop!
@@ -119,7 +119,7 @@ This may seem smart, but I would argue is a form of abuse to `FirstOrDefault()`.
 
 Side-effects is actually where a lot of grievances for LINQ are from, for example, people complain that nothing gets saved in database with the below code:
 
-```C#
+```csharp
 people.Select(person => updateProfileInDb(person));
 ```
 
@@ -127,7 +127,7 @@ You would have guessed it: LINQ is lazy and because the result of the above `Sel
 
 An easy fix:
 
-```C#
+```csharp
 people.Select(person => updateProfileInDb(person)).ToArray();
 ```
 
@@ -135,7 +135,7 @@ While this forces the evaluation, it's hardly idiomatic - `Select` is supposed t
 
 A more LINQ-idiomatic way to write this, in my opinion, is to simply use a `foreach` loop, as it's made for side-effects.
 
-```C#
+```csharp
 foreach (var person in people) {
   updateProfileInDb(person);
 }
