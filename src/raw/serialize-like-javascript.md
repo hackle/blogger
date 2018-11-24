@@ -1,5 +1,9 @@
 I have Javascript envy when it comes to consuming JSON, because it needs no serialization / deserialization. This is not the case for mostly languages, which usually requires some sort of serialization.
 
+We try to explore a way of serialization / deserialization so that **if the server of data / API promises to be backward-compatible, then it's possible to build the client side application so it is forward-compatible, just like that in Javascript.**
+
+(This post is inspired by Rich Hickey's talk [Spec-ulation](https://youtu.be/oyLBGkS5ICk) as unrelated as it may seem)
+
 Let's say we want to build an awesome app called ``plus1`` whose jobs is to make any user one year older.
 
 
