@@ -62,7 +62,7 @@ loadArticle :: ContentEntry -> IO Html
 loadArticle entry = do
   fp <- mkArticlePath $ getFile entry
   content <- IOT.readFile fp
-  return $ mconcat [ pageTitle, markdown def content ] where
+  return $ mconcat [ pageTitle, markdown markdownDef content ] where
     pageTitle = H.h1 $ toMarkup (getTitle entry)
 
 renderPage :: ArticleTitle -> FilePath -> H.Html -> IO Text
