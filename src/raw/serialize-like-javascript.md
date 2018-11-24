@@ -7,32 +7,27 @@ Let's say we want to build an awesome app called ``plus1`` whose jobs is to make
 
 1. read the existing profile of the user from a web API, e.g. in a controller
 
-	```javascript
-	httpClient.get('api/user/123.json')
-		.then(user => this.user = user);
+		httpClient.get('api/user/123.json')
+			.then(user => this.user = user);
 
-	// http returns
-	GET api/user/123.json
-	{
-		name: 'George',
-		age: 11
-	}
-	```
+		// http returns
+		GET api/user/123.json
+		{
+			name: 'George',
+			age: 11
+		}
+
 2. now the `user` object can be modified immediately (without any form of serialization).
 
-	```javascript
-	// later in the controller
-	this.user.age = this.user.age + 1;
-	```
+		// later in the controller
+		this.user.age = this.user.age + 1;
 
 3. and we send the modified profile back to the API (without any form of deserialization)
 
-	```javascript
-	httpClient.put('api/user/123.json', this.user)
-		.then(response => celebrateWith10Toasters('success!'));
+		httpClient.put('api/user/123.json', this.user)
+			.then(response => celebrateWith10Toasters('success!'));
 
-	// HTTP 200 OK
-	```
+		// HTTP 200 OK
 
 Everybody happy.
 
@@ -42,41 +37,32 @@ Things are not quite as intuitive in other languages
 
 1. read the existing profile of the user from an API.
 
-	```C#
-	var response = httpClient.get('api/user/123.json');
-	```
+		var response = httpClient.get('api/user/123.json');
 
 2. deserialize the response to a value
 
-	```C#
-	var user = Deserialize<User>(response);
+		var user = Deserialize<User>(response);
 
-	// User is defined as
-	class User
-	{
-		String Name;
-		Int Age;
-	}
-	```
+		// User is defined as
+		class User
+		{
+			String Name;
+			Int Age;
+		}
 
 3. now the `user` object can be modified.
 
-	```
-	user.Age = user.Age + 1;
-	```
+		user.Age = user.Age + 1;
 
 4. before posting it to the API, we need to serialize the modified `user` to a string.
 
-	```
-	var payload = Serialize<User>(user);
-	```
+		var payload = Serialize<User>(user);
 
 5. eventually we send the payload to the API
 
-	```
-	httpClient.put('api/user/123.json', payload);
-	// HTTP 200 OK
-	```
+		httpClient.put('api/user/123.json', payload);
+		// HTTP 200 OK
+
 Two extra steps for serialization and deserialization, not great, but not the end of the world either.
 
 ## when it becomes not so great
