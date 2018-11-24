@@ -19,7 +19,7 @@ module Contents where
         -- , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
         , ("LINQ, infinity, laziness and oh mine!", "linq-tips.md")
         -- , ("A lens look-alike (really a nested data updater) in C#?", "lens-csharp.md")
-        , ("Serialize like javascript, a prototype", "serialize-like-javascript.md")
+        , ("Serialize like javascript PART 1: the idea", "serialize-like-javascript.md")
         , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")
         , ("Fin", "fin.md")
         , ("Coding an alternative Vect.index, Type-Driven Development in Idris", "index-fin-alternative.md")
