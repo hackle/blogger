@@ -29,5 +29,8 @@ fromTemplate articleTitle base body styles idrisPrism = H.docTypeHtml $ do
         H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.min.js" $ ""
         H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-haskell.min.js" $ ""
         H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-csharp.min.js" $ ""
+        H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-fsharp.min.js" $ ""
         H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-css.min.js" $ ""
+        H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-javascript.min.js" $ ""
+        H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-typescript.min.js" $ ""
         H.script ! type_ "text/javascript" $ idrisPrism
