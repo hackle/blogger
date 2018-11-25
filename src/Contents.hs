@@ -24,8 +24,8 @@ module Contents where
         , ("Coding an alternative Vect.index, Type-Driven Development in Idris", "index-fin-alternative.md")
         , ("callCC in Haskell, and my ultimate Monad", "call-cc-my-ultimate-monad.md")
         , ("My take on (unit) testing", "my-take-on-unit-testing.md")
-        , ("Serialize like javascript PART 2: a prototype in Idris", "serialize-like-javascript-the-prototype.md")
-        , ("Serialize like javascript PART 1: the idea", "serialize-like-javascript.md")
+        , ("Serialize like javascript - MergeJSON in Idris!", "serialize-like-javascript-the-prototype.md")
+        , ("Serialize like javascript - the idea", "serialize-like-javascript.md")
         ]
 
     about :: ContentEntry
