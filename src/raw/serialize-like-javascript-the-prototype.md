@@ -128,6 +128,10 @@ Note I needed to put it in a `main` so I can execute it in the REPL. Otherwise t
 
 Works as expected.
 
+## Next
+
+From here on it would be straightforward - we need to integrate this pattern to the serialization layer of our client-side applications. Depending on what frameworks / libraries are used, the integration can be of a different level of complexity, but nonetheless possible.
+
 ## Summary
 
 A simple idea, inspired by Javascript's trivial handling of JSON objects, leads us to a simple solution in `Idris`. The solution is easily transferrable to any other language.
@@ -137,3 +141,5 @@ This kind of calls for a protocol (or an understanding) between the server and t
 The client side can then utilise the idea illustrated above to make sure any additive (backward-compatible) changes to the schema will be respected, kept throughout, and sent back to the server loyally.
 
 Note this approach only applies when such loyalty is necessary, in other words, both reading and writing of data are needed for the same line of process. If only read or only write is required, then our solution is not needed, or would be overkill.
+
+I can also see that this approach is not only applicable to JSON, but also other data formats such as XML.
