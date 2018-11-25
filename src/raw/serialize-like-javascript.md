@@ -49,7 +49,7 @@ Pretty simple right? However, things are not quite as intuitive in some other la
 var response = httpClient.Get("api/user/123.json");
 ```
 
-* deserialize the response to a value
+* `response` is still a `string`, so we cannot use it directly in our strongly-typed business domain yet. Instead we need to deserialize the response to a typed object e.g. `User`.
 
 ```csharp
 var user = Deserialize<User>(response);
@@ -68,7 +68,7 @@ class User
 user.Age = user.Age + 1;
 ```
 
-* before posting it to the API, we need to serialize the modified `user` to a string.
+* when putting the changes made to `user` to the API, we cannot send the `User` object directly because a typical `httpClient` requires a `string` as payload. So we need to serialize the modified `user` to a string.
 
 ```csharp
 var payload = Serialize<User>(user);
@@ -107,9 +107,9 @@ The `plus1` in `C#` though, will now have a problem...
 
 This presents the versioning problem - limited by serialization / deserialization, client side can only deal with the old version / schema, and will result in unintended deletion when dealing with the new version.
 
-One way to work around this, is to not change the schema of the API response at all. Instead, a new version of API is created and served separately through a different URI, e.g. `api/user/v2/123.json`. Client-side applications can switch to the new version whenever it is ready.
+One way to work around this, is to demand the server not change the schema of the API response at all. Instead, create a new version of API and serve it separately through a different URI, e.g. `api/user/v2/123.json`. Client-side applications can switch to the new version whenever it is ready.
 
-This is a sound solution. However, the server side can rightfully argue that this change is not a breaking change, so there is no need for versioning. Indeed, if we version each of such non-breaking changes, and if the API is a fast evolving (and popular) one, the client-side applications will have a hard time (if ever) catching up with the latest version. And before we know it, we are on `v30` and many (if not all) previous versions need to be maintained!
+This is a sound solution. However, the server side can rightfully argue that such changes are not breaking changes, so there is no need for versioning. Indeed, if we version each of such non-breaking changes, and if the API is a fast evolving (and popular) one, the client-side applications will have a hard time (if ever) catching up with the latest version. And before we know it, we are on `v30` and chances are, many (if not all) of these versions need to be maintained!
 
 ## a more robust solution
 
@@ -130,6 +130,9 @@ class User
 	String OriginalJsonString;
 }
 ```
+
+(I am going for simplicity here, you don't have to make your implementation this crude. By all means, go for generics or reflection)
+
 * when serialize a `User` back to a JSON string, before we send it off to the API, merge the modified `User` into the original JSON string, and then send off the combined string, which will have the `address` field intact. In psuedo-code:
 
 ```csharp
@@ -143,8 +146,8 @@ string merged = MergeJSON(modifiedUser.OriginalJsonString, modified);
 httpClient.Post("api/user/123.json", merged); // nothing is lost!
 ```
 
-That's the idea! I'd say it's really really simple.
+That's the idea! Wouldn't you agree that it's really really simple?
 
-You may be wondering how we can implement this `MergeJSON` method - honestly I am not really worried but as a developer I do enjoy getting my hands dirty, so I will soon get my hands dirty in writing `MergeJSON` in `Idris`. (edite: and it's right here [MergeJSON in Idris](./serialize-like-javascript-the-prototype)))
+Now you may be wondering how we can implement this `MergeJSON` method - honestly I am not really worried but as a developer I do enjoy getting my hands dirty, so I will soon get my hands dirty in writing `MergeJSON` in `Idris`. (edite: and it's right here [MergeJSON in Idris](./serialize-like-javascript-the-prototype)))
 
 In the mean time, you might have better luck finding that it's [already there](https://www.newtonsoft.com/json/help/html/MergeJson.htm) or [there](https://stackoverflow.com/questions/9895041/merging-two-json-documents-using-jackson) for free!
