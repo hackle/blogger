@@ -1,4 +1,4 @@
-In [Serialize like javascript](./serialize-like-javascript), we figured out a way to have forward compatible serialization / deserialization without risking losing / deleting newly added fields in the schema, much like with Javascript. Without further ado, let's crack into prototyping such a design, this time, in Idris.
+In [Serialize like javascript](./serialize-like-javascript---the-idea), we figured out a way to have forward compatible serialization / deserialization without risking losing / deleting newly added fields in the schema, much like with Javascript. Without further ado, let's crack into prototyping such a design, this time, in Idris.
 
 ## merge JSON strings
 

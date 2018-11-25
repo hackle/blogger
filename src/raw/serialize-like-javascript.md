@@ -148,6 +148,6 @@ httpClient.Post("api/user/123.json", merged); // nothing is lost!
 
 That's the idea! Wouldn't you agree that it's really really simple?
 
-Now you may be wondering how we can implement this `MergeJSON` method - honestly I am not really worried but as a developer I do enjoy getting my hands dirty, so I will soon get my hands dirty in writing `MergeJSON` in `Idris`. (edite: and it's right here [MergeJSON in Idris](./serialize-like-javascript-the-prototype)))
+Now you may be wondering how we can implement this `MergeJSON` method - honestly I am not really worried but as a developer I do enjoy getting my hands dirty, so I will soon get my hands dirty in writing `MergeJSON` in `Idris`. (edite: and it's right here [MergeJSON in Idris](./serialize-like-javascript---mergejson-in-idris-)))
 
 In the mean time, you might have better luck finding that it's [already there](https://www.newtonsoft.com/json/help/html/MergeJson.htm) or [there](https://stackoverflow.com/questions/9895041/merging-two-json-documents-using-jackson) for free!
