@@ -1,6 +1,6 @@
-I have Javascript envy when it comes to consuming JSON, because it needs no serialization / deserialization. This is not the case for mostly languages, which usually requires some sort of serialization.
+I have Javascript envy when it comes to consuming JSON, because it needs no serialization / deserialization. This is not the case for mostly languages, which usually requires some sort of serialization and such operations are usually lossy and may result in unintended effects.
 
-We try to explore a way of serialization / deserialization so that **if the server of data / API promises to be backward-compatible, then it's possible to build the client side application so it is forward-compatible, just like that in Javascript.**
+We try to explore a way of serialization / deserialization so this statement can hold: when API / data schema is concerned, **if the server can promise to be backward-compatible, then it's possible to build the client side application to be forward-compatible, just like that in Javascript.**
 
 (This post is inspired by Rich Hickey's talk [Spec-ulation](https://youtu.be/oyLBGkS5ICk) as unrelated as it may seem)
 
@@ -132,3 +132,5 @@ Problem solved?! Almost, but not quite. We need to introduce this pattern to the
 Despair not - the worst part is over and the rest is what we as developers are good at. I will soon get my hands dirty in writing `MergeJSON` in `Idris`.
 
 In the mean time, you might have better luck finding that it's [already there](https://www.newtonsoft.com/json/help/html/MergeJson.htm) or [there](https://stackoverflow.com/questions/9895041/merging-two-json-documents-using-jackson) for free!
+
+(Also see this [prototype in Idris](./serialize-like-javascript-the-prototype))
