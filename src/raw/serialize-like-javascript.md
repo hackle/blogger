@@ -1,4 +1,4 @@
-I have Javascript envy when it comes to consuming JSON, because it needs no serialization / deserialization. This is not the case for mostly languages, which usually requires some sort of serialization, and such operations are usually lossy and may result in unintended effects.
+I have Javascript envy when it comes to consuming JSON, because it needs no serialization / deserialization. This is not the case for most languages, which usually require some sort of serialization, and such operations are usually lossy and may result in unintended effects.
 
 We try to explore a way of serialization / deserialization so this statement can hold: when API / data schema is concerned, **if the server can promise to be backward-compatible, then it's possible to build the client side application to be forward-compatible, just like that in Javascript.**
 
