@@ -4,7 +4,7 @@ We try to explore a way of serialization / deserialization so this statement can
 
 (This post is inspired by Rich Hickey's talk [Spec-ulation](https://youtu.be/oyLBGkS5ICk), as unrelated as it may seem)
 
-Let's say we want to build an awesome app called ``plus1`` whose jobs is to make any user one year older.
+Let's say we want to build an awesome app called ``plus1`` whose job is to make any user one year older.
 
 
 ## `plus1` in Javascript
