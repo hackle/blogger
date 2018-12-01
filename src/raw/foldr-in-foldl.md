@@ -2,11 +2,11 @@ In one of his talks, Erik Meijer revealed one of his interview questions was to 
 
 I am glad that I was never in such an interview as it took me quite a while to figure this out (with a fair bit of googling).
 
-Called `reduce` in Javascript, or `aggregate` in Linq, In my opinion `fold` is one of the most useful concepts in day-to-day programming (and definitely not just for functional style programming). Getting a better understanding of `fold` certainly won't hurt.
+Called `reduce` in Javascript, or `aggregate` in Linq, in my opinion `fold` is one of the most useful concepts in day-to-day programming (and definitely not just for functional style programming). Getting a better understanding of `fold` certainly won't hurt.
 
 ## `foldl` vs `foldr`
 
-Given the below types, one can end up with two different implementations.
+Given the below type, one can come up with two different implementations.
 
 ```Idris
 myFold : (f: elem -> acc -> acc) -> (init: acc) -> (xs: List elem) -> acc
@@ -20,7 +20,7 @@ myFold1 f init [] = init
 myFold1 f init (x :: xs) = myFold1 f (f x init) xs
 ```
 
-Second implementation - note `init` is passed along and used only at the very end of the recursion.
+Second implementation - `init` is passed along and used only at the very end of the recursion.
 
 ```idris
 myFold2 : (f: elem -> acc -> acc) -> (init: acc) -> (xs: List elem) -> acc
@@ -28,7 +28,7 @@ myFold2 f init [] = init
 myFold2 f init (x :: xs) = f x (myFold2 f init xs)
 ```
 
-Let's see them in action with a trival example (One thing that I learned from `Haskell` or `Idris`, is that trivial examples can be the most important (or confounding) ones).
+Let's see them in action with a trival example (one thing that I have learned from `Haskell` and `Idris`, is that trivial examples can be the most important (or confounding) ones).
 
 ```Idris
 *myFoldl> myFold1 (::) [] [1..3]
@@ -37,7 +37,7 @@ Let's see them in action with a trival example (One thing that I learned from `H
 [1, 2, 3] : List Integer
 ```
 
-So `myFold1` will reverse a list as the first element `1` will be prepended to `init` - `[]`, then `2` and `3`. And `myFold2` loyally reconstructs the list.
+So `myFold1` will reverse a list as the first element `1` will be prepended to `init` - `[]`, then `2` and `3`. On the contrary, `myFold2` loyally reconstructs the list.
 
 ```idris
 *myFoldl> myFold1 (::) [] [1..3] == 3::(2::(1::[]))
@@ -55,7 +55,7 @@ Turns out `myFold1` is basically `foldl` and `myFold2` is `foldr`.
 [1, 2, 3] : List Integer
 ```
 
-Or simply as below thanks for structural equality.
+Or simply as below thanks to structural equality.
 
 ```idris
 *myFoldl> myFold1 (::) [] [1..3] == foldl (flip (::)) [] [1..3]
@@ -81,22 +81,22 @@ foldl : Foldable t => (acc -> elem -> acc) -> acc -> t elem -> acc
 foldr : Foldable t => (elem -> acc -> acc) -> acc -> t elem -> acc
 ```
 
-There is but one difference, the order of the parameters to the function `(acc -> elem -> acc)`! It cannot get easier than this, you say, we need only swap them when they are bound!
+Hold on - there is but one difference, the order of the parameters to the function `(acc -> elem -> acc)`! It cannot get easier than this, you say, we need only swap the parameters when they are bound! `flip` does exactly that.
 
 ```idris
 myFoldl f acc xs = foldr (flip f) acc xs
 ```
 
-Let see how it works:
+Let see if it works:
 
 ```idris
 *myFoldl> myFoldl ((\acc, elem => acc ++ [elem]))  [] [1..3]
 [3, 2, 1] : List Integer
 ```
 
-If you happen to be type-superstitious, you are in for a let-down here. No cigar! Although the type is correct, but `myFoldl` still has the behaviour of `foldr`.
+If you happen to be type-superstitious, you are in for a let-down here. No cigar! Although the type is correct, `myFoldl` still has the behaviour of `foldr`.
 
-Of course we can just do:
+Of course we can also just do:
 
 ```idris
 foldLeftCheat : (acc -> elem -> acc) -> acc -> List elem -> acc
@@ -110,7 +110,7 @@ And
 [3, 2, 1] : List Integer
 ```
 
-The reason I named this `cheat`, is because of `Foldable`. If we look at the type of `foldl` again,
+But there is a reason I named this `cheat` - the interface `Foldable` in the type of `foldl`. If we look at the type of `foldl` again,
 
 ```Idris
 foldl : Foldable t => (acc -> elem -> acc) -> acc -> t elem -> acc
