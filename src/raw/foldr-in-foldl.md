@@ -142,7 +142,7 @@ So our proper goal is to **define a `foldl` in terms of `foldr` that's applicabl
 
 With that said, we'll still use our trivial example for `List` as it's easier to understand. However we must abstain from using anything that's specific to `List`, so we'll be able to switch to a proper implementation for 'Foldable'.
 
-## a implementation that works
+## with continuation
 
 For `foldl` to come out of a `foldr`, we need to somehow transform `1::(2::(3::[]))` to `3::(2::(1::[]))`.
 
