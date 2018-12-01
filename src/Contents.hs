@@ -26,7 +26,7 @@ module Contents where
         , ("My take on (unit) testing", "my-take-on-unit-testing.md")
         , ("Serialize like javascript - MergeJSON in Idris!", "serialize-like-javascript-the-prototype.md")
         , ("Serialize like javascript - the idea", "serialize-like-javascript.md")
-        , ("foldl in terms of foldr", "foldr-in-foldl")
+        , ("foldl in terms of foldr", "foldr-in-foldl.md")
         ]
 
     about :: ContentEntry
