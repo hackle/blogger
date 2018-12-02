@@ -90,11 +90,11 @@ myFoldl f acc xs = foldr (flip f) acc xs
 Let see if it works:
 
 ```idris
-*myFoldl> myFoldl ((\acc, elem => acc ++ [elem]))  [] [1..3]
-[3, 2, 1] : List Integer
+*myFoldl> myFoldl (flip (::))  [] [1..3]
+[1, 2, 3] : List Integer
 ```
 
-If you happen to be type-superstitious, you are in for a let-down here. No cigar! Although the type is correct, `myFoldl` still has the behaviour of `foldr`.
+If you happen to be type-superstitious, you are in for a let-down here. No cigar! Although `foldr` is happy with the types of the arguments, but just by tweaking the order of some parameters, we are not going to magically turn it into `foldl`.
 
 Of course we can also just do:
 
@@ -110,7 +110,7 @@ And
 [3, 2, 1] : List Integer
 ```
 
-But there is a reason I named this `cheat` - the interface `Foldable` in the type of `foldl`. If we look at the type of `foldl` again,
+Which works for our example, but there is a reason I named this `cheat` - the interface `Foldable` in the type of `foldl`. If we look at the type of `foldl` again,
 
 ```Idris
 foldl : Foldable t => (acc -> elem -> acc) -> acc -> t elem -> acc
