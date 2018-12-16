@@ -1,4 +1,4 @@
-We explore the difference between pattern matching and passing in functions as arguments, and see how it makes a lot of sense in imperative languages such as C# when dealing with null values.
+We explore the difference between pattern matching and passing in functions as arguments, and see how it makes a lot of sense in imperative languages such as C#, so we might be able to get away from null checks.
 
 ## exhaustive pattern matching
 > I hate pattern matching... just pass in functions!
