@@ -6,7 +6,8 @@ Find the source code [here](https://github.com/hackle/idris-lambda-apigateway).
 ## set up
 
 * create a Lambda function that uses custom runtime
-* I am coding on `Ubuntu` and the compiled executables seem to be compatible with `AWS Linux` (which Lambda functions run on). Apparently this won't be the case for Windows or iOS so maybe developing through a container is required - I am keeping it simple here so I won't explore these options.
+* I am coding on `Ubuntu` in a VM and the compiled executables seem to be compatible with `AWS Linux` (which Lambda functions run on).
+* Apparently this won't be the case for a Windows or Mac machine, for which I use a container that's based on [LinuxBrew](https://github.com/Linuxbrew/docker) for `Ubuntu`. The Dockerfile can be found [here](https://github.com/hackle/idris-lambda-apigateway/blob/master/Dockerfile)
 
 ## `bootstrap`
 
@@ -49,13 +50,55 @@ AWS_XRAY_DAEMON_ADDRESS: 169.254.79.2:2000
 AWS_XRAY_CONTEXT_MISSING: LOG_ERROR
 _HANDLER: blog.handler
 AWS_LAMBDA_RUNTIME_API: 127.0.0.1:9001
-AWS_ACCESS_KEY_ID: ASIAUUEWB2VIWTDTII5Z
+AWS_ACCESS_KEY_ID: ...scrubbed...
 AWS_SECRET_ACCESS_KEY: ...scrubbed...
 AWS_SESSION_TOKEN: ...scrubbed...
 END RequestId: 611d2694-fce9-11e8-86bf-2554391e3366
-REPORT RequestId: 611d2694-fce9-11e8-86bf-2554391e3366	Duration: 37.39 ms	Billed Duration: 100 ms 	Memory Size: 128 MB	Max Memory Used: 12 MB	
+REPORT RequestId: 611d2694-fce9-11e8-86bf-2554391e3366	Duration: 37.39 ms	Billed Duration: 100 ms 	Memory Size: 128 MB	Max Memory Used: 12 MB
 RequestId: 611d2694-fce9-11e8-86bf-2554391e3366 Error: Runtime exited without providing a reason
 Runtime.ExitError
 ```
 
 Not surprising that it ends in a error as it's not a complete runtime yet.
+
+## invoke `echo`
+Next we'll simply call `echo` with any environment variable, for example `AWS_LAMBDA_RUNTIME_API`. This will be the same idea for us to invoke our handler.
+
+According to [this post on stack overflow](https://stackoverflow.com/a/40073553),
+> I'm not aware of any Idris library that lets you easily work with stdin/stdout of a subprocess.
+
+but luckily ther author provides a workaround in the same post that I could use to call `echo` and get its output back.
+
+And I have:
+
+```idris
+import System
+
+runTimeApiKey : String
+runTimeApiKey = "AWS_LAMBDA_RUNTIME_API"
+
+main : IO ()
+main = do
+  envs <- System.getEnvironment
+  case find (\(k, _) => k == runTimeApiKey) envs of
+    Nothing => putStrLn "Cannot find api root"
+    (Just (_, v)) => do
+      response <- execAndReadOutput $ "echo \"" ++ v ++ "\""
+      putStrLn response
+```
+
+And test it with Lambda gives me:
+
+```
+START RequestId: 1b5b279e-fda5-11e8-96c1-534435030916 Version: $LATEST
+127.0.0.1:9001
+...
+```
+`127.0.0.1:9001` is the root of the run time API. Cool.
+
+## get event and send it back
+Let's go a step further - get the event from the run time API, `echo` it, and send it back to the run time API. With this we complete the loop.
+
+For this we'll need to make HTTP calls with [idris-http](https://github.com/uwap/idris-http).
+
+## hook up a handler
