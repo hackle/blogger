@@ -1,9 +1,10 @@
 We explore the difference between pattern matching and passing in functions as arguments, and see how it makes a lot of sense in imperative languages such as C#, so we might be able to get away from null checks.
 
 ## exhaustive pattern matching
+
 > I hate pattern matching... just pass in functions!
 
-Paraphrased, Erik Meijer said this many times (definitely in [this great series](https://channel9.msdn.com/Series/C9-Lectures-Erik-Meijer-Functional-Programming-Fundamentals/Lecture-Series-Erik-Meijer-Functional-Programming-Fundamentals-Chapter-1) although I cannot place where exactly) to my utter perplexion - what's wrong with pattern matching? Especially when compilers for languages like `Haskell` and `Idris` can enforce exhaustive matching (or totality)?
+Paraphrased, Erik Meijer said this many times - definitely in [this great series](https://channel9.msdn.com/Series/C9-Lectures-Erik-Meijer-Functional-Programming-Fundamentals/Lecture-Series-Erik-Meijer-Functional-Programming-Fundamentals-Chapter-1) - although I cannot place where exactly) to my utter perplexion - what's wrong with pattern matching? Especially when compilers for languages like `Haskell` and `Idris` can enforce exhaustive matching (or totality)?
 
 ```haskell
 printMaybe :: Maybe String -> String
@@ -19,10 +20,10 @@ now try to load this up in `GHCI` with the `-W` option to turn on warnings.
 
 pattern-matching.hs:2:1: warning: [-Wincomplete-patterns]
     Pattern match(es) are non-exhaustive
-    In an equation for ‘printMaybe’: Patterns not matched: (Just _)
-  |
+    In an equation for 'printMaybe': Patterns not matched: (Just _)
+|
 2 | printMaybe Nothing = "Nothing"
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Ok, one module loaded.
 ```
 
@@ -109,7 +110,7 @@ static T UseString<T>(string str, Func<String, T> onValid, T onNull)
         return onValid(str);
 }
 ```
-`onValid` acts only on valid string, and `onNull` is returned is `str` is null. Straightforward.
+`onValid` acts only on valid string, and `onNull` is returned if `str` is null. Straightforward.
 
 Then to reverse a string using this function.
 
@@ -144,7 +145,7 @@ static int GetLengthCps(string str)
 No more null check! We just need to pass a function (and a default value `0`) to `UseString`, because there is guarantee from `UseString` that the `onValid` function will always act on a valid string, and in the case that the string is null, `onNull` will be returned. 
 
 ## summary
-Very simple trick inspired by Erik Meijer's "hatred" towards pattern matching. In languages with support for exhaustive pattern matching this may only be a choice of programming style as either way we can get strong confidence. However, in main stream imperative languages like C#, this pattern can be very handy as it saves us the pain of null checks, or worse, the pain of forgetting to do so.
+Very simple trick inspired by Erik Meijer's "hatred" towards pattern matching. In languages with support for exhaustive pattern matching, this may only be a choice of programming style, as either way we can get strong confidence. However, in main-stream imperative languages like C#, this pattern can be very handy as it saves us the pain of null checks, or worse, the pain of forgetting to do so.
 
 There are options to make this pattern more generic so we don't need to make `UseCustomer`, `UseProduct` etc etc.
 
