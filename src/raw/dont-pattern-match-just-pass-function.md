@@ -1,10 +1,10 @@
-We explore the difference between pattern matching and passing in functions as arguments, and see how it makes a lot of sense in imperative languages such as C#, so we might be able to get away from null checks.
+We explore the difference between pattern matching and passing in functions as arguments, and see how it makes a lot of sense in other languages such as C#, so we might be able to get away from null checks.
 
 ## exhaustive pattern matching
 
 > I hate pattern matching... just pass in functions!
 
-Paraphrased, Erik Meijer said this many times - definitely in [this great series](https://channel9.msdn.com/Series/C9-Lectures-Erik-Meijer-Functional-Programming-Fundamentals/Lecture-Series-Erik-Meijer-Functional-Programming-Fundamentals-Chapter-1) - although I cannot place where exactly) to my utter perplexion - what's wrong with pattern matching? Especially when compilers for languages like `Haskell` and `Idris` can enforce exhaustive matching (or totality)?
+Paraphrased, Erik Meijer said this many times (definitely in [this great series](https://channel9.msdn.com/Series/C9-Lectures-Erik-Meijer-Functional-Programming-Fundamentals/Lecture-Series-Erik-Meijer-Functional-Programming-Fundamentals-Chapter-1) although I cannot place where exactly) to my utter perplexion - what's wrong with pattern matching? Especially when compilers for languages like `Haskell` and `Idris` can enforce exhaustive matching (or totality)?
 
 ```haskell
 printMaybe :: Maybe String -> String
@@ -145,12 +145,12 @@ static int GetLengthCps(string str)
 No more null check! We just need to pass a function (and a default value `0`) to `UseString`, because there is guarantee from `UseString` that the `onValid` function will always act on a valid string, and in the case that the string is null, `onNull` will be returned. 
 
 ## summary
-Very simple trick inspired by Erik Meijer's "hatred" towards pattern matching. In languages with support for exhaustive pattern matching, this may only be a choice of programming style, as either way we can get strong confidence. However, in main-stream imperative languages like C#, this pattern can be very handy as it saves us the pain of null checks, or worse, the pain of forgetting to do so.
+Very simple trick inspired by Erik Meijer's "hatred" towards pattern matching. In languages with support for exhaustive pattern matching, this may only be a choice of programming style, as either way we can get strong confidence. However, in languages without such support like C#, this pattern can be very handy as it saves us the pain of null checks, or worse, the pain of forgetting to do so.
 
-There are options to make this pattern more generic so we don't need to make `UseCustomer`, `UseProduct` etc etc.
+There are options to make this pattern more generic so we don't need to make `UseCustomer`, `UseProduct` `UseXYZ` etc etc.
 
-It's also possible to make this more fluent with extension methods.
+It's also possible to make this more fluent, such as with extension methods.
 
-Of course one naturally runs into the problem of `void` not being a real type - but I'll leave all these to you to explore. 
+Of course one can naturally runs into the problem of `void` not being a real type - but I'll leave all these to you to explore. 
 
 Have fun hacking!
