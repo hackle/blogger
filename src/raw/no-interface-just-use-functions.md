@@ -2,15 +2,15 @@ I want to show you how functions can replace interfaces in the cases of dependen
 
 ## example: `LatteMaker`:
 
-Let's stick with C# - my favorite imperative language - for the example, a make-up `LatteMaker`.
+Let's stick with C# - my favorite imperative language - for the example, a made-up `LatteMaker`.
 
 ```csharp
-public interface IICoffeeBeanProvider
+public interface ICoffeeBeanProvider
 {
     CoffeeBean GetInGram(int grams);
 }
 
-public class CoffeeBeanProvider : IICoffeeBeanProvider 
+public class CoffeeBeanProvider : ICoffeeBeanProvider 
 { 
     public CoffeeBean GetInGram(int grams)
     {
