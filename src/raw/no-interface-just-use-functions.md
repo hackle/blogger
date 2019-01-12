@@ -59,7 +59,7 @@ public class LatteMaker : ILatteMaker
 }
 ```
 
-Regrettably, that's a lot of code! However, I hope the style of these **52** (keep this in mind) lines look familiar to you - `LatteMaker` takes its dependencies in the form of interfaces through its constructor. Responsibilities are clearly separated. We can see this will work well with dependency injectors, and will be a breeze to unit test with the help of mocking frameworks.
+Regrettably, that's a lot of code! However, I hope the style of these **52** (keep this in mind) lines looks familiar to you - `LatteMaker` takes its dependencies in the form of interfaces through its constructor. Responsibilities are clearly separated. We can see this will work well with dependency injectors, and will be a breeze to unit test with the help of mocking frameworks.
 
 ## using interfaces as a popular practice
 
@@ -245,6 +245,6 @@ As in most main-stream languages, functions are first-class in `C#`. Replacing i
 
 Some best practices still apply, for example, naming the function signatures becomes more important as types don't always express everything (to be discussed in yet another post). 
 
-In the above example,  `getBeansInGram` has the signature `Func<int, CoffeeBean>`, while `CoffeeBean` is straight-forward, `int` can mean anything such as age to height. Therefore it's important to reveal its meaning `gram` in `getBeansInGram`. (further reading: how F# makes this a breeze with [units of measure in F#](https://fsharpforfunandprofit.com/posts/units-of-measure/)).
+In the above example,  `getBeansInGram` has the signature `Func<int, CoffeeBean>`, while `CoffeeBean` is straight-forward, `int` can mean anything such as age, height or times of winks to signal yes. Therefore it's important to reveal its meaning `gram` by the name `getBeansInGram`. (further reading: how F# makes this a breeze with [units of measure in F#](https://fsharpforfunandprofit.com/posts/units-of-measure/)).
 
-Last but not least - this is not a novel invention of mine - one could easily come to this realisation with enough time spent in functional programming. Let that be the moral of the story.
+Last but not least, this is not a novel invention of mine. One naturally comes to this realisation with enough time spent in functional programming. Let that be the moral of the story.
