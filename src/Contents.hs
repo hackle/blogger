@@ -27,6 +27,7 @@ module Contents where
         , ("Serialize like javascript - MergeJSON in Idris!", "serialize-like-javascript-the-prototype.md")
         , ("Serialize like javascript - the idea", "serialize-like-javascript.md")
         , ("foldl in terms of foldr", "foldr-in-foldl.md")
+        , ("Inject functions, not interfaces", "no-interface-just-use-functions.md")
         , ("Don't null check, just continue!", "dont-pattern-match-just-pass-function.md")
         ]
 
