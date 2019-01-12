@@ -1,8 +1,8 @@
 I want to show you how functions can replace interfaces in the cases of dependency injection, for obvious benefits such as less code and simpler solutions.
 
-## example: `CoffeeMaker`:
+## example: `LatteMaker`:
 
-Let's stick with C# - my favorite imperative language - for the example, a make-up `CoffeeMaker`.
+Let's stick with C# - my favorite imperative language - for the example, a make-up `LatteMaker`.
 
 ```csharp
 public interface IICoffeeBeanProvider
@@ -63,18 +63,21 @@ My regret there is a lot of code! However, I hope the style of these **52** (kee
 
 ## using interfaces as a popular practice
 
-In object oriented programming, it's a common practice that for each concrete class, there should be a corresponding interface. The example above represents that style.
+In object oriented programming, it's a common practice that for each concrete class, there is a corresponding interface for various "benefits". The example above represents that style.
 
 What makes me uneasy, is that after years of doing this, I couldn't help but feeling such style of coding is repetitive,
+
 * to inject `ICoffeeBeanProvider` and `IMilkProvider` to `LatteMaker`, I need to write them 3 times, respectively as fields, constructor parameters, and assigning the arguments to the fields. (I love how `TypeScript` makes this more concise with constructor assignment)
-* I am in general very cautious of blanket rules in the form of `every X must have a Y` - usually such rules are either wrong, or masks other problems, and result in either waste or bad solutions.
-* what also bugs me a lot, is that libraries and frameworks don't always use this style. For example, `System.Net.WebClient` does not implement an interface called `IWebClient`. Why? Surely microsoft should champion best practices?!
 
-## functions to the rescue!
+* I am in general very cautious about blanket rules in the form of `every X must have a Y` - usually such rules are either wrong, or masks other problems, and result in either waste or bad solutions.
 
-Looking closer at how `ICoffeeBeanProvider` and `IMilkProvider` are used, an easy observation is that essentially, all we need is the methods they provide, the interfaces wrap around the methods. What if we just use the methods themselves, without the overhead of interfaces?
+* what also bugs me a lot, is that libraries and frameworks don't always use this style. For example, `System.Net.WebClient` does not implement an interface called `IWebClient`. Why? Surely Microsoft should champion best practices?!
 
-This may sound outlandish to some, but C# has had support for function types `Func<>`, `Action<>` as well as lambda for ages now, so do most other main-stream languages (even `Java` does!) these days. With such support it's nothing strange to pass functions around. Let's get started!
+## functions for less code
+
+Looking closer at how `ICoffeeBeanProvider` and `IMilkProvider` are used, an easy observation is that essentially, all we need is the methods they provide - the interfaces merely wrap around the methods, and offer little else. What if we just use the methods themselves, without the overhead of interfaces?
+
+This may sound outlandish to some, but `C#` has had support for first-class function types `Func<>`, `Action<>` as well as lambda for ages now, so do most other main-stream languages (even `Java` does!) these days. With such support it's nothing strange to pass functions around. Let's get started!
 
 ### inject functions to constructor
 
@@ -112,11 +115,11 @@ var latteMaker = new LatteMaker(beanProvider.GetInGram, milkProvider.GetInOunce)
 var latte = latteMaker.Make();
 ```
 
-There is not much difference to the `LatteMaker` yet, but since now we don't depend on the interfaces `ICoffeeBeanProvider` and `IMilkProvider`, both can be deleted. Less code, small win.
+Not much difference to the original `LatteMaker` yet, but since now we don't depend on the interfaces `ICoffeeBeanProvider` and `IMilkProvider`, both can be deleted. Less code, always nice to see.
 
 ## remove the constructor
 
-Although dependencies are injected as functions now, the `LatteMaker` is not much different. I am especially not happy with the repetition of declare, inject and assign for the dependent functions. 
+Although dependencies are injected as functions now, the `LatteMaker` is not much different. I am especially not happy with the same repetition of *declare, inject and assign* for the dependent functions. 
 
 Look at the present `LatteMaker`, it's obvious that both `Func`s are used only in the `Make` method. A natural thought would be - why don't we just embed these functions to the method? That's easy to do and now we have:
 
@@ -141,11 +144,11 @@ To use it,
 var latte = new LatteMaker().Make(beanProvider.GetInGram, milkProvider.GetInOunce);
 ```
 
-Much less code! I am happy.
+Shockingly, the constructor, the fields are completely gone, the *declare, inject and assign* repetition is removed, there is much less code, but the `Make` method needs not change much, and remains straight-forward!
 
 ## static-ise
 
-When a class needs no constructors, it's usually a good sign it can be made static. When a classes is made static, it becomes less stateful, and therefore much easier to reason with.
+When a class needs no constructors, it's usually a good sign it can be made static. When a classes is made static, it becomes less stateful, and therefore much easier to reason with. Needless to say, I am an advocate for static classes.
 
 A static `LatteMaker` looks like
 
@@ -171,7 +174,7 @@ To use it,
 var latte = LatteMaker.Make(beanProvider.GetInGram, milkProvider.GetInOunce);
 ```
 
-Now our example looks like
+Finally, our example is reduced to 29 lines of code from 52.
 
 ```csharp
 public class CoffeeBeanProvider 
@@ -204,33 +207,33 @@ public static class LatteMaker
 }
 ```
 
-From 52 lines to 29 - I am happy.
+## is anything lost?
 
-## what have we lost?
+Before we celebrate, it's important to make sure that we haven't done anything terrible. 
 
-Before we celebrate, it's important to make sure that we haven't done anything terrible. So have we lost any benefits of using interfaces / dependency injection via constructor? Let's go over some best practices:
+Have we lost any benefits of using interfaces / dependency injection via constructor? Let's go over some best practices:
 
 ### separation of concern
-All Classes still have the same responsibilities as before - just with much less code.
+Each class still has the same responsibilities as before - just with much less code.
 
 ### dependency inversion
 
 `LatteMaker` does not depend on concrete instances of `CoffeeBeanProvider` or `MilkProvider`, in fact, instead of depending on specific interfaces, `LatteMaker.Make` requires functions that satisfy the specified type signatures only, and this can be **significant**.
 
-Think about it, any class can easily provide such functions, no matter what interface it does or does not implement. Or even better, the consumer can just pass in a lambda. In other words, for our example, `interfaces are not necessary`!
+Think about it, any class can easily provide such functions, no matter what interface it does or does not implement. In fact, one does not have to use a method wrapped in a class, using a lambda is sufficient for trivial cases, and requires even less code. In other words, for our example and potentially many similar scenarios, `interfaces are not necessary at all`!
 
 Also - it's time to stop complaining about lack of support for **duck typing** in programming languages, for cases of converting one interface to another with identical type signatures, but is declared separately. The solution is as illustrated above: if an API is designed to accept functions instead of interfaces, then we get duck typing for free.
 
 ### testability
 
-Because **dependency inversion** is maintained, `LatteMaker` remains easy to unit test. In fact, it's now much easier to test now because the necessity for mocking is completely removed - I will cover more of that in a different post.
+Because **dependency inversion** is maintained, unit testing `LatteMaker` remains equally easy, if not more so - because the necessity for mocking is completely removed. I will cover more of that in a different post.
 
 ## summary
 
-Interface has its place in programming, but popular usage of interfaces for the convenience of dependency injection and unit testing results in abuse of interface, or as Martin Fowler terms it, [header interface](https://martinfowler.com/bliki/HeaderInterface.html)
+Interface has its place in programming, but popular usage of interfaces for the convenience of dependency injection and unit testing results in abuse of interface, or as Martin Fowler terms, [header interface](https://martinfowler.com/bliki/HeaderInterface.html).
 
 As in most main-stream languages, functions are first-class constructs in `C#`. Replacing interfaces with functions results in much less code, a simpler and more straight-forward style, and less stateful, more reasonable solutions.
 
-Some best practices still apply, for example, naming the function signatures becomes more important as types don't always express everything (to be discussed in another post). In the above example, `Make(Func<int, CoffeeBean> getBeansInGram, Func<int, Milk> getMilkInOunce)`, `getBeansInGram` has a signature of `Func<int, CoffeeBean>`, while `CoffeeBean` is easy to understand, `int` can mean anything, so it's important to reveal it means `gram` with `getBeansInGram`. (further reading: [units of measure in F#](https://fsharpforfunandprofit.com/posts/units-of-measure/)).
+Some best practices still apply, for example, naming the function signatures becomes more important as types don't always express everything (to be discussed in yet another post). In the above example,  `getBeansInGram` has a signature of `Func<int, CoffeeBean>`, while `CoffeeBean` is easy to understand, `int` can mean anything such as age to height, so it's important to reveal it means `gram` with `getBeansInGram`. (further reading: how F# makes this a breeze with [units of measure in F#](https://fsharpforfunandprofit.com/posts/units-of-measure/)).
 
-Last but not least - this is not a novel invention of mine - anybody could come to this realisation with enough time with functional programming. Let that be the moral of the story.
+Last but not least - this is not a novel invention of mine - one could easily come to this realisation with enough time spent in functional programming. Let that be the moral of the story.
