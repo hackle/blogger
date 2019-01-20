@@ -28,7 +28,7 @@ module Contents where
         , ("Serialize like javascript - the idea", "serialize-like-javascript.md")
         , ("foldl in terms of foldr", "foldr-in-foldl.md")
         , ("Inject functions, not interfaces", "no-interface-just-use-functions.md")
-        , ("Code simple, unit test easy", "test-complex-keep-rest-simple.md")
+        , ("Make unit testing a breeze by segregating complexity", "test-complex-keep-rest-simple.md")
         , ("Don't null check, just continue!", "dont-pattern-match-just-pass-function.md")
         ]
 

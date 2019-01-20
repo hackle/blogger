@@ -9,7 +9,7 @@ Let's look at an example, a `ShoppingController` for an online shopping applicat
 * buyer can get discounts according to type of membership
 * it's also possible to get a discount with a promo code
 * in case buyer qualifies for both types of discount, the better discount applies
-* however, some items are not discountable and their original price should be used
+* however, some items are not discountable and their original price should apply
 
 ```csharp
 public class ShoppingController : BaseController
@@ -61,41 +61,43 @@ public class ShoppingController : BaseController
 }
 ```
 
-As an example this may seem unnecessarily complicated - but we all know that it's nowhere as complicated as real world applications.
+As an example this may seem unnecessarily complicated - but we all know it's nowhere as complicated as real world applications.
 
-I believe we'll all agree that `CalculateTotalPayable` needs to be unit tested thoroughly because it would be quite important to our application and it's fairly complex (and can grow much more so).
+There should be no doubt `CalculateTotalPayable` needs to be unit tested thoroughly, because it's quite important to a shopping application, and it's fairly complex (and can grow much more so).
 
 ## analyzing the complexity of `CalculateTotalPayable`
 
-Let's inspect the complexity of the method and how we can unit test it.
+Let's get a feel of the complexity of the method in light of unit testing.
 
-* because the controller depends on `ILoggingService` and `IStockService`, Mocks for these interfaces are to be created to construct the controller. **Although** the method under test has no use for `IStockService`. (see also [inject functions, not interfaces](/inject-functions--not-interfaces))
+* because the controller depends on `ILoggingService` and `IStockService`, `mocks` for these interfaces are to be created to construct the controller. **Although** `CalculateTotalPayable` has no use for `IStockService`. (injecting interfaces is questionable too - see also [inject functions, not interfaces](/inject-functions--not-interfaces))
 * there are 3 scenarios for discount based on types of membership 
 * also 3 scenarios for discount based on promo code
-* yet 2 scenarios based on whether an `Item` can be discounted or not
+* yet 2 more scenarios based on whether an `Item` can be discounted
 
 I'll have to confess I am not looking forward to unit testing this method:
 
-* we need `3 x 3 x 2 = 18` test cases to fully cover this method. (and remember real-life applications can be much more complicated than this!)
-* any time a new dependency is introduced to the controller, even if the new dependency has nothing to do with `CalculateTotalPayable`, all the 18 tests will break and needs fixing.
+* we need `3 x 3 x 2 = 18` test cases to fully cover this method. (and remember real-life applications can be much more complex!)
+* any time a new dependency is added to the controller, even one that has nothing to do with `CalculateTotalPayable`, all the 18 tests will break and need fixing.
 * the call to `ILoggingService.Log` really is trivial - but it also needs to be stubbed or tests will fail.
 
-This is typically the moment teams decide that it's not worthwhile to unit test, as developers explain how complicated, time-consuming it is, and how annoying maintenance will be, "although it would be the **right** thing to do", everybody agrees with regret.
+This is typically the moment teams decide that it's not worthwhile to write any unit test, as developers explain how complicated, time-consuming it is, and how annoying maintenance will be, "although it would be the **right** thing to do", everybody agrees with regret.
+
+This is unfortunate and seems paradoxical: complex code is not tested because it's complex, but what's the point of testing if we only test simple code?
 
 But hold on team! This doesn't have to be the case. We'll see how we can move some code around and make unit testing a breeze. It won't take long - just 2 very simple steps, at most.
 
 ## step 1. separate code into pure functions
 
-Looking closely at the method body, it's obvious that it consists of 3 steps:
+Looking closely at `CalculateTotalPayable`, it's clear that it's made up of 3 steps:
 
 - calculate discount based on type of membership
 - calculate discount based on promo code
 - calculate the sum to pay based on whether each item is discountable, and which discount to apply
 
-So step 1 is to move each step into a separate static class. We are not going to use interfaces because:
+So step 1 is to move each step into a separate static class - not interfaces, because:
 
-* static methods are the easiest to unit tests (as they are usually equivalent to pure methods)
-* interfaces are also code to write and maintain, and usually lead to [header interfaces](https://martinfowler.com/bliki/HeaderInterface.html)
+* static methods are almost pure functions, which are the easiest to unit test
+* interfaces are also code to write and maintain, and usually lead to [header interfaces](https://martinfowler.com/bliki/HeaderInterface.html). Less code is usually better than more.
 
 So we create three separate static classes as follows, to start with discount based on member types:
 
@@ -131,7 +133,7 @@ public void Gets_discounts_per_type_of_membership(
 }
 ```
 
-It doesn't get any easier - just only a matter of giving input and expecting output! I describe this type of unit tests as **data-driven**. Such is the beauty of static methods aka pure functions.
+It doesn't get any easier - only a matter of giving input and expecting output! I consider this type of unit tests **data-driven**. Such is the beauty of static methods aka pure functions.
 
 Same goes for the other two classes.
 
@@ -190,31 +192,23 @@ public decimal CalculateTotalPayable(IEnumerable<Item> items, Membership member,
 
 ## step 2? there is no step 2
 
-You'd be surprised - we are done, there is not really a step 2. Except maybe, deleting any unit tests previously written for the original complex `CalculateTotalPayable`?
+You'd be surprised - we are done, there is not really a step 2. Except maybe, deleting any unit tests previously written for the original `CalculateTotalPayable`?
 
-And yes, you heard right - we are not going to unit test `CalculateTotalPayable`, because it's now **trivial**.
+And yes, you guessed right - we are not going to unit test `CalculateTotalPayable`, because it's now **trivial**.
 
 Look at it. There is no branching of logic in this method any longer, it's made up of simple (almost boring) statements and expressions. There is but a single path through this method, or in other words, its [Cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity) is 1.
 
-But, do we still get the benefits of unit testing, and are we still aligned with best practices? Let's see
-
-* separation of concern: check, we break the complex method into functions with very specific responsibilities.
-* completeness of unit testing: check, we still cover all scenarios. Only instead of keeping all logic in a lump, we break them apart so it's much easier to test.
-
-And for extra benefits
-
-* more robust unit tests - being static methods, the code under test is now free of dependencies
-* fewer un-robust unit tests - we are not testing the controller now there is no risk of having broken unit tests because of new dependencies introduced to the controller, potentially for unrelated methods.
+Unit testing such methods are still very possible, but usually uninteresting and almost pointless. 
 
 ### the integrator pattern
 
-Taking this style of code and unit testing one step further, we arrive at such a pattern that 
+Taking this style of coding and unit testing one step further, we arrive at a pattern that features: 
 
-* classes that only integrate other code units, but are devoid of complexity themselves. Examples of such classes: controllers in MVC, presenters in MVP, services in service oriented architecture, or components in some front-end frameworks. They have a very low level of complexity and therefore require no unit testing.
+* a type of classes that only integrate other code units, but are devoid of complexity themselves. Examples of such classes: controllers in MVC, presenters in MVP, services in service oriented architecture, or components in some front-end frameworks. They have a very low level of complexity and therefore require no unit testing.
 
-* complexity is separated into code units with specific responsibilities. These classes / functions are where the logic of the application lives and should be thoroughly unit tested. They are preferably static / pure, so unit testing becomes data-driven, or, a matter of coming up with good sets of input and expected output.
+* complexity is separated into code units with specific responsibilities. These classes / functions are where the logic of the application lives and should be thoroughly unit tested. They are preferably static / pure, so unit testing becomes data-driven, or, a matter of coming up with representative (if not complete) sets of input and expected output.
 
-We can call this the **Integrator pattern**. The essence of this pattern, as can be seen above, is conscious segregation of complexity. 
+We can call this the **Integrator pattern**.
 
 ## summary
 
@@ -224,4 +218,6 @@ Unit testing is key to productivity especially when dealing with complexity. How
 
 The matter is made worse by some popular frameworks that endorse practices that are misleading, confusing and unnecessarily complicated. (Yes I am looking at you, Angular).
 
-The solution is not to resort to fight complexity with more complexity, such as mocking, dependency injection, creating header interfaces. Instead, we can look back at complexity in its face, consciously break it up and segregate it, and quite easily, we restore simplicity and the joy of unit testing. 
+There are solutions that try to fight complexity with more complexity, such as mocking, dependency injection, creating header interfaces. 
+
+The **Integrator** pattern, as can be seen above, handles complexity by looking right in its face, consciously breaking it up, putting it in separate places, and quite easily, we restore simplicity as well as the joy of unit testing.
