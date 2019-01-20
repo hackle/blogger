@@ -38,7 +38,7 @@ public class ShoppingController : BaseController
                 return item.Price;
         });
 
-        this.loggingService.Log(LogLevel.Info, $"logging info");
+        this.loggingService.Log(LogLevel.Info, $"logging that member XYZ gets prices for ABC with dicount so and so");
 
         return totalPayable;
     }

@@ -1,7 +1,7 @@
 flags: {}
 packages:
 - .
-allow-newer: true
+allow-newer: false
 extra-deps:
 - aeson-1.2.4.0
 - amazonka-core-1.5.0
