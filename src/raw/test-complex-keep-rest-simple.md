@@ -6,7 +6,7 @@ The idea is very simple: separate complex logic to simpler units, and make the i
 
 Let's look at an example, a `ShoppingController` for an online shopping application. To calculate total sum to pay for a list of items, the business logic is as follows:
 
-* buyer can get discounts according to type of membership
+* buyer can get a discount according to type of membership
 * it's also possible to get a discount with a promo code
 * in case buyer qualifies for both types of discount, the better discount applies
 * however, some items are not discountable and their original price should apply
@@ -208,16 +208,16 @@ Taking this style of coding and unit testing one step further, we arrive at a pa
 
 * complexity is separated into code units with specific responsibilities. These classes / functions are where the logic of the application lives and should be thoroughly unit tested. They are preferably static / pure, so unit testing becomes data-driven, or, a matter of coming up with representative (if not complete) sets of input and expected output.
 
-We can call this the **Integrator pattern**.
+Let's call this the **Integrator pattern**.
 
 ## summary
 
-The software industry is notorious for complicating things that should otherwise be simple. Popular practices for unit testing is just another example. 
+The software industry is notorious for complicating things that should otherwise be simple. Some of the more popular practices for unit testing is just another example. 
 
-Unit testing is key to productivity especially when dealing with complexity. However, because of poor practices (and frameworks made to accommodate such practices, which in turn further compound the problems) it has a bad name of being expensive: hard to write, fragile and easily broken, a nightmare to maintain.
+Unit testing is key to productivity especially when dealing with complexity. However, because of poor practices it has a bad name of being expensive: hard to write, fragile and easily broken, a nightmare to maintain.
 
-The matter is made worse by some popular frameworks that endorse practices that are misleading, confusing and unnecessarily complicated. (Yes I am looking at you, Angular).
-
-There are solutions that try to fight complexity with more complexity, such as mocking, dependency injection, creating header interfaces. 
+The matter is made worse by some popular frameworks that endorse practices that try to manage complexity with more complexity, such as built-in support for mocking, dependency injection etc. Now developers need to learn yet another new way to unit test, which does not help and compounds the problems more. (Yes I am looking at you, Angular).
 
 The **Integrator** pattern, as can be seen above, handles complexity by looking right in its face, consciously breaking it up, putting it in separate places, and quite easily, we restore simplicity as well as the joy of unit testing.
+
+It's language- or framework- agnostic, so we can all start using it now. Simplicity, the essence of programming, prevails. Happy hacking!
