@@ -30,6 +30,7 @@ module Contents where
         , ("Inject functions, not interfaces", "no-interface-just-use-functions.md")
         , ("Make unit testing a breeze by segregating complexity", "test-complex-keep-rest-simple.md")
         , ("Don't null check, just continue!", "dont-pattern-match-just-pass-function.md")
+        , ("2-layer architecture", "two-layer-architecture.md")
         ]
 
     about :: ContentEntry
