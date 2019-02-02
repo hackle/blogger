@@ -5,14 +5,14 @@ module Template where
 import Text.Blaze.Html5
 import qualified Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes as A
-import Contents (about, getSlug, ArticleTitle)
+import Contents (about, getSlug, ContentEntry(..))
 
 type HtmlBody = H.Html
 
-fromTemplate :: ArticleTitle -> AttributeValue -> HtmlBody -> H.Html -> H.Html -> H.Html
-fromTemplate articleTitle base body styles idrisPrism = H.docTypeHtml $ do
+fromTemplate :: ContentEntry -> AttributeValue -> HtmlBody -> H.Html -> H.Html -> H.Html
+fromTemplate contentEntry base body styles idrisPrism = H.docTypeHtml $ do
     H.head $ do
-        H.title $ toHtml (articleTitle ++ " | Hackle's blog")
+        H.title $ toHtml ((getTitle contentEntry) ++ " | Hackle's blog")
         H.base ! href base
         H.meta ! name "viewport" ! content "width=device-width, initial-scale=1.0"
         H.link ! rel "stylesheet" ! href "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
