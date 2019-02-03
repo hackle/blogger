@@ -33,7 +33,7 @@ loadPage urlBase path = do
         single <- loadArticle toLoad
         renderPage toLoad urlBase $ mconcat (single:sharing:seeAlso:otherBlogEntries)
         where
-          entry = path >>= \p -> List.find (\e -> p == getSlug e) siteContents
+          entry = path >>= \p -> List.find (\e -> eqSlug p e) siteContents
           (latestArticle:_) = blogContents
           toLoad = fromMaybe latestArticle entry
           seeAlso = H.h4 "See also:"

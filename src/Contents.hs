@@ -1,5 +1,7 @@
 module Contents where
     import Data.Char
+    import Data.List.Extra (stripSuffix)
+    import Data.Maybe (fromMaybe)
 
     type ArticleTitle = String
     data ContentEntry = Entry { getTitle::ArticleTitle
@@ -9,9 +11,12 @@ module Contents where
 
     toEntry :: (ArticleTitle, FilePath) -> ContentEntry
     toEntry (artTitle, fPath) =
-        Entry artTitle fPath (toSlug artTitle)
-        where
-            toSlug = fmap ((\c -> if c `elem` ['a'..'z'] then c else '-').toLower)
+        Entry artTitle fPath $ fromMaybe fPath (stripSuffix ".md" fPath)
+
+    eqSlug :: String -> ContentEntry -> Bool
+    eqSlug slug ent = strip slug == strip (getSlug ent) || strip slug == strip (getTitle ent)
+        where 
+            strip str = toLower <$> filter isLetter str
 
     blogContents :: [ContentEntry]
     blogContents = reverse $ toEntry <$> [
