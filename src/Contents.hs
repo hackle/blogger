@@ -1,7 +1,8 @@
 module Contents where
     import Data.Char
-    import Data.List.Extra (stripSuffix)
+    import Data.List.Extra (stripSuffix, words)
     import Data.Maybe (fromMaybe)
+    import Data.List (intercalate)
 
     type ArticleTitle = String
     data ContentEntry = Entry { getTitle::ArticleTitle
@@ -10,13 +11,16 @@ module Contents where
                                 } deriving Eq
 
     toEntry :: (ArticleTitle, FilePath) -> ContentEntry
-    toEntry (artTitle, fPath) =
-        Entry artTitle fPath $ fromMaybe fPath (stripSuffix ".md" fPath)
+    toEntry (artTitle, fPath) = Entry artTitle fPath slug
+        where
+            slug = intercalate "-" $ words $ map toLower $ filter goodChar artTitle
+            goodChar c = isAlphaNum c || c == ' '
 
     eqSlug :: String -> ContentEntry -> Bool
-    eqSlug slug ent = strip slug == strip (getSlug ent) || strip slug == strip (getTitle ent)
+    eqSlug str (Entry _ path slug) = strip str == strip slug || strip str == strip pathWoExt
         where 
             strip str = toLower <$> filter isLetter str
+            pathWoExt = fromMaybe path $ stripSuffix ".md" path
 
     blogContents :: [ContentEntry]
     blogContents = reverse $ toEntry <$> [
