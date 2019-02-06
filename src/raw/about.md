@@ -6,4 +6,4 @@ I am a programmer and I enjoy programming a lot. At work I use a lot of C# and T
 
 The setup of this blog is based on the excellent [serverless-haskell](https://github.com/seek-oss/serverless-haskell) project. You'll find a [write-up](/setting-up-an-aws-lambda-with-serverless-haskell) for how I managed to wire everything up.
 
-If you ever want to get in touch, this is my email address but reversed: moc.liamtoh@welkcah (you'll find an article dedicated to a ``reverse`` function in Idris). Or find me on [Twitter](https://twitter.com/hacklew).
+If you ever want to get in touch, this is my email address but reversed: moc.liamtoh@welkcah (you'll find an article dedicated to a ``reverse`` function in Idris). Or find me on Twitter [@hacklew](https://twitter.com/hacklew).
