@@ -26,7 +26,7 @@ module Contents where
     blogContents = reverse $ toEntry <$> [
         ("How is this blog put together", "blog-architecture.md")
         -- , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
-        , ("LINQ, infinity, laziness and oh mine!", "linq-tips.md")
+        , ("LINQ, infinity, laziness and oh my!", "linq-tips.md")
         -- , ("A lens look-alike (really a nested data updater) in C#?", "lens-csharp.md")
         , ("Lens (really record viewer / updater) in TypeScript", "lens-typescript.md")
         , ("Fin", "fin.md")
@@ -40,6 +40,7 @@ module Contents where
         , ("Make unit testing a breeze by segregating complexity", "test-complex-keep-rest-simple.md")
         , ("Don't null check, just continue!", "dont-pattern-match-just-pass-function.md")
         , ("2-layer architecture", "two-layer-architecture.md")
+        , ("Types and tests: JavaScript 10, Idris 0", "types-and-tests.md")
         ]
 
     about :: ContentEntry
