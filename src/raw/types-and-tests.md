@@ -1,6 +1,6 @@
 It's a well-known claim that static typing can help reduce amount of unit tests required. Let's see what this means with a few examples in different languages.
 
-Disclaimer: this is in no way trying fuel any debate over related subjects. If you are indeed in, or about to get into such a debate, read [What to know before debating type systems](http://blogs.perl.org/users/ovid/2010/08/what-to-know-before-debating-type-systems.html).
+Disclaimer: this is in no way trying to fuel any debate over related subjects. If you are indeed in, or about to get into such a debate, read [What to know before debating type systems](http://blogs.perl.org/users/ovid/2010/08/what-to-know-before-debating-type-systems.html).
 
 ## example
 
