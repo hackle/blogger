@@ -41,6 +41,7 @@ module Contents where
         , ("Don't null check, just continue!", "dont-pattern-match-just-pass-function.md")
         , ("2-layer architecture", "two-layer-architecture.md")
         , ("Types and tests: JavaScript 10, Idris 0", "types-and-tests.md")
+        , ("Types, names, and type superstition", "type-superstition.md")
         ]
 
     about :: ContentEntry
