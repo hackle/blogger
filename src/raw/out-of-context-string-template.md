@@ -102,7 +102,7 @@ This might not be obvious yet but let's consider again the **old** version of `B
 void Bar()
 {
     Decimal pricePerOunce = 17.36m;
-    // expecting template: "The current price is {0:C2} per ounce.
+    // expecting template: "The current price is {0:C2} per ounce."
     String s = String.Format(priceTemplate, pricePerOunce);
     // ...
 }
@@ -140,6 +140,17 @@ Even if we do call it magic, it's still a questionable practice to place it away
 Therefore, it's more pragmatic and helpful to place the string template where it is consumed, to make requirements immediate and clear.
 
 With that we now declare **out-of-context string template is an anti-pattern** because it damages context and introduces friction to understanding and maintaining source code.
+
+## what if the template is re-used?
+
+In the case of reusing a string template, we can create a function to hold the template, and the function can expose the data requirements as parameters. For example,
+
+```csharp
+string FormatPrice(string item, decimal pricePerOunce)
+{
+    return String.Format("The current price for {0} is {1} per ounce.", item, pricePerOunce);
+}
+```
 
 ## alternatives
 
