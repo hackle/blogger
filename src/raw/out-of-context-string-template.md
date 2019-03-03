@@ -152,6 +152,8 @@ string FormatPrice(string item, decimal pricePerOunce)
 }
 ```
 
+We can then reuse `FormatPrice` instead of the string template.
+
 ## alternatives
 
 ### string interpolation
