@@ -42,6 +42,7 @@ module Contents where
         , ("2-layer architecture", "two-layer-architecture.md")
         , ("Types and tests: JavaScript 10, Idris 0", "types-and-tests.md")
         , ("Types, names, and type superstition", "type-superstition.md")
+        , ("Out-of-context string template is an anti-pattern", "out-of-context-string-template.md")
         ]
 
     about :: ContentEntry

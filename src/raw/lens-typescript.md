@@ -1,6 +1,6 @@
 You would have heard of lens if you use or (like me) dabble in Haskell. Loosely called functional getters and setters, it is popularized by the mighty Edward Kmett with his famous [lens package](http://hackage.haskell.org/package/lens).
 
-Ironically, the lens proper condones an imperative syntax, but the idea is unfortunately not really utilized enough for the Object Oriented world, to the dismay of many who have had a taste of the mojo and go back to stateful assignments and unsafe navigations.
+Ironically, the lens proper condones an imperative syntax, but the idea is unfortunately not really utilized enough for the Object Oriented world, to the dismay of many who have had a taste of the mojo and then have to go back to stateful assignments and unsafe navigations.
 
 I for one have craved for a port of lens in TypeScript when working with redux in TypeScript: while immutability is great, spreading through nested data structures is not particularly fun.
 
@@ -8,7 +8,7 @@ Existing libraries such as Rambda does provide [lens-like functions](https://ram
 
 I then resolved to take matters to my own hands and took on to build something that's lens-like in spirit, but can appear not-scary-at-all, idiomatic to OO programmers.
 
-TypeScript proved to be a bless - its beautiful type system helped me get type-safety and intellisense for this tiny library - [TsMiniLens](https://github.com/hackle/TsMiniLens)).
+TypeScript proved to be a bless - its beautiful type system helped me get type-safety and intellisense for this tiny library - [TsMiniLens](https://github.com/hackle/TsMiniLens).
 
 Below is how it works.
 
@@ -73,4 +73,4 @@ It's also possible to chain lenses with ``lens1.chain(lens1)`` or more fluently,
 ``lens.castIf(typeGuard)`` supports navigating through union types safely with type guards. In lens / optics terms, this might be the equivalence of prism.
 
 ## Remember it's mini
-Bear in mind it's mini indeed - there is no support for navigating through arrays, Maps or other complex data types.
+Bear in mind it's mini indeed - there is absolutely no parity with lens proper in Haskell.
