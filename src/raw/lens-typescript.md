@@ -1,92 +1,76 @@
-## What I want
+You would have heard of lens if you use or (like me) dabble in Haskell. Loosely called functional getters and setters, it is popularized by the mighty Edward Kmett with his famous [lens package](http://hackage.haskell.org/package/lens).
 
-An idiomatic record updater in TypeScript that is type-safe, and null-aware.
+Ironically, the lens proper condones an imperative syntax, but the idea is unfortunately not really utilized enough for the Object Oriented world, to the dismay of many who have had a taste of the mojo and go back to stateful assignments and unsafe navigations.
 
-(Update: I actually manage to build it here [https://github.com/hackle/TsMiniLens](https://github.com/hackle/TsMiniLens))
+I for one have craved for a port of lens in TypeScript when working with redux in TypeScript: while immutability is great, spreading through nested data structures is not particularly fun.
 
-Given
+Existing libraries such as Rambda does provide [lens-like functions](https://ramdajs.com/docs/#lens), which is great in itself; however its lack of type-safety and functional-syntax (which to be fair it's the purpose of Rambda) can be off-putting to those who are used to OO styled programming.
+
+I then resolved to take matters to my own hands and took on to build something that's lens-like in spirit, but can appear not-scary-at-all, idiomatic to OO programmers.
+
+TypeScript proved to be a bless - its beautiful type system helped me get type-safety and intellisense for this tiny library - [TsMiniLens](https://github.com/hackle/TsMiniLens)).
+
+Below is how it works.
+
+## Use cases
+
+### Given
+```TypeScript
+interface Address { city?: string; street: string };
+interface Person { name?: string; address: Address };
+
+const lensPerson2Street = lensFor<Person>().withPath('address', 'street'); // this is type safe, e.g. 'street1' wont't compile
+
+// or since version 1.1.6
+const lensPerson2Street = lensFrom<Person>().to('address', 'street');
+
+```
+
+### view() to navigate safely
+
+We all know the dreaded null reference exception (Law of demeter applies)
 
 ```TypeScript
-type Address = { street: string; region: string }
-type Person = { name: string; address: address }
-const person1: Person = { 
-    name: 'Foo', 
+const street = person.address.street; // error if address is null!
+```
+
+with lens this never happens, in the following case, if address is null then view() returns null instead of erroring out
+
+```TypeScript
+const street = lensPerson2Street.view(person); // safe!
+```
+
+### set() or over() to update easily
+
+If immutability is a concern, then updating a nested data structure can be tedious.
+```TypeScript
+const updatedPerson = {
+    ...person,
     address: {
-        street: 'Queen',
-        region: 'CBD'
-        }
+        ...person.address,
+        street: 'new street'
     }
-
-const person2: Person = { name: 'Bar', address: null }
+};
+// imagine more nesting! :(
 ```
 
-And an updater as follows,
-
-```TypeScript
-const updater = Updater.for<Person>().withPath('address', 'street');
+with ``set()`` this becomes a breeze. It does a CoW (Copy on Write) to support immutability.
 ```
-
-Satisfies the following assertions
-
-```TypeScript   
-// this sets street to waterloo
-const updatedPerson = updater.set(person1, 'Waterloo'); 
-
-// assert
-updatedPerson.address.street === 'Waterloo';
-// not the same reference to address
-updatedPerson.address !== person1.address;
-// not the same reference to person
-updatedPerson !== person1;
-
+const personRelocated = lensPerson2Street.set(person, 'new street');
 ```
+Note ``personRelocated`` is a different object than ``person``, or, ``person !== personRelocated``.
 
-Also,
-
-```TypeScript
-// null aware - address is null, no exception
-const updatedPerson2 = updater.set(person2, 'Walterloo');
-// this is satisfied
-updatedPerson2.address === null;
-
-// type safety - will not compile, district is not a field  of address
-const badUpdater = Updater.for<Person>().withPath('address', 'district'); 
-
+``over()`` is handy if we are to modify (but not replace) the current street,
 ```
-## Implementation
-
-The implementation is surprisingly straightforward.
-
-```TypeScript
-class Updater<T> {
-    constructor(public fields: any[]) {
-    }
-
-    set(obj: T, val: TField): T {
-        return this.fields.reduceRight(
-            (st, cur) => next => mapNullable(_ => ({ ...next, [cur]: st(next[cur]) }), next),
-            _ => val
-        )(obj);
-    }
-}
-
-
+const updatedPerson = lensPerson2Street.over(person, street => 'Level 2' + street);
 ```
+Quiz: how to implement ``set()`` in terms of ``over()``?
 
-## Todo
+### chain() and castIf()
 
-You'll notice this is far from exhaustively covering all possibilities. To name a few missing features, working with
+It's also possible to chain lenses with ``lens1.chain(lens1)`` or more fluently, ``lens.then.withPath('level1', 'level2')``
 
-* union types
-* arrays
-* passing in a lambda for the ``over`()` function
+``lens.castIf(typeGuard)`` supports navigating through union types safely with type guards. In lens / optics terms, this might be the equivalence of prism.
 
-I can see this will evolve into a more STAB like pattern if all the above are implemented. Hopefully they'd be covered when real need emerges in more serious forms.
-
-## Background
-
-When working with TypeScript, I liked the increase popularity of immutability and other usually considered "functional programming" concepts.
-
-One consequence of immutability is the need for handy ways to update complex data structures. In Haskell, this is indisputably the domain of the almighty [Lens](https://hackage.haskell.org/package/lens).
-
-Ports of lens do exists but in my opinion they mostly still appear esoteric, and usually not simple enough.
+## Remember it's mini
+Bear in mind it's mini indeed - there is no support for navigating through arrays, Maps or other complex data types.
