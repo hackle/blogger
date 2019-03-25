@@ -24,9 +24,9 @@ Yes - just decide and move on - done is better than perfect.
 
 All the lengthy arguments to regard code style as the sole reason for readability are very much exaggerated just the same. Programming is a creative trade, it's OK if people have different styles. Choice of spaces, tabs, indentation or naming do not have such a massive impact (as is often fervently alleged) on the readability of source code.
 
-As programmers, we'll have to learn to move on from such superficial subjects. Here is a spoiler on my planned post on code review: try not to spend too much time reviewing and commenting on code style.
-
 So if "good" code means code with good style only, then it really doesn't matter much. It's like taking good penmanship as good literature. They are related to some extent but one would be foolish to equate them. 
+
+As programmers, we'll have to learn to move on from such superficial subjects. Here is a spoiler on my planned post on code review: try not to spend too much time reviewing and commenting on code style.
 
 ## algorithms
 
