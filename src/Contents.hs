@@ -43,6 +43,7 @@ module Contents where
         , ("Types and tests: JavaScript 10, Idris 0", "types-and-tests.md")
         , ("Types, names, and type superstition", "type-superstition.md")
         , ("Out-of-context string template is an anti-pattern", "out-of-context-string-template.md")
+        , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
         ]
 
     about :: ContentEntry

@@ -1,4 +1,4 @@
-## Or, string templates are not magic strings
+**Or, string templates are not magic strings.**
 
 If a string template is placed away from its context, then the semantical benefit disappears and confusion arises. Such placement is a design smell.
 
