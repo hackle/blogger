@@ -44,7 +44,7 @@ module Contents where
         , ("Types, names, and type superstition", "type-superstition.md")
         , ("Out-of-context string template is an anti-pattern", "out-of-context-string-template.md")
         , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
-        , ("the Const magic, Identity and tuple", "the-const-trick.md")
+        , ("the Const magic, Identity and tuple", "the-const-trickery.md")
         ]
 
     about :: ContentEntry

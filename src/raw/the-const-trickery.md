@@ -148,6 +148,18 @@ Person {name = "Hackle"}
 
 Be warned when trying them out in `GHCI` - they won't work without applying `snd` and `fst` as `undefined` will kick in. Thanks to laziness, if we avoid touching `undefined` by picking the other value in the tuple, there would be no exception.
 
+The acute reader would be screaming now - why use `undefined` at all? Just duplicate the value for the tuple as `(a, a)`! Indeed that works just the same.
+
+```haskell
+> dup = \a -> (a, a)
+> lname (dup . reverse) $ Person "Hackle"
+("elkcaH",Person {name = "elkcaH"})
+> fst $ lname (dup . reverse) $ Person "Hackle"
+"elkcaH"
+> snd $ lname (dup . reverse) $ Person "Hackle"
+Person {name = "elkcaH"}
+```
+
 In practice we'd still be using `Const` and `Identity` as they are safer and more expressive, but if you find them a bit confusing, then the above understanding may be helpful.
 
 ## summary
