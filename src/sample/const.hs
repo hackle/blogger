@@ -28,6 +28,7 @@ lname fname p = (\n -> p { name = n }) <$> fname (name p)
 
 mkIdentity a = (undefined, a)
 mkConst a = (a, undefined)
+dup a = (a, a)
 
 id1 = runIdentity $ lname Identity $ Person "Hackle"
 -- id2 = snd $ lname mkIdentity $ Person "Hackle" (Address "Sale" "CBD")
