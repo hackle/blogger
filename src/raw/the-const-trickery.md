@@ -70,8 +70,8 @@ Const "ab"
 -- but not this as char is not a monoid
 Data.Functor.Const> :t Const 'a' <*> Const 'b'
 <interactive>:1:1: error:
-    • No instance for (Monoid Char) arising from a use of '<*>'
-    • In the expression: Const 'a' <*> Const 'b'
+    _ No instance for (Monoid Char) arising from a use of '<*>'
+    _ In the expression: Const 'a' <*> Const 'b'
 ```
 
 ## a trickery
