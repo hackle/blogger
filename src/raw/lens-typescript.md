@@ -12,6 +12,8 @@ TypeScript proved to be a bless - its beautiful type system helped me get type-s
 
 Below is how it works.
 
+![See it in action](https://github.com/hackle/TsMiniLens/raw/master/demo.gif)
+
 ## Use cases
 
 ### Given
