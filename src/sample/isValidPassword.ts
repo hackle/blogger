@@ -5,4 +5,10 @@ function isValidPassword(password: string): boolean {
     return password.length >= 4 && password.length <= 8;
 }
 
-isValidPassword(123);
+// isValidPassword(123);
+
+function amHappy(dayOfWeek: 'Friday' | 'Saturday'): boolean {
+    return true;
+}
+
+// amHappy('Monday');

@@ -138,7 +138,7 @@ mkIdentity a = (undefined, a)
 mkConst a = (a, undefined)
 ```
 
-Then we can use then in place of `Identity` and `Const` as follows:
+Then we can use them in place of `Identity` and `Const` as follows:
 
 ```haskell
 > snd $ lname mkIdentity $ Person "Hackle"
@@ -150,7 +150,7 @@ Person {name = "Hackle"}
 
 You would have noticed that `(a, b)` is both a `Functor` and an `Applicative` - that's why we get no complaints from `GHCi`.
 
-Be warned though, when trying them out in `GHCI`, it won't work without applying `snd` and `fst`, as `undefined` will kick in. Thanks to laziness, if we avoid touching `undefined` in the tuple, there would be no exception.
+Be warned though, when trying them out in `GHCi`, it won't work without applying `snd` and `fst`, as `undefined` will kick in. Thanks to laziness, if we avoid touching `undefined` in the tuple, there would be no exception.
 
 The acute reader would have been screaming already - why use `undefined` at all? Just duplicate the value for the tuple as `(a, a)`! And we don't have to worry about `GHCi` blowing up. Indeed that works.
 

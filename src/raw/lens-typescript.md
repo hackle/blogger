@@ -55,7 +55,7 @@ const updatedPerson = {
 ```
 
 with ``set()`` this becomes a breeze. It does a CoW (Copy on Write) to support immutability.
-```
+```typescript
 const personRelocated = lensPerson2Street.set(person, 'new street');
 ```
 Note ``personRelocated`` is a different object than ``person``, or, ``person !== personRelocated``.
