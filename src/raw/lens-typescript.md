@@ -74,5 +74,17 @@ It's also possible to chain lenses with ``lens1.chain(lens1)`` or more fluently,
 
 ``lens.castIf(typeGuard)`` supports navigating through union types safely with type guards. In lens / optics terms, this might be the equivalence of prism.
 
+## yet to come
+
+### insert
+
+Unlike `set` that stops at any null value, `insert` will create objects along the way, and guarantee the value will be eventually present.
+
+```typescript
+lensPerson2Street.insert(null, 'Sale Street');
+
+// { address: { street: 'Sale Street' } }
+```
+
 ## Remember it's mini
 Bear in mind it's mini indeed - there is absolutely no parity with lens proper in Haskell.
