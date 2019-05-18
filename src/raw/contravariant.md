@@ -4,7 +4,7 @@ Now if we fix the number of apples, say, we have 20 apples only, then the more p
 
 In programming with types, convariance and contravariance appear in different forms.
 
-## C#
+## `C#`
 
 A popular example of covariant is `IEnumerable<T>`. Say we have
 
@@ -66,7 +66,7 @@ Covariant and contravariant can exist in delegates and interfaces, if used in an
 
 `in` and `out` in C# are good keywords for getting an intuition, to get a different perspective though, let's move to Haskell.
 
-## Haskell
+## `Haskell`
 
 In Haskell `Functor` is sometimes called a covariant functor. Upon hearing this, we know there are 2 things that change in the same direction. Which 2 things?
 
@@ -114,7 +114,7 @@ instance Functor ((->) r) where
 
 And now, back to C#.
 
-## C# again
+## `C#` again
 
 Let's try interpret the covariants and contravariants in C# with the understanding gained from `Functor` and `Contravariant`.
 
@@ -144,7 +144,7 @@ Again the intuition goes: `feed` can feed any `Animal`, `Dog` is an `Animal`, so
 
 Now, back to Haskell.
 
-## Haskell again
+## `Haskell` again
 
 Subtyping is not just a thing in Object Oriented Programming, it can (kind of) appear in Haskell too. For example, any `Monad` must be `Applicative`, and any `Applicative` must be `Functor`. Let's say we have the following (useless) functions. 
 
@@ -173,4 +173,4 @@ And `functor_to_int__to_int applicative_to_int` does not work, because `Functor 
 
 ## further reading
 
-If we've made good sense this far, try take it one step further and read about [positive and negative positions](https://www.schoolofhaskell.com/user/commercial/content/covariance-contravariance). Be warned, it can be a bit mind-bending!
+If we've made good sense this far, try take it one step further and read about [positive and negative positions](https://www.schoolofhaskell.com/user/commercial/content/covariance-contravariance). Be warned, it can be a bit mind-bending (possibly at how simple it eventually is) when it gets to positivity and negativity.
