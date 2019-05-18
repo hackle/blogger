@@ -124,9 +124,9 @@ First `IEnumerable<out T>` can be seen as a `Functor` (it's actually very simila
 fmap (upcast :: Dog -> Animal) IEnumerable<Dog> = IEnumerable<Animal>
 ```
 
-And do we have the function `Dog -> Animal`? Well, it's an upcast, a `Dog` is an `Animal`. The other way around won't work because a function `Animal -> Dog` does not always work.
+And do we have the function `Dog -> Animal`? Well, it's an upcast, a `Dog` is an `Animal`. The other way around won't work because `Animal -> Dog` is a downcast and downcast is not always successful.
 
-Let's look at `Func<Animal>`, because it's a function, its `fmap` works just as in Haskell,
+Now onto `Func<Animal>`, because it's a function, its `fmap` works just as in Haskell,
 
 ```haskell
 fmap (upcast :: Dog -> Animal) (f :: () -> Dog) = upcast . f
@@ -169,8 +169,8 @@ functor_to_int__to_int _ = 1
 
 `applicative_to_int__to_int functor_to_int` works, because there is an implicit "upcast" `Applicative -> Functor`, just like `Dog -> Animal`.
 
-And `functor_to_int__to_int applicative_to_int` does not work, because `Functor -> Applicative` does not necessarily work.
+Not wo with `functor_to_int__to_int applicative_to_int`, because `Functor -> Applicative` is a "downcast" and there is no guarantee it will work.
 
 ## further reading
 
-If we've made good sense this far, try take it one step further and read about [positive and negative positions](https://www.schoolofhaskell.com/user/commercial/content/covariance-contravariance). Be warned, it can be a bit mind-bending (possibly at how simple it eventually is) when it gets to positivity and negativity.
+If we've made good sense this far, try take it one step further and read about [positive and negative positions](https://www.schoolofhaskell.com/user/commercial/content/covariance-contravariance). Be warned, it can be a bit mind-bending!
