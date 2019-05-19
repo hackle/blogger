@@ -31,3 +31,7 @@ a.title:active
 .token.operator {
   background-color: inherit;
 }
+
+.markdown-body img {
+    border: 1px solid gray;
+}

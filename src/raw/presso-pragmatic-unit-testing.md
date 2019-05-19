@@ -1,3 +1,5 @@
+These are the slides for a talk I do as introduction to "pragmatic unit testing now!", but it's slowly becoming a thing of its own as I find myself doing this separately (without running a workshop) more and more.
+
 ![slide 1](https://s3-ap-southeast-2.amazonaws.com/hacklewayne.com/img-01.jpg)
 
 ![slide 2](https://s3-ap-southeast-2.amazonaws.com/hacklewayne.com/img-02.jpg)
