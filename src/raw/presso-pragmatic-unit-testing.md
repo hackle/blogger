@@ -18,7 +18,7 @@ In software, when people say "We don't have time so we don't test", that's simpl
 
 The difference is then, whether testing is automated, or manual; whether efficient, or wasteful; whether it suits a purpose, or defeats it.
 
-Unit testing is usually considered automated, efficient and suitable - but it's not always the case! However, more often than not, unit testing is a practice that gives more benefits than grief.
+Unit testing is usually considered automated, efficient and suitable. Although it's not always the case, more often than not, we consider it a practice that gives more benefits than grief.
 
 ![slide 5](https://s3-ap-southeast-2.amazonaws.com/hacklewayne.com/img-05.jpg)
 
@@ -28,7 +28,7 @@ Underrated as in "It's a just a matter of spending time to do it. Sure if I spen
 
 Overrated as in "I know so many advanced techniques and tricks, I can write unit tests better than anybody else"
 
-My take on this though, is that there is no and should not be "advanced unit testing" pe se. There are bad practices, which include "good" practices, especially "perfect" practices, but in daily programming for most of us, there should be no rocket science in unit testing.
+My take on this though, is that there is no and should not be "advanced unit testing" pe se. There are bad practices, which ironically are called "good" practices, especially "perfect" practices, but in daily programming for most of us, there should be no rocket science in unit testing.
 
 When these ideas are put plainly though, we know the answer is not in the extremes - that's where pragmatism comes in handy.
 
@@ -62,7 +62,7 @@ We can definitely write a unit testing for this, although in practice, it's usua
 
 ![slide 9](https://s3-ap-southeast-2.amazonaws.com/hacklewayne.com/img-09.jpg)
 
-We can also look at a "lesser" but brilliant type system, that of `TypeScript`, which I think strikes a pretty good balance, with some very very interesting features.
+We can also look at a "lesser" but no less brilliant type system, that of `TypeScript`, which I think strikes a pretty good balance, with some very very interesting features.
 
 ![slide 10](https://s3-ap-southeast-2.amazonaws.com/hacklewayne.com/img-10.jpg)
 
