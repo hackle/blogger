@@ -26,6 +26,9 @@ fromTemplate contentEntry base body styles idrisPrism = H.docTypeHtml $ do
         body
         H.hr
         H.a ! href (toValue $ getSlug about) $ "About me and this blog, or get in touch"
+        H.p $ do
+            H.a ! href "https://ndcoslo.com/speaker/hackle-wayne/" $ do
+                H.img ! src "https://s3-ap-southeast-2.amazonaws.com/hacklewayne.com/linkedin_header.png"
         H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.min.js" $ ""
         H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-haskell.min.js" $ ""
         H.script ! src "https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-csharp.min.js" $ ""

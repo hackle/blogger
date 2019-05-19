@@ -25,6 +25,7 @@ module Contents where
     blogContents :: [ContentEntry]
     blogContents = reverse $ toEntry <$> [
         ("How is this blog put together", "blog-architecture.md")
+        ,("A few things about unit testing", "presso-pragmatic-unit-testing.md")
         -- , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
         , ("LINQ, infinity, laziness and oh my!", "linq-tips.md")
         -- , ("A lens look-alike (really a nested data updater) in C#?", "lens-csharp.md")
