@@ -24,4 +24,4 @@ pageIndex request = do
 success :: Text -> APIGatewayProxyResponse Text
 success page = responseOK 
     & responseBody ?~ page
-    & agprsHeaders `over` HashMap.insert "content-type" "text/html"
+    & agprsHeaders `over` HashMap.insert "content-type" "text/html; charset=UTF-8"
