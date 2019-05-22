@@ -49,7 +49,7 @@ Func<Animal> findAnimal = new Func<Dog>(() => new Dog());
 Func<Dog> findDog = new Func<Animal>(() => new Animal());
 ```
 
-If I need a way to find an `Animal`, and am given a way to find a `Dog`, I am happy - a `Dog` is an `Animal`. However, if I need to find a `Dog` but am given a way to find any `Animal`, it's clearly no good.
+If I need a way to *find* an `Animal`, and am given a way to find a `Dog`, I am happy - a `Dog` is an `Animal`. However, if I need to find a `Dog` but am given a way to find any `Animal`, it's clearly no good.
 
 `Action<in T>` is the other way around. It's an easy guess that `in` means *input*.
 
@@ -60,7 +60,53 @@ Action<Dog> feedDog = new Action<Animal>(a => Console.WriteLine("come eat!"));
 Action<Animal> feedAnimal = new Action<Dog>(a => Console.WriteLine("come eat!"));
 ```
 
-I need a way to feed a `Dog`, and am given a way to feed any `Animal`, I am happy. However, if I need a way to feed any `Animal`, but am given a way to feed only `Dog`, then it's no good.
+I need a way to *feed* a `Dog`, and am given a way to feed any `Animal`, I am happy. However, if I need a way to feed any `Animal`, but am given a way to feed only `Dog`, then it's no good.
+
+Analogies are nice, but what really is going on here? When in doubt, try code it. So here we go. Starting with `Func`:
+
+```csharp
+Func<Animal> findAnimal = () => ?? must be animal
+```
+
+What happens if we only have a `Dog` at hand? It's
+
+```csharp
+Func<Animal> findAnimal = () => new Dog() as Animal;
+```
+
+You'll note the upcast is not really necessary. Let's try `Action` next. First, `Action<Animal>` can act on `Animal` or its subtypes like `Dog`. `Action<Dog>` can act on `Dog` but not `Animal`. So how can we assign `Action<Animal>` to `Action<Dog>`? Let's say we have,
+
+```csharp
+Action<Dog> feedDog => dog => Console.WriteLine("woof!"); 
+Action<Animal> feedAnimal = animal => Console.WriteLine("I am full!");
+```
+And need to define,
+
+```csharp
+Action<Dog> actOnDog => dog => ??
+```
+
+One option would be `dog => feedDog(dog)`, or, `dog => feedAnimal(dog as Animal)`, because again the upcast is for demonstration purpose.
+
+This is even more interesting when we nest them, e.g. `Action<Action<Dog>>`.
+
+```csharp
+var dog = new Dog();
+var animal = new Animal();
+Action<Action<Dog>> nestedDog = f => f(dog);
+Action<Action<Animal>> nestedAnimal = f => f(animal);
+```
+
+And watch this:
+
+```csharp
+Action<Action<Animal>> nestedAnimal = nestedDog;
+
+// because 
+Action<Action<Animal>> nestedAnimal = f => f(dog as Animal);
+```
+
+What's the pattern here? Upcast, odd / even? 
 
 Covariant and contravariant can exist in delegates and interfaces, if used in an interface, there is a constraint - `T` in a `out T` type can only appear in *output* position, or as return type; `in T` only in *input* position, or as parameter type. If we look at interface `IEnumerable<out T>` again, it has only one method, `IEnumerator<out T> GetEnumerator ()`. Note `T` appears as a return type, wrapped in `IEnumerator<out T>`, just to make things easier :) So we have to look at `IEnumerator<out T>`, which has just a getter `T Current { get; }`, and `T` appears as a return type.
 
