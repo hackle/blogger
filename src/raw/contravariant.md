@@ -106,11 +106,11 @@ Action<Action<Animal>> nestedAnimal = nestedDog;
 Action<Action<Animal>> nestedAnimal = f => f(dog as Animal);
 ```
 
-What's the pattern here? Upcast, odd / even? 
+To grasp nesting fully, we'll need to read up on positive / negative positions - see the reference at the end. 
 
 Covariant and contravariant can exist in delegates and interfaces, if used in an interface, there is a constraint - `T` in a `out T` type can only appear in *output* position, or as return type; `in T` only in *input* position, or as parameter type. If we look at interface `IEnumerable<out T>` again, it has only one method, `IEnumerator<out T> GetEnumerator ()`. Note `T` appears as a return type, wrapped in `IEnumerator<out T>`, just to make things easier :) So we have to look at `IEnumerator<out T>`, which has just a getter `T Current { get; }`, and `T` appears as a return type.
 
-`in` and `out` in C# are good keywords for getting an intuition, to get a different perspective though, let's move to Haskell.
+`in` and `out` in C# are good keywords for getting an intuition. For a different perspective though, let's move to Haskell.
 
 ## `Haskell`
 
