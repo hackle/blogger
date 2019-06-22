@@ -2,9 +2,9 @@ If unit tests are data-driven, and code under test is a pure function, then Test
 
 ## T.D.D. the usual way
 
-Popular practices in Object Oriented Programming using interfaces and dependency injection can make it hard to develop in a Test-Driven fashion.
+Popular practices in Object Oriented Programming using dependency injection and mocking can make it hard to develop in a Test-Driven fashion.
 
-Let's say we need to build a `Checkout` feature for a `ShoppingService`. If we are to test drive, we'll start a test method, usually with a base case,`If_buying_nothing_Then_charged_for_nothing`, which can be,
+Let's say we need to build a `Checkout` feature for a `ShoppingService`. If we are to test drive the usual way, we'll start a test method, usually with a base case,`If_buying_nothing_Then_charged_for_nothing`, which can be,
 
 ```csharp
 [Fact]
@@ -172,7 +172,7 @@ The advantage of this, is that with a complete `Checkout` method, we have confid
 
 Further more - because `CalculateDiscountedTotal` cares only about data provided through parameters, it can be made static and becomes a *pure function* - pure methods are much much easier to test. For one, it does not depend on the state of the instance - this means D.I. and mocking won't be such a big thing for unit testing.
 
-** Drive test with data
+### Drive test with data
 
 We can now flesh out the test for `CalculateDiscountedTotal`. Good news is that we have a good idea what it should do (aka the requirements). So we start a unit test as this.
 
@@ -186,6 +186,7 @@ public void If_member_is_having_birthday_Then_gets_50_percent_discount_Otherwise
 ```
 
 A few things to note,
+
 * Again I *declare* a test method by stating there will be an *actual* value and it should be equal to an *expected* value, **without** providing these values / parameters first. Why? Well it's because
     1. the focus should be on the algorithm so I want to get to it first
     2. the algorithm will tell me what data to provide. *Data-driven*, remember?
