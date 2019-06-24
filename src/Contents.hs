@@ -48,6 +48,7 @@ module Contents where
         , ("the magic Const, Identity and tuple", "the-const-trickery.md")
         , ("Covariant and contravariant from C# to Haskell to C# to Haskell", "contravariant.md")
         , ("T.D.D. is most practical data-driven with pure functions", "tdd-data-driven-and-functional.md")
+        , ("Covariance and Contravariance, positive and negative positions", "contravariant-positions.md")
         ]
 
     about :: ContentEntry

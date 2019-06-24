@@ -219,4 +219,4 @@ Not wo with `functor_to_int__to_int applicative_to_int`, because `Functor -> App
 
 ## further reading
 
-If we've made good sense this far, try take it one step further and read about [positive and negative positions](https://www.schoolofhaskell.com/user/commercial/content/covariance-contravariance). Be warned, it can be a bit mind-bending!
+If we've made good sense this far, try take it one step further and read about positive and negative positions on [this blog](./contravariant-positions) or [explained in Haskell](https://www.schoolofhaskell.com/user/commercial/content/covariance-contravariance). Be warned, it can be a bit mind-bending!
