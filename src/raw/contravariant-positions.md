@@ -78,23 +78,27 @@ Func<Func<Dog>, int> withDogGetter = dogGetter => dogToInt(dogGetter());
 
 `withDogGetter` needs to somehow turn a `Dog` (as is returned from `Func<Dog>`) into an `int`, or, we could say, it's a `Func<Dog, int>` in disguise. `Func<Dog, int>` is actually **contravariant** in `Dog`, which means we can use a `Func<Animal, int>`.
 
+Note I analysed `Action` and `Func` separately for ease of explanation. The reasoning would stay the same if we mix them up.
+
 ## positivity and negativity
 
-It's getting harder and harder to come up with analogies, and even if it's possible, the analogies would be quite stretched to the point of being more confusing than helpful (try google for Monad analogies!)
+As nesting gets deeper and deeper - why anybody would want to do that I have no idea - it's harder and harder to come up with analogies, and even if it's possible, the analogies would be quite stretched to the point of being more confusing than helpful (try google for Monad analogies!)
 
-And if we nest the types deeper - why anybody would want to do that I have no idea - it quickly becomes impossible to understand if we resort only to analogies and intuition.
+At the same time it becomes harder and harder to understand if we resort only to analogies and intuition.
 
-Luckily, some smart people made it easy for us, with the notation of positive and negative positions. 
+Luckily, some smart people made it easy for us, with the notation of positive and negative positions. Below is how it works taking `Func` and `Action` as examples.
 
-1. A parameter `T` is in a *positive* position if it's the return type of a function, namely, the last type in the list of type parameters for a `Func`, such as in `Func<T>`, or `Func<int, T>` and so on.
-2. `T` is in a *negative* position if it's not the return type, such as `Func<T, int>` or `Func<string, T, int>`. Note `T` is negative in `Action<T>` as `Action` always returns `void`.
+1. A parameter `T` is in a *positive* position if it's the return type, usually, the last type in the list of type parameters, such as in `Func<T>`, or `Func<int, T>` and so on.
+2. `T` is in a *negative* position if it's not the return type, such as `Func<T, int>` or `Func<string, T, int>`. Note `T` is negative in `Action<T>` as `Action` always returns `void` which does not appear in the parameter list.
 3. When function types are nested, positivity and negativity are changed as in multiplication. Let me explain.
 
 In `Func<int, T>`, `T` is positive, as in a positive number, say `+1`. In `Func<T, int>` or `Action<T>`, `T` is negative as in `-1`.
 
-Now in `Func<Func<int, T>, string>`, `T` is positive in `Func<int, T>`, but `Func<int, T>` as a type is negative in `Func<Func<int, T>, string>`. `+1 * -1 = -1`, so `T` is negative in the whole type.
+Now in `Func<Func<int, T>, string>`, `T` is positive in `Func<int, T>`, but `Func<int, T>` as a type is negative in `Func<Func<int, T>, string>`. Now we multiply the numbers as in Algebra, `+1 * -1 = -1`, so `T` is negative in the whole type.
 
-Or in `Action<Action<T>>`: `T` is negative in `Action<T>`, which in turn is also negative in `Action<Action<T>>`, `-1 * -1 = 1`, so `T` is positive in `Action<Action<T>>`!
+Or in `Action<Action<T>>`: `T` is negative in `Action<T>`, which in turn is also negative in `Action<Action<T>>`, when multiplied, `-1 * -1 = 1`, so `T` is positive in `Action<Action<T>>`.
+
+Try it out yourself - it's pretty wicked!
 
 ## correct or useful
 
