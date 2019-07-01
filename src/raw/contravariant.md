@@ -28,7 +28,7 @@ IEnumerable<Animal> animals = dogs;
 animals = creatures; // <-- this won't compile
 ```
 
-Type `Dog` is assignable to `Animal`, so `IEnumerable<Dog>` is assignable to `IEnumerable<Animal>`, `T` and `IEnumerable<T>` change in the same direction, and are therefore covariant! Or it's also said that `IEnumerable<T>` is covariant in `T`. 
+Type `Dog` is assignable to `Animal`, so `IEnumerable<Dog>` is assignable to `IEnumerable<Animal>`, `T` and `IEnumerable<T>` change in the same direction, and are therefore covariant! We can also say that `IEnumerable<T>` is covariant in `T`. 
 
 You'd be thinking, if `IEnumerable<T>` is covariant in `T`, sure `List<T>` too? Well, not quite so. try,
 
@@ -98,7 +98,9 @@ And need to define,
 Action<Dog> actOnDog => dog => ??
 ```
 
-One option would be `dog => feedDog(dog)`, or, `dog => feedAnimal(dog as Animal)`, because again the upcast is for demonstration purpose.
+One option would be `dog => feedDog(dog)`, or, if we have a `Dog` at hand, `dog => feedAnimal(dog as Animal)`. Again the upcast is only for demonstration purpose.
+
+Through coding it, we can see that it's nothing magic, but how type safety for sub-typing works through various composite types.
 
 ## `IEnumerable<T>` vs `IList<T>`
 
