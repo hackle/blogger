@@ -8,6 +8,18 @@ The setup of this blog is based on the excellent [serverless-haskell](https://gi
 
 If you ever want to get in touch, this is my email address but reversed: moc.liamtoh@welkcah (you'll find an article dedicated to a ``reverse`` function in Idris). Or find me on Twitter [@hacklew](https://twitter.com/hacklew).
 
-Come to my [workshop at NDC Oslo](https://ndcoslo.com/speaker/hackle-wayne/)!
+## Pragmatic unit testing now!
 
-Slides to [A few things about unit testing](/presso-pragmatic-unit-testing)
+This is a workshop that I can run for your team to introduce a few very simple ideas and techniques to make unit testing more useful, fun and practical.
+
+It was run at [NDC Oslo](https://ndcoslo.com/speaker/hackle-wayne/)!
+
+## Speaking and talks
+
+I am available for speaking at conferences, meetups or workplaces when there is genuine interest. Below are some of the current topics,
+
+### A few things about unit testing
+Slides for [A few things about unit testing](/presso-pragmatic-unit-testing)
+
+### Immutability for free! (use lens in TypeScript for the win)
+### You are but one key word away from functional programming

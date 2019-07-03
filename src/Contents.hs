@@ -46,9 +46,9 @@ module Contents where
         , ("Out-of-context string template is an anti-pattern", "out-of-context-string-template.md")
         , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
         , ("the magic Const, Identity and tuple", "the-const-trickery.md")
-        , ("Covariant and contravariant", "contravariant.md")
+        , ("Covariance and contravariance", "contravariant.md")
         , ("T.D.D. is most practical data-driven with pure functions", "tdd-data-driven-and-functional.md")
-        , ("Covariance and Contravariance, positive and negative positions", "contravariant-positions.md")
+        , ("Nesting and positions in covariance and contravariance, ", "contravariant-positions.md")
         ]
 
     about :: ContentEntry
