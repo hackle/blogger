@@ -279,7 +279,7 @@ Remember `initFunc` is used for the base case - for `List`, is `[]`. Apparently 
 So here is our `myFoldl` in its full glory:
 
 ```Idris
-foldOneElem : (g : acc -> elem -> acc) -> (elem: elem) -> (prev: acc -> acc) -> ((cur: acc) -> acc)
+foldOneElem : (g : acc -> elem -> acc) -> (elem: elem) -> (prev: acc -> acc) -> (cur: acc -> acc)
 foldOneElem g elem prev cur = prev (g cur elem)
 
 myFoldl : (acc -> elem -> acc) -> acc -> List elem -> acc
