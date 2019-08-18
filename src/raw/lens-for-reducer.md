@@ -1,4 +1,4 @@
-Once having got used to the idea, it's not hard to see that any `lens` implementation can help reduce boilerplate in dealing with complex data structure, for example, in so-called "reducer" functions as in Redux. Let's see how we can utilise something simple as `tsMiniLens` to arrive at a minimalistic replacement for the usual reducers. 
+Once having got used to the idea, it's not hard to see that any `lens` implementation can help reduce boilerplate in dealing with complex data structure, for example, with so-called "reducer" functions in Redux. Let's see how we can utilise something as simple as `tsMiniLens` to build a minimalistic replacement for the usual reducers. 
 
 This replacement would look as follows:
 
@@ -37,7 +37,7 @@ function reducer(state: State, action: Action): State {
 
 ```
 
-I say "usual" because implementations vary, there are different styles with much more ceremony, such as union `Action` types, enum as tags for `Action` etc. I picked the above for its lack of ceremony (largely due to representing `Action` as class and use of `instanceof`) as well as distraction from the topic at hand.
+I say "usual" because implementations vary, there are different styles with much more ceremony, such as union `Action` types, enum as tags for `Action` etc. I picked the above for its lack of ceremony (largely due to representing `Action` as class and use of `instanceof`) or distraction from the topic at hand.
 
 While I can't say I am a big fan of the whole Redux fetish, if I have to use it then I wouldn't mind writing a `reducer` as the one above.
 
@@ -54,7 +54,7 @@ const lStateTo = {
 
 **lFooTo.bar** is a bit of hungarian notation (that you don't need to follow) I use to wrap lenses for an object; it simply means "lens from Foo to bar". 
 
-With the above we can do `lStateTo.name.view({ name: 'foo', birthday: ... })` or `lStateTo.name.set(state, 'Jack')`. Meanwhile, the `reducer` function becomes:
+With the above we can do `lStateTo.name.view(state)` or `lStateTo.name.set(state, 'Jack')`. Meanwhile, the `reducer` function becomes:
 
 ```typescript
 function reducer(state: State, action: ActionUnion): State {
@@ -68,14 +68,14 @@ function reducer(state: State, action: ActionUnion): State {
 }
 ```
 
-This may not seem much difference as the structure of `State` is simple - but we are on the right track.
+If this seems not much difference it is only because the structure of `State` is simple - but we are on the right track.
 
 Notably, the repetition in `reducer` is more pronounced now - with every `instanceof` it tries to recover the type of `action` so the `payload` can be accessed by following code.
 (Read about [instanceof type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#instanceof-type-guards))
 
 Such repetition is something we can abstract over. One option is to use something like a **builder pattern** to build up a reducer with one `Action` type at a time.
 
-With the idea is in place, we need only add a few helper types to get underway.
+With the idea in place, we need only add a few helper types to get underway.
 
 ```typescript
 interface IAction<TPayload> { payload?: TPayload }
@@ -87,7 +87,7 @@ type TypeOf<T> = {
 type Reducer<TState, TAction> = (st: TState, action: TAction) => TState;
 ```
 
-Worth noting that `TypeOf<T>` represents a constructor - it kind of works like a `where T : class` constraint in `C#` to generalise over classes, and it's usually seen when a type is passed along, for example, `foo<T>(ctor: TypeOf<T>)` can be invoked as `foo<UpdateBirthdayAction>(UpdateBirthdayAction)` or simply `foo(UpdateBirthdayAction)`. Remember the type parameters are erased at compile time by `TypeScript`, this allows us to pass the "type" along as value and is present at runtime.
+Worth noting that `TypeOf<T>` represents a constructor - it kind of works like a `where T : class` constraint in `C#` to generalise over classes, and it's usually seen when a type is passed along, for example, `foo<T>(ctor: TypeOf<T>)` can be invoked as `foo<UpdateBirthdayAction>(UpdateBirthdayAction)` or simply `foo(UpdateBirthdayAction)`. Remember the type parameters are erased at compile time by `TypeScript`, this allows us to pass the "type" along as value and it remains present at runtime.
 
 At last we are ready for `LensReducer` with which we can register `Action`s with corresponding lenses, and make a `reducer` function.
 
@@ -121,7 +121,7 @@ For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying 
 * `UpdateNameAction` must have a `payload` of `string`
 * `lStateTo.name` must be a lens that manipulates a `string` field within a data structure of type `State` (which is encoded in the type of `ReducerBuilder`). 
 
-Kind of nice that so much follows by specifying just `string` as type parameter to `register()`, isn't it?
+Kind of nice that so much follows by specifying `State` and `string` as type parameters to `register()`, isn't it?
 
 In fact, to invoke `register()` we don't need to specify `TPayload` at all, as it will be inferred from `IAction`. Let's see it in action (pun is coincidental). First of all the `Action` classes now need to implement IAction<T>.
 
@@ -139,8 +139,8 @@ And behold - this is how we get our good-old `reducer` back.
 
 ```typescript
 const reducer = new LensReducer<State>()
-                    .register<string>(UpdateNameAction, lStateTo.name)
-                    .register<Date>(UpdateBirthdayAction, lStateTo.Birthday)
+                    .register(UpdateNameAction, lStateTo.name)
+                    .register(UpdateBirthdayAction, lStateTo.Birthday)
                     .toReducer();
 ```
 
@@ -151,3 +151,5 @@ This is a trick I've found useful when dealing with similar scenarios - when the
 But encapsulation is an OOP concept isn't it? Very true. On the other hand, keeping a weakly-typed list is no easy feat in functional languages like Haskell.
 
 And make no mistake: there are definitely plenty of OOP here: the builder pattern that encapsulates the weakly-typed functions, with a fluent interface. While it would have been possible to use functional alternatives, I feel OOP concepts work much better and are more practical. Nothing wrong combining paradigms - in fact it's only reasonable that we do when it makes sense.
+
+You may want to improve on this solution for more flexibility - for example, could `register` also take a `Reduce` function as its second parameter? This will change its type to `register<TPayload>(ty: TypeOf<IAction<TPayload>>, lensOrReducer: Lens<TState, TPayload> | Reducer<TState, TPayload>)` and we can write `register(UpdateNameAction, (st, name) => ...)`. If you've come this far, sure you'll enjoy this little exercise.
