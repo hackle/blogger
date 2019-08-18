@@ -19,10 +19,17 @@ type ActionUnion = UpdateBirthdayAction | UpdateNameAction;
 
 type ActionBase = { type: ActionTypes }
 
-function reducer1(state: State, action: ActionUnion): State {
+function reducer(state: State, action: ActionUnion): State {
     switch (action.type) {
-        case 'UpdateBirthday': return { ...state, birthday: action.payload };
-        case 'UpdateName': return { ...state, name: action.payload };
+        case 'UpdateBirthday': return { ...state, birthday: (action as any).payload };
+        case 'UpdateName': return { ...state, name: (action as any).payload };
         default: return state;
     }
 }
+
+console.log(reducer({
+    name: '', birthday: null
+}, {
+    type: 'UpdateBirthday',
+    payload: new Date()
+ }));
