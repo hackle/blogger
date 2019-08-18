@@ -19,7 +19,11 @@ It was run at [NDC Oslo](https://ndcoslo.com/speaker/hackle-wayne/)!
 I am available for speaking at conferences, meetups or workplaces when there is genuine interest. Below are some of the current topics,
 
 ### A few things about unit testing
+Thinking about unit testing from first principle - and brace for the finds!
 Slides for [A few things about unit testing](/presso-pragmatic-unit-testing)
 
 ### Immutability for free! (use lens in TypeScript for the win)
+We look at the concept and implementation of lens, and see how it can be used in day-to-day scenarios for fun and profit.
+
 ### You are but one key word away from functional programming
+An easy and practical way to get everyday Object-Oriented programmers into functional programming. No joke! You'll get it.
