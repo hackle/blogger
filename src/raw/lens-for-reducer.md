@@ -1,6 +1,6 @@
-Once having got used to the idea, it's not hard to see that any `lens` implementation can help reduce boilerplate in transformation of complex data structure, for example, in so called "reducer" functions. Let's see how we can utilise something simple as `tsMiniLens` to arrive at a minimalistic but type-safe replacement for the usual reducers, in `TypeScript`.
+Once having got used to the idea, it's not hard to see that any `lens` implementation can help reduce boilerplate in dealing with complex data structure, for example, in so-called "reducer" functions as in Redux. Let's see how we can utilise something simple as `tsMiniLens` to arrive at a minimalistic replacement for the usual reducers. 
 
-Our goal is to have a fluent interface to build reducers with type-safety as well as type inference.
+This replacement would look as follows:
 
 ```typescript
 const reducer = new LensReducer<State>()
@@ -9,7 +9,7 @@ const reducer = new LensReducer<State>()
     .toReducer();
 ```
 
-Let's start with a *usual* way of setting up a reducer.
+Let's start with a "usual" way of setting up a reducer.
 
 ```TypeScript
 class UpdateBirthdayAction {
@@ -37,11 +37,11 @@ function reducer(state: State, action: Action): State {
 
 ```
 
-It's good to be aware that implementations vary, there are conventions with much more ceremony, such as union `Action` types, enum as tags for `Action` etc. I picked the above style for its lack of ceremony (largely due to representing `Action` as class and use of `instanceof`) as well as distraction from the topic at hand.
+I say "usual" because implementations vary, there are different styles with much more ceremony, such as union `Action` types, enum as tags for `Action` etc. I picked the above for its lack of ceremony (largely due to representing `Action` as class and use of `instanceof`) as well as distraction from the topic at hand.
 
-I can't say I am a big fan of the whole `redux` fetish but if I have to use it then I wouldn't mind writing a `reducer` as the one above.
+While I can't say I am a big fan of the whole Redux fetish, if I have to use it then I wouldn't mind writing a `reducer` as the one above.
 
-There is but one small annoyance, the way the `state` value is being updated is quite tedious, with code blocks like `{ ...state, birthday: action.payload }` or `{ ...state, name: action.payload }`. This can get pretty messy if the data structure at hand is complex.
+There is but one small annoyance, the way the `state` value is being updated is quite tedious, with code blocks like `{ ...state, birthday: action.payload }` or `{ ...state, name: action.payload }`. It can get pretty messy if the data structure at hand is complex.
 
 Worry not - `lens` excels at eliminating such repetitions. First, let's define a few lenses for `State`. (You may want to click [here](lens-typescript) for a quick recap of `tsMiniLens`.)
 
@@ -68,14 +68,14 @@ function reducer(state: State, action: ActionUnion): State {
 }
 ```
 
-This may not seem much difference as `State` is simple - but we are on the right track.
+This may not seem much difference as the structure of `State` is simple - but we are on the right track.
 
-The repetition in `reducer` is more pronounced now - with every `instanceof` it tries to recover the type of `action` so the `payload` can be accessed by following code.
+Notably, the repetition in `reducer` is more pronounced now - with every `instanceof` it tries to recover the type of `action` so the `payload` can be accessed by following code.
 (Read about [instanceof type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#instanceof-type-guards))
 
 Such repetition is something we can abstract over. One option is to use something like a **builder pattern** to build up a reducer with one `Action` type at a time.
 
-Now the idea is in place, we need only add a few helper types to get underway.
+With the idea is in place, we need only add a few helper types to get underway.
 
 ```typescript
 interface IAction<TPayload> { payload?: TPayload }
@@ -87,9 +87,9 @@ type TypeOf<T> = {
 type Reducer<TState, TAction> = (st: TState, action: TAction) => TState;
 ```
 
-`TypeOf<T>` represents a constructor - it kind of works like a `where T : class` constraint in `C#`. It generalises over classes and it's usually seen when a type is passed along, for example, `foo<T>(ctor: TypeOf<T>)` can be invoked as `foo<UpdateBirthdayAction>(UpdateBirthdayAction)` or simply `foo(UpdateBirthdayAction)`.
+Worth noting that `TypeOf<T>` represents a constructor - it kind of works like a `where T : class` constraint in `C#` to generalise over classes, and it's usually seen when a type is passed along, for example, `foo<T>(ctor: TypeOf<T>)` can be invoked as `foo<UpdateBirthdayAction>(UpdateBirthdayAction)` or simply `foo(UpdateBirthdayAction)`. Remember the type parameters are erased at compile time by `TypeScript`, this allows us to pass the "type" along as value and is present at runtime.
 
-Now we are ready for `LensReducer` with which we can register `Action`s with corresponding lenses, and make a `reducer` function.
+At last we are ready for `LensReducer` with which we can register `Action`s with corresponding lenses, and make a `reducer` function.
 
 ```typescript
 class LensReducer<TState> {
@@ -123,7 +123,7 @@ For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying 
 
 Kind of nice that so much follows by specifying just `string` as type parameter to `register()`, isn't it?
 
-In fact - we don't need to specify `TPayload` at all, it will be inferred from `IAction`. Let's see it in action (pun is coincidental). First of all the `Action` classes now need to implement IAction<T>.
+In fact, to invoke `register()` we don't need to specify `TPayload` at all, as it will be inferred from `IAction`. Let's see it in action (pun is coincidental). First of all the `Action` classes now need to implement IAction<T>.
 
 ```typescript
 class UpdateBirthdayAction implements IAction<Date> {
@@ -135,7 +135,7 @@ class UpdateNameAction implements IAction<string> {
 }
 ```
 
-And we get our good-old `reducer` back.
+And behold - this is how we get our good-old `reducer` back.
 
 ```typescript
 const reducer = new LensReducer<State>()
