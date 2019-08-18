@@ -110,7 +110,9 @@ class LensReducer<TState> {
 
 We want the method `ReducerBuilder.register()` to take type of `payload` of an `Action` as type parameter. This type restricts the first parameter of `register` to an `Action` with it as payload, and the second parameter to a `lens` that focuses on a `string` value of a `State` structure. 
 
-For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying `string`, it's required that `UpdateNameAction` must have a `payload` of `string`; and `lStateTo.name` must be a lens that manipulates a `string` field within a structure of type `State` (which is encoded in the type of `ReducerBuilder`). All this should follow by just specifying a type parameter.
+For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying `string`, it's required that `UpdateNameAction` must have a `payload` of `string`; and `lStateTo.name` must be a lens that manipulates a `string` field within a structure of type `State` (which is encoded in the type of `ReducerBuilder`). 
+
+A lot follows by specifying `string` as type parameter.
 
 It is used as follows
 
@@ -132,10 +134,10 @@ const reducer = new LensReducer<State>()
 const newState = reducer(oldState, new UpdateNameAction('George'));
 ```
 
-Type-safety is maintained. The trick is to only make strongly-type methods public, and the weakly-typed `reducerFns: Reducer<TState, any>[]` private. The public method ensures that all input is in good shape; the weakly-typed field unifies `Action`s of different types.
+Type-safety is maintained, how? Well, by making strongly-type methods public, and the weakly-typed `reducerFns: Reducer<TState, any>[]` private. The public method ensures that all input is in good and valid shape; the weakly-typed field unifies `Action`s of different types.
 
-This is trick I've found useful when dealing with similar scenarios - when there is a need to unify an ever-growing list of sub-types, encapsulation could work better than abusing union types.
+This is a trick I've found useful when dealing with similar scenarios - when there is a need to unify an ever-growing list of sub-types, encapsulation could work better than abusing union types.
 
-But encapsulation is an OOP concept isn't it? In fact, keeping a weakly-typed list is no easy feat in functional languages like Haskell. This technique is only possible with cross-paradigm languages. 
+But encapsulation is an OOP concept isn't it? Very true. On the other hand, keeping a weakly-typed list is no easy feat in functional languages like Haskell.
 
-And make no mistake: there are definitely plenty of OOP here: the builder pattern that encapsulates the weakly-typed functions, with a fluent interface. While it would have been possible to use functional alternatives, I feel OOP concepts works much better and are more practical.
+And make no mistake: there are definitely plenty of OOP here: the builder pattern that encapsulates the weakly-typed functions, with a fluent interface. While it would have been possible to use functional alternatives, I feel OOP concepts work much better and are more practical.
