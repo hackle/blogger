@@ -112,18 +112,18 @@ class LensReducer<TState> {
 
 All the type annotations and lambdas can be a bit overwhelming but let's take a deep breath and dive in:
 
-1. We want method `ReducerBuilder.register()` takes a type parameter that is an `Action`'s *payload*, for example, `TPayload`. 
+1. Method `ReducerBuilder.register()` takes a type parameter that is an `Action`'s *payload*, for example, `TPayload`. 
 2. This type parameter in turn restricts `ty`, the first parameter of `register()`, to an `Action` with `TPayload` as payload, 
-3. it also restricts the second parameter `len`, to type `Lens` that focuses on a `string` field within a `State` data structure. 
+3. it also restricts the second parameter `len`, to type `Lens<State, string>` that focuses on a `string` field within a `State` data structure. 
 
-For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying `string`, it's required 
+For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying `string`, it's required that
 
 * `UpdateNameAction` must have a `payload` of `string`
 * `lStateTo.name` must be a lens that manipulates a `string` field within a data structure of type `State` (which is encoded in the type of `ReducerBuilder`). 
 
 Kind of nice that so much follows by specifying just `string` as type parameter to `register()`, isn't it?
 
-Let's see it in action (pun is coincidental). First of all the `Action` classes now need to implement IAction<T>.
+In fact - we don't need to specify `TPayload` at all, it will be inferred from `IAction`. Let's see it in action (pun is coincidental). First of all the `Action` classes now need to implement IAction<T>.
 
 ```typescript
 class UpdateBirthdayAction implements IAction<Date> {
