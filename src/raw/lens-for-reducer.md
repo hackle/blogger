@@ -87,7 +87,9 @@ type TypeOf<T> = {
 type Reducer<TState, TAction> = (st: TState, action: TAction) => TState;
 ```
 
-And here comes the `LensReducer` with which we can register `Action`s with corresponding lenses, and make a `reducer` function.
+`TypeOf<T>` represents a constructor - it kind of works like a `where T : class` constraint in `C#`. It generalises over classes and it's usually seen when a type is passed along, for example, `foo<T>(ctor: TypeOf<T>)` can be invoked as `foo<UpdateBirthdayAction>(UpdateBirthdayAction)` or simply `foo(UpdateBirthdayAction)`.
+
+Now we are ready for `LensReducer` with which we can register `Action`s with corresponding lenses, and make a `reducer` function.
 
 ```typescript
 class LensReducer<TState> {
@@ -108,16 +110,22 @@ class LensReducer<TState> {
 }
 ```
 
-We want the method `ReducerBuilder.register()` to take type of `payload` of an `Action` as type parameter. This type restricts the first parameter of `register` to an `Action` with it as payload, and the second parameter to a `lens` that focuses on a `string` value of a `State` structure. 
+All the type annotations and lambdas can be a bit overwhelming but let's take a deep breath and dive in:
 
-For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying `string`, it's required that `UpdateNameAction` must have a `payload` of `string`; and `lStateTo.name` must be a lens that manipulates a `string` field within a structure of type `State` (which is encoded in the type of `ReducerBuilder`). 
+1. We want method `ReducerBuilder.register()` takes a type parameter that is an `Action`'s *payload*, for example, `TPayload`. 
+2. This type parameter in turn restricts `ty`, the first parameter of `register()`, to an `Action` with `TPayload` as payload, 
+3. it also restricts the second parameter `len`, to type `Lens` that focuses on a `string` field within a `State` data structure. 
 
-A lot follows by specifying `string` as type parameter.
+For example: `register<string>(UpdateNameAction, lStateTo.name)`. By specifying `string`, it's required 
 
-It is used as follows
+* `UpdateNameAction` must have a `payload` of `string`
+* `lStateTo.name` must be a lens that manipulates a `string` field within a data structure of type `State` (which is encoded in the type of `ReducerBuilder`). 
+
+Kind of nice that so much follows by specifying just `string` as type parameter to `register()`, isn't it?
+
+Let's see it in action (pun is coincidental). First of all the `Action` classes now need to implement IAction<T>.
 
 ```typescript
-// and the Action classes need to implement IAction
 class UpdateBirthdayAction implements IAction<Date> {
     constructor(public payload: Date){};
 }
@@ -125,19 +133,21 @@ class UpdateBirthdayAction implements IAction<Date> {
 class UpdateNameAction implements IAction<string> {
     constructor(public payload: string){};
 }
+```
 
+And we get our good-old `reducer` back.
+
+```typescript
 const reducer = new LensReducer<State>()
                     .register<string>(UpdateNameAction, lStateTo.name)
                     .register<Date>(UpdateBirthdayAction, lStateTo.Birthday)
                     .toReducer();
-
-const newState = reducer(oldState, new UpdateNameAction('George'));
 ```
 
-Type-safety is maintained, how? Well, by making strongly-type methods public, and the weakly-typed `reducerFns: Reducer<TState, any>[]` private. The public method ensures that all input is in good and valid shape; the weakly-typed field unifies `Action`s of different types.
+Type safety, what we value, is maintained, how? Well, by making strongly-type methods public, and the weakly-typed `reducerFns: Reducer<TState, any>[]` private. The public method ensures that all input is in good and valid shape; the weakly-typed field unifies `Action`s of different types.
 
 This is a trick I've found useful when dealing with similar scenarios - when there is a need to unify an ever-growing list of sub-types, encapsulation could work better than abusing union types.
 
 But encapsulation is an OOP concept isn't it? Very true. On the other hand, keeping a weakly-typed list is no easy feat in functional languages like Haskell.
 
-And make no mistake: there are definitely plenty of OOP here: the builder pattern that encapsulates the weakly-typed functions, with a fluent interface. While it would have been possible to use functional alternatives, I feel OOP concepts work much better and are more practical.
+And make no mistake: there are definitely plenty of OOP here: the builder pattern that encapsulates the weakly-typed functions, with a fluent interface. While it would have been possible to use functional alternatives, I feel OOP concepts work much better and are more practical. Nothing wrong combining paradigms - in fact it's only reasonable that we do when it makes sense.
