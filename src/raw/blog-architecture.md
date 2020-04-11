@@ -1,4 +1,17 @@
-For me this blog is not just some place I post my learnings and ideas, but also somewhere I can put my learnings into practice. Here is a brief overview of what I used for this blog, and some notable facts.
+For me this blog is not just some place I post my learnings and ideas, but also somewhere I can put them into practice. Here is a brief overview of what I used for this blog, and some notable facts.
+
+## Update April 12, 2020
+I've been procrastinating on switching this blog to using [aws-lambda-haskell-runtime](http://hackage.haskell.org/package/aws-lambda-haskell-runtime). Compared to [serverless-haskell](https://github.com/seek-oss/serverless-haskell), It has no dependency on node, and feels more "native" to me.
+
+Also because of the dependency on node, GitHub sends me warnings once in a while about out-dated packages that exposed vulnerabilities. Just a bit annoying.
+
+On the other hand I tried to create a custom lambda runtime in `Idris`, and actually got it running, except once in a while I would get a SIG_FAULT and I had to give up. To me coding IO heavy stuff in `Idris` is not much different to Haskell, just with less libraries to use and needed much hacking.
+
+As it turned out, [aws-lambda-haskell-runtime](http://hackage.haskell.org/package/aws-lambda-haskell-runtime) is a joy to use. The [documentation](https://theam.github.io/aws-lambda-haskell-runtime/index.html) is succinct but on point. The only hiccup I had was trying to do `stack build` on my MacBook, and couldn't overcome a linker error. A bit of googling revealed it's kind of a no-go when (static?) linking is a concern. Then I just did `stack build --docker` and all was good.
+
+Before removing [serverless-haskell](https://github.com/seek-oss/serverless-haskell) I realised I still needed the types for the [Api Gateway](https://theam.github.io/aws-lambda-haskell-runtime/04-usage-with-api-gateway.html) and why write more code if I already have it for free? So I let both libraries live together happily.
+
+To make things even easier, the [serverless](https://serverless.com/framework/docs/providers/aws/) framework is quite up-to-date when it comes to support for custom runtime. Seriously, I should have looked into this much sooner!
 
 ## AWS Api Gateway + Lambda with Serverless-Haskell
 This blog is based on the excellent [serverless-haskell](https://github.com/seek-oss/serverless-haskell) framework, which enables me to utilise the power of AWS Api Gateway + Lambda with code written in `Haskell`. Nothing wrong with any other languages but `Haskell` is what I am learning at this moment (and have been for a while now).
