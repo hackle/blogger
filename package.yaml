@@ -1,4 +1,4 @@
-name:                blogger
+name:                blogger1
 version:             0.1.0.0
 github:              "githubuser/blogger"
 license:             BSD3
@@ -21,6 +21,8 @@ description:         Please see the README on Github at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- aws-lambda-haskell-runtime >= 2.0.1
+- aeson
 
 library:
   source-dirs: src
@@ -31,24 +33,27 @@ library:
     - directory
     - transformers
     - mtl
+    - extra
+    - uri-encode
+    - aeson
+    - lens
+    - unordered-containers
+    - serverless-haskell
 
 executables:
-  blogger-exe:
+  bootstrap:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
     - -threaded
     - -rtsopts
+    - -O2
+    - -static
     - -with-rtsopts=-N
+    cc-options: -static
+    ld-options: -static -pthread
     dependencies:
-    - blogger
-    - aeson
-    - lens
-    - text
-    - unordered-containers
-    - serverless-haskell
-    - blaze-html
-    - transformers
+    - blogger1
 
 tests:
   blogger-test:
@@ -59,8 +64,15 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - blogger
+    - blogger1
     - text
     - hspec
     - hspec-discover
     - blaze-html
+
+default-extensions:
+  - TemplateHaskell
+  - RecordWildCards
+  - OverloadedLists
+  - OverloadedStrings
+  - DeriveGeneric

@@ -16,3 +16,7 @@ functions:
       artifact: build/function.zip
     layers:
       - arn:aws:lambda:ap-southeast-2:785355572843:layer:aws-haskell-runtime:2
+    events:
+      - http:
+          path: /test/{name}
+          method: get

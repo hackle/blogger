@@ -75,10 +75,10 @@ renderPage contentEntry base content = do
     return $ LT.toStrict (renderHtml html)
 
 loadIdrisPrism :: IO Html
-loadIdrisPrism = loadFromCurrentDir "/src/prism-idris.js"
+loadIdrisPrism = loadFromCurrentDir "/src/raw/prism-idris.js"
 
 loadStyles :: IO Html
-loadStyles = loadFromCurrentDir "/src/styles.css"
+loadStyles = loadFromCurrentDir "/src/raw/styles.css"
 
 loadFromCurrentDir :: FilePath -> IO Html
 loadFromCurrentDir fp = do

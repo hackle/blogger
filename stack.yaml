@@ -1,25 +1,27 @@
 flags: {}
 packages:
 - .
-allow-newer: false
 extra-deps:
-- aeson-1.2.4.0
-- amazonka-core-1.5.0
-- amazonka-kinesis-1.5.0
-- amazonka-s3-1.5.0
-- bifunctors-5.5.2
-- blaze-html-0.9.0.0
-- conduit-1.2.13.1
-- conduit-extra-1.2.3.2
-- mmorph-1.1.2
-- network-2.6.3.5
-- parsec-3.1.13.0
-- primitive-0.6.3.0
-- profunctors-5.2.2
-- resourcet-1.1.11
-- semigroupoids-5.2.2
-- serverless-haskell-0.4.2
-- typed-process-0.2.2.0
-- xml-conduit-1.4.0.4
-- markdown-0.1.17.1
-resolver: lts-9.1
+# - aeson-1.2.4.0
+# - amazonka-core-1.5.0
+# - amazonka-kinesis-1.5.0
+# - amazonka-s3-1.5.0
+# - bifunctors-5.5.2
+# - blaze-html-0.9.0.0
+# - conduit-1.2.13.1
+# - conduit-extra-1.2.3.2
+# - mmorph-1.1.2
+# - network-2.6.3.5
+# - parsec-3.1.13.0
+# - primitive-0.6.3.0
+# - profunctors-5.2.2
+# - resourcet-1.1.11
+# - semigroupoids-5.2.2
+# - serverless-haskell-0.4.2
+# - typed-process-0.2.2.0
+# - xml-conduit-1.4.0.4
+# - markdown-0.1.17.1
+- aws-lambda-haskell-runtime-2.0.1
+resolver: lts-13.25
+docker:
+  enable: true
