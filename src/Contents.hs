@@ -50,6 +50,7 @@ module Contents where
         , ("T.D.D. is most practical data-driven with pure functions", "tdd-data-driven-and-functional.md")
         , ("Nesting and positions in covariance and contravariance, ", "contravariant-positions.md")
         , ("Reducer to reduce, with lens in OO flavour", "lens-for-reducer.md")
+        , ("Dependent types in TypeScript?", "dependent-types-typescript.md")
         ]
 
     about :: ContentEntry
