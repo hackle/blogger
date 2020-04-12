@@ -6,7 +6,9 @@ append : (xs : Vect m a) -> (ys : Vect n a) -> Vect (m + n) a
 
 Whereas `m` and `n` are values that specify the lengths of the Vectors. As they are values, it's only natural to treat them as such, so the result `Vect` would have length `m+n`.
 
-You will be surprised, but it's possible to get a taste of dependent types in TypeScript. **Literal types**, come to think of it, are basically **values**. And with TypeScript's support for conditional types, we can (almost) manage a little type calculation. 
+You will be surprised, but it's possible to get a taste of dependent types in TypeScript, just from a *slightly different* direction. 
+
+[**Literal types**](https://www.typescriptlang.org/docs/handbook/advanced-types.html#string-literal-types), come to think of it, are basically **values**. And with TypeScript's support for conditional types, we can (almost) manage a little type calculation. 
 
 Let's get to it!
 
