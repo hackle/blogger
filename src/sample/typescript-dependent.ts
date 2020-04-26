@@ -15,3 +15,8 @@ function toggle<T extends OnOff>(st: T): Toggle<T> {
 }
 
 const state4 = toggle('on');
+
+
+interface Functor<Ins, El1, El2> {
+    map(fn: (el: El1) => El2): Ins;
+}
