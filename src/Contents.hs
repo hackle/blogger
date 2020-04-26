@@ -51,6 +51,7 @@ module Contents where
         , ("Nesting and positions in covariance and contravariance, ", "contravariant-positions.md")
         , ("Reducer to reduce, with lens in OO flavour", "lens-for-reducer.md")
         , ("Dependent types in TypeScript?", "dependent-types-typescript.md")
+        , ("The Diamond, squashed and recovered", "the-diamond-kata.md")
         ]
 
     about :: ContentEntry

@@ -1,4 +1,4 @@
-The Diamond Kata is an exercise typically used for Test-Driven Development. Briefly, given a letter from A to Z - in the below example, letter D - to build a pattern like below.
+The Diamond Kata is an exercise typically used for Test-Driven Development. Briefly put, given a letter from A to Z - in our example, D - the task is to build a pattern like below, with the letters forming a diamond shape.
 
 ```
 ---A---
@@ -10,12 +10,15 @@ D-----D
 ---A---
 ```
 
-There are different solutions to this kata, typically with loops and sentinel values. Here I want to share a solution that can be slightly different.
+(SPOILER ALERT! If you are new to the Diamond Kata, this is the time to stop reading, and try it out first for yourself.)
 
-First, build a table filled with letters in this fashion. We need to decide 
+Simple, visual and intuitive, this Kata lends itself perfectly to learning of testing techniques such as Property Based Testing. 
 
-1. how to build a single row
-2. how many rows to populate
+As we all know, the point of this Kata is not the solution itself, but how we arrive at it. Regardless, I want to share one that I found interesting, representative and equally intuitive.
+
+Here is the idea: consider the above "diamond", what if we squash it from top to bottom into a single row, keeping only one letter for each column? We get `DCBABCD`.
+
+Next, we replace each row in the table with this squashed row.
 
 ```
 DCBABCD
@@ -27,11 +30,9 @@ DCBABCD
 DCBABCD
 ```
 
-Now we only need to decide
+What can we do with this table? Well, if we look and squint long and closely enough, we can see the "diamond" is hidden within! This is hardly any surprise - each row is a squashed "diamond" to begin with.
 
-3. what letter to **KEEP** in each row, replace other letters, and we are done.
-
-With the table layout, it's easy to see the letters to keep across all rows form the same pattern as the letters in each row, but reversed.
+The problem is, how can we recover the "diamond"? Well, by removing the letters we don't need! Specifically, keep only 'A' in the first row, and 'B' in the second, and so on until 'D', then back to 'A'. 
 
 ```
 DCBABCD <-- keep "A" only
@@ -43,25 +44,43 @@ DCBABCD <-- keep "B" only
 DCBABCD <-- keep "A" only
 ```
 
-Here is a simple solution in Haskell (which you'll agree with me is a great choice).
+And we arrive at...
 
-```haskell
-import Data.Char
-
-diamond :: Char -> IO ()
-diamond c = do
-    mapM putStrLn $ build c
-    return ()
-            
-build :: Char -> [[Char]]
-build c = keep <$> lettersToKeep
-    where
-        chars = ['A'..c] -- 1. A B C D
-        row = (reverse $ tail chars) ++ chars -- 2. D C B ++ A B C D
-        lettersToKeep = chars ++ (tail $ reverse chars) -- 3. A B C D ++ C B A, similar to above
-        keep letter = (\l -> if l == letter then letter else '-') <$> row
+```
+---A---
+--B-B--
+-C---C-
+D-----D
+-C---C-
+--B-B--
+---A---
 ```
 
-In summary,
-1. usually it's a good idea to spend some time looking at the problem closely, in this case, the result dataset. There can be patterns waiting to be discovered!
-2. and it might not always the best idea to jump into coding without doing step 1 thoroughly, even with TDD!
+Doesn't get any easier, does it? To quickly recap, the keys to this algorithm are
+
+1. making the **squashed** row
+3. knowing what letter to **KEEP** in each row.
+
+Isn't this strange? We haven't mentioned anything like loops, coordinates or sentinel values, and the solution is already jumping out at us!
+
+Of course, by now, I trust you already have these 2 simple steps figured out, so it's time for you to open up your favourite IDE, and for me to bid you good luck...
+
+Nonetheless, for completeness's sake, below is an implementation in Haskell (which you'll agree with me is a good choice).
+
+```haskell
+diamond :: Char -> IO ()
+diamond c = mapM_ putStrLn $ build c
+            
+build :: Char -> [[Char]]
+build c = makeRow <$> lettersToKeep
+    where
+        letters = ['A'..c] -- 1. A B C D
+        squashedRow = (reverse $ tail letters) ++ letters -- 2. D C B ++ A B C D
+        lettersToKeep = letters ++ (tail $ reverse letters) -- 3. A B C D ++ C B A, similar to above
+        makeRow letter = (\l -> if l == letter then letter else '-') <$> squashedRow
+```
+
+As customary for any Kata, the moral of the story:
+
+1. it's often a good idea to spend time on the problem at hand first. Sometimes, by simply staring at the dataset long enough, we can find patterns that lead to intuitive solutions.
+2. conversely, it might not always be the best idea to dive into coding without doing step 1 thoroughly, with or without TDD.
