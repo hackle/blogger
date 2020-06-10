@@ -24,8 +24,7 @@ module Contents where
 
     blogContents :: [ContentEntry]
     blogContents = reverse $ toEntry <$> [
-        ("Good code does not matter... not that much", "good-code-does-not-matter.md")
-        , ("How is this blog put together", "blog-architecture.md")
+        ("How is this blog put together", "blog-architecture.md")
         , ("A few things about unit testing", "presso-pragmatic-unit-testing.md")
         -- , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
         , ("LINQ, infinity, laziness and oh my!", "linq-tips.md")
@@ -53,6 +52,7 @@ module Contents where
         , ("Dependent types in TypeScript?", "dependent-types-typescript.md")
         , ("The Diamond, squashed and recovered", "the-diamond-kata.md")
         , ("Tuck-away and take-one, whatever it takes to look declarative", "anything-to-be-declarative.md")
+        , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
         ]
 
     about :: ContentEntry
