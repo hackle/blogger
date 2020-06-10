@@ -24,8 +24,9 @@ module Contents where
 
     blogContents :: [ContentEntry]
     blogContents = reverse $ toEntry <$> [
-        ("How is this blog put together", "blog-architecture.md")
-        ,("A few things about unit testing", "presso-pragmatic-unit-testing.md")
+        ("Good code does not matter... not that much", "good-code-does-not-matter.md")
+        , ("How is this blog put together", "blog-architecture.md")
+        , ("A few things about unit testing", "presso-pragmatic-unit-testing.md")
         -- , ("Modeling domain with F# for strong specification", "modeling-with-fsharp.md")
         , ("LINQ, infinity, laziness and oh my!", "linq-tips.md")
         -- , ("A lens look-alike (really a nested data updater) in C#?", "lens-csharp.md")
@@ -44,7 +45,6 @@ module Contents where
         , ("Types and tests: JavaScript 10, Idris 0", "types-and-tests.md")
         , ("Types, names, and type superstition", "type-superstition.md")
         , ("Out-of-context string template is an anti-pattern", "out-of-context-string-template.md")
-        , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
         , ("the magic Const, Identity and tuple", "the-const-trickery.md")
         , ("Covariance and contravariance", "contravariant.md")
         , ("T.D.D. is most practical data-driven with pure functions", "tdd-data-driven-and-functional.md")
@@ -52,6 +52,7 @@ module Contents where
         , ("Reducer to reduce, with lens in OO flavour", "lens-for-reducer.md")
         , ("Dependent types in TypeScript?", "dependent-types-typescript.md")
         , ("The Diamond, squashed and recovered", "the-diamond-kata.md")
+        , ("Tuck-away and take-one, whatever it takes to look declarative", "anything-to-be-declarative.md")
         ]
 
     about :: ContentEntry
