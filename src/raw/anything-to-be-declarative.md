@@ -93,4 +93,28 @@ function _1<T>(v: T, ...vs: []any): T {
 }
 ```
 
-There you go! Call it clever or dirty, or both, but maybe you will find it handy some day.
+# the happily hoisted
+
+I was breathless when I first saw how `where` is used in this Haskell code snippet on [https://www.haskell.org/](https://www.haskell.org/)
+
+```haskell
+primes = filterPrime [2..]
+  where filterPrime (p:xs) =
+          p : filterPrime [x | x <- xs, x `mod` p /= 0]
+```
+
+See how `filterPrime` is declared AFTER it's used? (Take nothing away from the other reasons to be breathless about this snippet)
+
+Turns out, JavaScript has always got this right through hoisting. So it's possible to write
+
+```TypeScript
+function foo(x: number) {
+    return bar(x);
+
+    function bar(y: number) {
+        return y * 2;
+    }
+}
+```
+
+I have reservations about hoisting of variables, but don't mind that of functions at all!
