@@ -124,6 +124,9 @@ console.log(animalGetter());
 
 This would look like an issue for correctness but in practice it's not as simple as black or white - there is a nice explanation [here](https://github.com/Microsoft/TypeScript/wiki/FAQ#why-are-function-parameters-bivariant) which I find very reasonable and insightful.
 
+**CORRECTION**
+This is only true with default function type checking mode. When `--strictFunctionTypes` is set, TypeScript checks function types for contravariance. See https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html
+
 ## Summary
 
 Understanding co- and contra-variance can help us design correct types when generics are involved, as well as troubleshoot or avoid *variance* problems - such problems can be hard to penetrate to the unknowing.
