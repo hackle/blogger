@@ -1,0 +1,12 @@
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/bin/Debug/netcoreapp3.1/concurrency.deps.json
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/bin/Debug/netcoreapp3.1/concurrency.runtimeconfig.json
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/bin/Debug/netcoreapp3.1/concurrency.runtimeconfig.dev.json
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/bin/Debug/netcoreapp3.1/concurrency.dll
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/bin/Debug/netcoreapp3.1/concurrency.pdb
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/obj/Debug/netcoreapp3.1/concurrency.csprojAssemblyReference.cache
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/obj/Debug/netcoreapp3.1/concurrency.csproj.CoreCompileInputs.cache
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/obj/Debug/netcoreapp3.1/concurrency.AssemblyInfoInputs.cache
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/obj/Debug/netcoreapp3.1/concurrency.AssemblyInfo.cs
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/obj/Debug/netcoreapp3.1/concurrency.dll
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/obj/Debug/netcoreapp3.1/concurrency.pdb
+/Users/hacklewayne/Work/blogger/src/sample/concurrency/obj/Debug/netcoreapp3.1/concurrency.genruntimeconfig.cache

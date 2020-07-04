@@ -1,0 +1,1 @@
+Here is a give-away. I was once asked in an interview: (say in C#) two threads share a variable with initial value 0, one thread increases it by 1 for 10000 times, while at the exact same time, another thread decreases it by 1 for 10000 times, what's the value of this variable in the end?
