@@ -7,3 +7,5 @@ node_modules
 *.cabal
 .DS_Store
 build
+obj
+bin
