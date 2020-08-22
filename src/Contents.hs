@@ -53,6 +53,7 @@ module Contents where
         , ("The Diamond, squashed and recovered", "the-diamond-kata.md")
         , ("Tuck-away and take-one, whatever it takes to look declarative", "anything-to-be-declarative.md")
         , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
+        , ("Setting CAP loose in real life", "cap.md")
         ]
 
     about :: ContentEntry
