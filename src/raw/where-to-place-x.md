@@ -2,7 +2,7 @@ For a football application, there is `const int totalGameMinutes = 90`. Where do
 
 Let's say if you put it in the `const` file, it's placement by technical concern, where as `Game` is by functionality.
 
-If we stick to one or the other, the effect of placement can turn out to be a pretty deep-reaching.
+If we stick to one or the other, the effect of placement can turn out to be a pretty far-reaching.
 
 Here is my recommendation: prefer placement by functionality whenever possible.
 

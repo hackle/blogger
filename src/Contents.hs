@@ -54,7 +54,7 @@ module Contents where
         , ("Tuck-away and take-one, whatever it takes to look declarative", "anything-to-be-declarative.md")
         , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
         , ("Setting CAP loose in real life", "cap.md")
-        , ("Placement by functionality, not by technical concerns", "where-to-place-x.md")
+        , ("Placement by functionality, not technical concerns", "where-to-place-x.md")
         ]
 
     about :: ContentEntry
