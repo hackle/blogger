@@ -8,19 +8,28 @@ The setup of this blog is based on the excellent [serverless-haskell](https://gi
 
 If you ever want to get in touch, this is my email address but reversed: moc.liamtoh@welkcah (you'll find an article dedicated to a ``reverse`` function in Idris). Or find me on Twitter [@hacklew](https://twitter.com/hacklew).
 
-## Pragmatic unit testing now!
-
-This is a workshop that I can run for your team to introduce a few very simple ideas and techniques to make unit testing more useful, fun and practical.
-
-It was run at [NDC Oslo](https://ndcoslo.com/speaker/hackle-wayne/)!
-
 ## Speaking and talks
 
 I am available for speaking at conferences, meetups or workplaces when there is genuine interest. Below are some of the current topics,
 
+## Test cheap, code simple (also called "Pragmatic unit testing now!")
+
+This is a workshop that I can run for your team to introduce a few very simple ideas and techniques to make unit testing more useful, fun and practical.
+
+## CBD programmers: Clearly Brutally Declaratively
+
+A hands-on intro to declarative ways of thinking and programming.
+
+## Goodbye RegEx, Hello Parsers
+
+An brief introduction to problem solving with parsers when regular expressions get stretched.
+
+## Off on the right foot with React and TypeScript
+
+A full-day workshop to get you started properly and strongly with React and TypeScript, with a bias towards first-principle thinking.
+
 ### A few things about unit testing
-Thinking about unit testing from first principle - and brace for the finds!
-Slides for [A few things about unit testing](/presso-pragmatic-unit-testing)
+Thinking about unit testing from first principle - and brace for the findings!
 
 ### Immutability for free! (use lens in TypeScript for the win)
 We look at the concept and implementation of lens, and see how it can be used in day-to-day scenarios for fun and profit.
