@@ -1,4 +1,4 @@
-# the pet peeve
+# Redux the pet peeve
 
 For a long time I have been uncertain about the state-of-art of state management, particularly in client-side applications, and particularly regarding the popularity of `Redux` style architecture, for its 
 
@@ -13,11 +13,13 @@ When raised, historically my concerns were mostly brushed aside if not mocked at
 
 There are various emerging alternatives to `Redux/Sagas`, some promising and others simply trying to abstract over or reorganise the building block. (Just to be clear, being an advocate for functional programming, I am not particularly fond of any framework that uses a mutation-based state transition. It's backwards!)
 
-To the very core, a lot of such frameworks / architectures are about managing side effect, which has been an age-old challenge and warranted many solutions or attempts.
+To the very core, a lot of such frameworks / architectures are about managing side effect, which has been an age-old challenge and warranted many solutions or attempts. 
 
-To name one, popular IoC containers / Dependency injectors are to a certain extent a form of managing side effects, by separating interfaces from concrete implementations where side-effects (think DB repository, API facade), which are kept in a container that has registration / injection capacities.
+One of the problems with side effect is if managed poorly, it's disastrous for testing, especially integration testing. Dependency injection and mocking is a popular, albeit easily abused solution.
 
-The famous [`Elm` architecture](https://guide.elm-lang.org/architecture/) marked a milestone and passed [inspirations to the likes of `Redux/Sagas`](https://redux.js.org/understanding/history-and-design/prior-art#elm). `Sagas` help keeping side-effect in its own space/level (in the form of generator functions), making it easier to achieve purity for the components.
+IoC containers / Dependency injectors does this by separating interfaces from concrete implementations where side-effects (think DB repository, API facade), which are kept in a container that has registration / injection capacities.
+
+The famous [`Elm` architecture](https://guide.elm-lang.org/architecture/) does it differently and marked a milestone and passed [inspirations to the likes of `Redux/Sagas`](https://redux.js.org/understanding/history-and-design/prior-art#elm). `Sagas` help keeping side-effect in its own space/level (in the form of generator functions), making it easier to achieve purity for the components. However, any language without the benefits of a type system as sound as that of `Elm` can come across as somewhat lacking or less intuitive / idiomatic. For example, using `Action`s with unique `type` identifiers and different types of `payload` is no match to natively supported union types.
 
 Coincidentally, I also came to learn that in `haskell` there have been a outburst of effect systems (which I never used in anger). The main takeaway is encoding side-effects as data types for the application domain to consume, and only interpret the result on the top level. Mind you, `Sagas` kind of implements this data-interpretation idea, as generator functions need to be interpreted by the framework.
 
