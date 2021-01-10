@@ -7,11 +7,11 @@ For a long time I have been uncertain about the state-of-art of state management
 
 (With that said I've been very impressed with the awareness and prevalence of immutability and functional-style programming that such architectures were integral in creating).
 
-When raised, historically my concerns were mostly brushed aside if not mocked at, with arguments of varying level of rationality. However, to my great delight, lately I have been hearing similar thoughts from developers from different places and with various background. Thoughtworks even put `Redux` [back to "trial"](https://www.thoughtworks.com/radar/languages-and-frameworks/redux), not without a honourary mentioning of `Sagas` which to be honest has been one of my pet peeves. The description is also spot-on. Well done Thoughtworks!
+When raised, historically my concerns were mostly brushed aside if not mocked at, with arguments of varying level of rationality. However, to my great delight, lately I have been hearing similar thoughts from developers from different places and with various background. Thoughtworks even put `Redux` [back to "trial"](https://www.thoughtworks.com/radar/languages-and-frameworks/redux), not without a honourary mentioning of `Saga` which to be honest has been one of my pet peeves. The description is also spot-on. Well done Thoughtworks!
 
 # the problem: managing side-effects
 
-There are various emerging alternatives to `Redux/Sagas`, some promising and others simply trying to abstract over or reorganise the building block. (Just to be clear, being an advocate for functional programming, I am not particularly fond of any framework that uses a mutation-based state transition. It's backwards!)
+There are various emerging alternatives to `Redux/Saga`, some promising and others simply trying to abstract over or reorganise the building block. (Just to be clear, being an advocate for functional programming, I am not particularly fond of any framework that uses a mutation-based state transition. It's backwards!)
 
 To the very core, a lot of such frameworks / architectures are about managing side effect, which has been an age-old challenge and warranted many solutions or attempts. 
 
@@ -19,9 +19,9 @@ One of the problems with side effect is if managed poorly, it's disastrous for t
 
 IoC containers / Dependency injectors does this by separating interfaces from concrete implementations where side-effects (think DB repository, API facade), which are kept in a container that has registration / injection capacities.
 
-The famous [`Elm` architecture](https://guide.elm-lang.org/architecture/) does it differently and marked a milestone and passed [inspirations to the likes of `Redux/Sagas`](https://redux.js.org/understanding/history-and-design/prior-art#elm). `Sagas` help keeping side-effect in its own space/level (in the form of generator functions), making it easier to achieve purity for the components. However, any language without the benefits of a type system as sound as that of `Elm` can come across as somewhat lacking or less intuitive / idiomatic. For example, using `Action`s with unique `type` identifiers and different types of `payload` is no match to natively supported union types.
+The famous [`Elm` architecture](https://guide.elm-lang.org/architecture/) does it differently and marked a milestone and passed [inspirations to the likes of `Redux/Saga`](https://redux.js.org/understanding/history-and-design/prior-art#elm). `Saga` help keeping side-effect in its own space/level (in the form of generator functions), making it easier to achieve purity for the components. However, any language without the benefits of a type system as sound as that of `Elm` can come across as somewhat lacking or less intuitive / idiomatic. For example, using `Action`s with unique `type` identifiers and different types of `payload` is no match to natively supported union types.
 
-Coincidentally, I also came to learn that in `haskell` there have been a outburst of effect systems (which I never used in anger). The main takeaway is encoding side-effects as data types for the application domain to consume, and only interpret the result on the top level. Mind you, `Sagas` kind of implements this data-interpretation idea, as generator functions need to be interpreted by the framework.
+Coincidentally, I also came to learn that in `haskell` there have been a outburst of effect systems (which I never used in anger). The main takeaway is encoding side-effects as data types for the application domain to consume, and only interpret the result on the top level. Mind you, `Saga` kind of implements this data-interpretation idea, as generator functions need to be interpreted by the framework.
 
 # plain and simple: the idea
 
