@@ -1,19 +1,27 @@
-For a long time I have been uncertain about the state-of-art of state management, particularly in client-side applications, and particularly regarding the popularity of `redux` style architecture, for its 
+# the pet peeve
+
+For a long time I have been uncertain about the state-of-art of state management, particularly in client-side applications, and particularly regarding the popularity of `Redux` style architecture, for its 
+
 * verbosity that results in code bloat
 * unnecessary decoupling of logic that results in challenges to understanding what is going on
 
 (With that said I've been very impressed with the awareness and prevalence of immutability and functional-style programming that such architectures were integral in creating).
 
-When raised, historically my concerns were mostly brushed aside if not mocked at, with arguments of varying level of rationality. However, to my great delight, lately I have been hearing similar thoughts from developers from different places and with various background. Thoughtworks even put `redux` back to "trial", with a honourary mentioning of `sagas` which to be honest has been one of my pet peeves :)
+When raised, historically my concerns were mostly brushed aside if not mocked at, with arguments of varying level of rationality. However, to my great delight, lately I have been hearing similar thoughts from developers from different places and with various background. Thoughtworks even put `Redux` [back to "trial"](https://www.thoughtworks.com/radar/languages-and-frameworks/redux), not without a honourary mentioning of `Sagas` which to be honest has been one of my pet peeves. The description is also spot-on. Well done Thoughtworks!
 
-There are various emerging alternatives to `redux/sagas`, some promising and others simply trying to abstract over or reorganise the building block. (Just to be clear, being an advocate for functional programming, I am not particularly fond of any framework that uses a mutation-based state transition. It's backwards!)
+# the problem: managing side-effects
+
+There are various emerging alternatives to `Redux/Sagas`, some promising and others simply trying to abstract over or reorganise the building block. (Just to be clear, being an advocate for functional programming, I am not particularly fond of any framework that uses a mutation-based state transition. It's backwards!)
 
 To the very core, a lot of such frameworks / architectures are about managing side effect, which has been an age-old challenge and warranted many solutions or attempts.
-To name one, popular IoC containers / Dependency injectors is a form of managing side effects to a certain extent, by separating interfaces from implementations, and keeping concrete implementations in a container that has registration / injection capacities.
 
-The famous [`Elm` architecture](https://guide.elm-lang.org/architecture/) marked a milestone and passed [inspirations to the likes of `Redux/Sagas`](https://redux.js.org/understanding/history-and-design/prior-art#elm). `Sagas` help keeping side-effect in its own space or level (in the form of generator functions), making it easier to achieve purity for the components.
+To name one, popular IoC containers / Dependency injectors are to a certain extent a form of managing side effects, by separating interfaces from concrete implementations where side-effects (think DB repository, API facade), which are kept in a container that has registration / injection capacities.
 
-Coincidentally, I also came to learn in `haskell` there have been a outburst of effect systems (which I never used in anger). The main takeaway is encoding side-effects as data types for the application domain to consume, and only interpret the result on the top level.
+The famous [`Elm` architecture](https://guide.elm-lang.org/architecture/) marked a milestone and passed [inspirations to the likes of `Redux/Sagas`](https://redux.js.org/understanding/history-and-design/prior-art#elm). `Sagas` help keeping side-effect in its own space/level (in the form of generator functions), making it easier to achieve purity for the components.
+
+Coincidentally, I also came to learn that in `haskell` there have been a outburst of effect systems (which I never used in anger). The main takeaway is encoding side-effects as data types for the application domain to consume, and only interpret the result on the top level. Mind you, `Sagas` kind of implements this data-interpretation idea, as generator functions need to be interpreted by the framework.
+
+# plain and simple: the idea
 
 This is a long-winded way of saying the idea of state management can be quite simple, even without any framework/library. Inspired by more conservative architecture of `haskell` applications, or in general, immutability-based functional programming, below is a high-level description of implementing this with `React`.
 
@@ -24,6 +32,8 @@ This is a long-winded way of saying the idea of state management can be quite si
 Yes, it is that simple. The acute reader will scream "prop drilling!" at "pass ... all the way down". Luckily, the `React` folks have just the right fix for us, in the form of [`Context`](https://reactjs.org/docs/context.html). So the above statement can be revised as 
 > "use a `Context` to pass the state and the operations to needy components".
 (Mind you, this is not much different than how `Redux` does it).
+
+# an implementation
 
 It's quite straightforward to implement and [this one is by me](https://github.com/hackle/Lensta). A few key points below.
 
@@ -45,7 +55,7 @@ export default withState<OwnProps, StateProps>(
 
 You'll see this implementation actually has a familiar syntax, that's because the idea is basically the same, but the implementation is arguably much, much simpler.
 
-One thing that can be annoying, is updating a single field in a complex and deep state object. One might want to call back the tiny, verbose `reducer`s and all sorts of funny ways to combine them to a large reducer. However I have never been a fan of such convolution, for the boilerplate is easily made unnecessary with [lens](https://www.npmjs.com/package/tsminilens). A succinct side-effect operation as below to close this post. [full code](https://github.com/hackle/Lensta/blob/master/src/appIO.ts)
+One thing that can be annoying, is updating a single field in a complex and deep state object. One might want to call back the tiny, verbose `reducer`s and all sorts of funny ways to combine them to a large reducer. However I have never been a fan of such convolution, for the boilerplate is easily made unnecessary with [lens](https://www.npmjs.com/package/tsminilens). A succinct side-effect operation as below. [full code](https://github.com/hackle/Lensta/blob/master/src/appIO.ts)
 
 ```TypeScript
 // defining lenses
@@ -66,3 +76,5 @@ const increaseCounterAsync = async () => {
     setState(prev => lens.counter.set(prev, text.length));
 };
 ```
+
+If you made it through to the end, you'll agree the idea should be fairly straightforward to implement in any language. All the merrier if you are lucky to find similar ways to avoid "prop drilling" as that of React's `Context`.
