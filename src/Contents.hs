@@ -55,6 +55,7 @@ module Contents where
         , ("Good code does not matter... not that much", "good-code-does-not-matter.md")
         , ("Setting CAP loose in real life", "cap.md")
         , ("Placement by functionality, not technical concerns", "where-to-place-x.md")
+        , ("Plain and simple state management", "plain-state-management.md")
         ]
 
     about :: ContentEntry
