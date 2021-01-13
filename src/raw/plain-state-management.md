@@ -11,7 +11,7 @@ When raised, historically my concerns were mostly brushed aside if not mocked at
 
 # the problem: managing side-effects
 
-There are various emerging alternatives to `Redux/Saga`, some promising and others simply trying to abstract over or reorganise the same building blocks. (Just to be clear, being an advocate for functional programming, I am not particularly fond of any framework that uses a mutation-based state transition. It's backwards!)
+There are various emerging alternatives to `Redux/Saga`, some promising and others simply trying to abstract over or reorganise the same building blocks. (Just to be clear, being an advocate for functional programming, I am not particularly fond of any framework that uses an imperative/mutation-based state transition. It's backwards!)
 
 To the very core, a lot of such frameworks / architectures are about managing side effect, which has been an age-old challenge and warranted many solutions or attempts. 
 
