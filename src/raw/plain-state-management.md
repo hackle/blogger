@@ -7,7 +7,7 @@ For a long time I have been uncertain about the state-of-art of state management
 
 (With that said I've been very impressed with the awareness and prevalence of immutability and functional-style programming that such architectures were integral in creating).
 
-When raised, historically my concerns were mostly brushed aside if not mocked at, with arguments of varying level of rationality. However, to my great delight, lately I have been hearing similar thoughts from developers from different places and with various background. Thoughtworks even put `Redux` [back to "trial"](https://www.thoughtworks.com/radar/languages-and-frameworks/redux), not without a honourary mentioning of `Saga` which to be honest has been one of my pet peeves. The description is also spot-on. Well done Thoughtworks!
+When raised, historically my concerns were mostly brushed aside if not mocked, with arguments of varying level of rationality. However, to my great delight, lately I have been hearing similar thoughts from developers from different places and with various background. Thoughtworks even put `Redux` [back to "trial"](https://www.thoughtworks.com/radar/languages-and-frameworks/redux), not without a honourary mentioning of `Saga` which to be honest has been one of my pet peeves. The description is also spot-on. Well done Thoughtworks!
 
 # the problem: managing side-effects
 
