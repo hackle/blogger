@@ -56,6 +56,8 @@ module Contents where
         , ("Setting CAP loose in real life", "cap.md")
         , ("Placement by functionality, not technical concerns", "where-to-place-x.md")
         , ("Plain and simple state management", "plain-state-management.md")
+        , ("Self-referenced JSON?", "self-reference-json.md")
+        , ("Also on Comonad and Conway's game of life", "conway-comonad.md")
         ]
 
     about :: ContentEntry
