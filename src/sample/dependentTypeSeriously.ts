@@ -85,7 +85,8 @@ type ToArrays<T extends any[]> =
         ? [T1[], ...ToArrays<Ts>]
         : never;
 
-declare function mapMany<T extends any[], U>(map: (...ts: T) => U, ...ps: ToArrays<T>);
+declare function mapMany<T extends any[], U>(mapper: (...ts: T) => U, ...ps: ToArrays<T>);
+
 mapMany((a: string) => `${a}`, [ 'hello', 'world' ]);
 mapMany((a: string, b: number) => `${a} ${b}`, [ 'hello', 'world' ], [ 2, 3 ]);
 

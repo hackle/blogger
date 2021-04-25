@@ -42,7 +42,7 @@ type TypeEqual<T, U> =
         ? true
         : false
     : false;
-    
+
 const n: number = 1;
 const bothNumbers: TypeEqual<number, typeof n> = true;
 const areEqual: TypeEqual<1, 1> = true;
@@ -138,6 +138,28 @@ We will use either tuples or variadic functions for following examples. In most 
 
 Now we are ready for some dependent types!
 
+## Variadic map
+
+Let's follow with another variadic function, this time as parameter `mapper` to function `mapMany`. Unlike the typical map function `map : (mapper: a -> b) -> [a] -> [b]`, the number and types of following parameters depend on the parameters of the `mapper` function, for example, `mapMany: (mapper: a -> b -> c) -> [a] -> [b] -> [c]`.
+
+We already know it's possible to type indefinite number of parameters with `mapper<T extends any[]>(...parameters: T)`, what's less well-known is to use `infer` to restore the type of each element of `T`. Reversed entropy!
+
+```TypeScript
+type ToArrays<T extends any[]> =
+    T extends []
+    ? []
+    : T extends [infer T1, ...infer Ts]
+        ? [T1[], ...ToArrays<Ts>]
+        : never;
+
+declare function mapMany<T extends any[], U>(mapper: (...ts: T) => U, ...ps: ToArrays<T>);
+
+mapMany((a: string) => `${a}`, [ 'hello', 'world' ]);
+mapMany((a: string, b: number) => `${a} ${b}`, [ 'hello', 'world' ], [ 2, 3 ]);
+```
+
+(There are suggestions the above example would be easier to understand if it's called `zipMany`).
+
 ## concat
 
 Who would have guessed - `concat` is relatively trivial to type in TypeScript. In curried form below.
@@ -153,6 +175,11 @@ const merged = concat(1, 'true')('hero', new Date());   // [number, string, stri
 We take advantage of pattern matching and type inference to inductively reconstruct a type for `reverse`.
 
 ```TypeScript
+type Reverse<T extends any[]> =
+    T extends [infer T1, ...infer Ts]
+    ? [ ...Reverse<Ts>, T1 ]
+    : T;
+
 declare function reverse<T extends any[]>(...ts: T): Reverse<T>;
 
 const isReversed = reverse(1, true, 'hero');    // [string, boolean, number]
