@@ -19,6 +19,8 @@ type TypeEqual<T, U> =
 
 const n: number = 1;
 const bothNumbers: TypeEqual<number, typeof n> = true;
+const areEqual: TypeEqual<1, 1> = true;
+const notEqual: TypeEqual<1, 2> = false;
 // const notEqual: TypeEqual<number, string> = true; // won't compile
 
 // pattern matching 2
@@ -74,6 +76,18 @@ type TrueDat = TypeOfTrue<'true'>;   // string, not TypeOfTrue<'true'>
 // variadic
 declare function params<T extends any[]>(...params: T): T;
 const ps = params(true, 'chocolate', 3);  // [boolean, string, number]
+
+// map many
+type ToArrays<T extends any[]> =
+    T extends []
+    ? []
+    : T extends [infer T1, ...infer Ts]
+        ? [T1[], ...ToArrays<Ts>]
+        : never;
+
+declare function mapMany<T extends any[], U>(map: (...ts: T) => U, ...ps: ToArrays<T>);
+mapMany((a: string) => `${a}`, [ 'hello', 'world' ]);
+mapMany((a: string, b: number) => `${a} ${b}`, [ 'hello', 'world' ], [ 2, 3 ]);
 
 // concat
 declare function concat<T extends any[]>(...ts: T): <U extends any[]>(...us: U) =>[...T, ...U];
