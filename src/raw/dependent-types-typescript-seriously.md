@@ -6,9 +6,9 @@ concat : Vect m a -> Vect n a -> Vect (m + n) a
 
 It does imply that values must be available on type level for the calculation, as `m` and `n` above. This rules out most programming languages already, especially those mainstream. The glaring exception is, you would have guessed, TypeScript.
 
-We will look at the enabling features first. If you are quite well versed, feel free to skip to the `concat` example.
+We will look at the enabling features first. If you are quite well versed, feel free to skip to the **Variadic map** example.
 
-## type-value cross-over
+## Values in / as types
 It's quite common to see values used in types for day-to-day TypeScript code, for example:
 
 ```TypeScript
@@ -205,7 +205,7 @@ const unchanged = remove([ 1, 2, 3 ] as const, 4 as const); // [1, 2, 3]
 
 ## Peano number
 
-While we can also define Peano numbers as tuples, below is the more traditional object syntax.
+While we can also define Peano numbers as tuples, below is the more traditional object form.
 
 ```TypeScript
 type Nat = 0 | { suc: Nat };
