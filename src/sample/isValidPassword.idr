@@ -7,6 +7,6 @@ validPassword : ValidPassword 4 8
 validPassword = MkPass "abcd"
 
 invalidPassword : ValidPassword 4 8
-invalidPassword = MkPass "abc"
+invalidPassword = MkPass "abcd"
 
 -- see https://github.com/hackle/idris/blob/master/range.idr

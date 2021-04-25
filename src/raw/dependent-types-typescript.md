@@ -69,4 +69,4 @@ And if we inspect the type of `state4`, it will be `"off"`.
 
 If you find this interesting, maybe you'd also like to read about [this issue on GitHub](https://github.com/microsoft/TypeScript/issues/33014).
 
-P/S I won't recommend trying something like the `append` example, just yet.
+P/S I won't recommend trying something like the `append` example, just yet. (update: But we will, [right here](dependent-types-typescript-seriously))

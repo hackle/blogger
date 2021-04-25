@@ -58,6 +58,7 @@ module Contents where
         , ("Plain and simple state management", "plain-state-management.md")
         , ("Self-referenced JSON?", "self-reference-json.md")
         , ("Also on Comonad and Conway's game of life", "conway-comonad.md")
+        , ("Dependent Types in TypeScript, Seriously", "dependent-types-typescript-seriously.md")
         ]
 
     about :: ContentEntry
