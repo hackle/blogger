@@ -1,3 +1,5 @@
+(Update: more proper dependent types have become possible with new language features in TypeScript, please see [this later post](dependent-types-in-typescript-seriously)).
+
 "A dependent type is a type whose definition depends on a value", according to Wikipedia. Unlike most statically-typed programming languages where types and values live in different places, with dependent types, they may appear together. For example, in `Idris`, there is a function that appends a Vector to another, with a type signature as below,
 
 ```
