@@ -1,15 +1,19 @@
 export {};
 
+// values and types
 type WeekendDay = 'Saturday' | 'Sunday';
-// type Foo = { bar: 'baz' };
-// type Hom = [ 1, 2, 3 ];
+type Foo = { bar: 'baz' };
+type Hom = [ 1, 2, 3 ];
 
 const foo = { bar: 'baz' };
-type Foo = typeof foo;
+type FooL = typeof foo;
 
 const hom = [ 1, 2, 3 ] as const;
-type Hom = typeof hom;
+type HomL = typeof hom;
 
+
+
+// equality
 type TypeEqual<T, U> = 
     T extends U
     ? U extends T
@@ -20,10 +24,14 @@ type TypeEqual<T, U> =
 const n: number = 1;
 const bothNumbers: TypeEqual<number, typeof n> = true;
 const areEqual: TypeEqual<1, 1> = true;
-const notEqual: TypeEqual<1, 2> = false;
-// const notEqual: TypeEqual<number, string> = true; // won't compile
+const notEqual1: TypeEqual<1, 2> = false;
+const notEqual2: TypeEqual<number, string> = false; // won't compile
 
-// pattern matching 2
+
+
+
+
+// pattern matching
 type ExtractFoo<T> = 
     T extends { foo: infer U }
     ? U
@@ -34,8 +42,22 @@ type ExtractFoo<T> =
 const withFoo1 = { foo: new Date() };
 type Foo1 = ExtractFoo<typeof withFoo1>;    // Date
 
-const withFoo2 = { bar: { foo: true } };
+const withFoo2 = { bar: { foo: new Date() } };
 type Foo2 = ExtractFoo<typeof withFoo2>;    // boolean
+
+
+// pattern matching / tuples
+type NoReadOnly<T> =
+    T extends readonly [...infer U]
+    ? U
+    : T;
+
+const tuple = [ 1, 'true', false ] as const;
+type TupsReadonly = typeof tuple;       // readonly [1, "true", false]
+type Tups = NoReadOnly<TupsReadonly>;   // [1, "true", false]
+
+
+
 
 // recursion
 type ExtractFooRec<T> = 
@@ -49,19 +71,13 @@ type FooRec1 = ExtractFooRec<typeof withFoo1>;    // Date
 
 type FooRec2 = ExtractFooRec<typeof withFoo2>;    // boolean
 
-// tuples
-type NoReadOnly<T> =
-    T extends readonly [...infer U]
-    ? U
-    : T;
 
-const tuple = [ 1, 'true', false ] as const;
-type TupsReadonly = typeof tuple;       // readonly [1, "true", false]
-type Tups = NoReadOnly<TupsReadonly>;   // [1, "true", false]
 
-const collapsed = [ 1, 'true', false ]; // (string | number | boolean)[]
 
-// collapse entropy
+
+// entropy / collapse
+
+const collapsed = [ 1, 'true', false ] as const; // (string | number | boolean)[]
 
 type TypeOfTrue<T> =
     T extends 'true'
@@ -70,12 +86,17 @@ type TypeOfTrue<T> =
         ? boolean
         : never;
 
-type TrueDat = TypeOfTrue<'true'>;   // string, not TypeOfTrue<'true'> 
+type TrueDat = TypeOfTrue<true>;   // string, not TypeOfTrue<'true'> 
 
 
+
+
+// reversed entropy
 // variadic
 declare function params<T extends any[]>(...params: T): T;
 const ps = params(true, 'chocolate', 3);  // [boolean, string, number]
+
+
 
 // map many
 type ToArrays<T extends any[]> =
@@ -88,13 +109,25 @@ type ToArrays<T extends any[]> =
 declare function mapMany<T extends any[], U>(mapper: (...ts: T) => U, ...ps: ToArrays<T>);
 
 mapMany((a: string) => `${a}`, [ 'hello', 'world' ]);
-mapMany((a: string, b: number) => `${a} ${b}`, [ 'hello', 'world' ], [ 2, 3 ]);
+mapMany((a: string, b: number, c: boolean) => `${a} ${b}`, 
+        [ 'hello', 'world' ], 
+        [ 2, 3 ],
+        [true, false]);
 
-// concat
+
+
+
+
+
+// Vect / concat
 declare function concat<T extends any[]>(...ts: T): <U extends any[]>(...us: U) =>[...T, ...U];
-const merged = concat(1, 'true')('hero', new Date());   // [number, string, string, Date]
+const merged = concat(1, 'true')('hero', new Date(), 1 as const);   // [number, string, string, Date]
 
-// reverse
+
+
+
+
+// Vect / reverse
 
 type Reverse<T extends any[]> =
     T extends [infer T1, ...infer Ts]
@@ -105,7 +138,11 @@ declare function reverse<T extends any[]>(...ts: T): Reverse<T>;
 
 const isReversed = reverse(1, true, 'hero');    // [string, boolean, number]
 
-// remove element
+
+
+
+
+// Vect / remove element
 type Remove<T extends any[], U> =
     T extends [infer T1, ...infer Ts]
     ? TypeEqual<T1, U> extends true
@@ -117,7 +154,11 @@ declare function remove<T extends readonly any[], U>(ts: T, t: U): Remove<NoRead
 const oneLess = remove([ 1, 2, 3 ] as const, 2 as const);   // [1, 3]
 const unchanged = remove([ 1, 2, 3 ] as const, 4 as const); // [1, 2, 3]
 
-// Peano
+
+
+
+
+// Peano / natural number
 
 type Nat = 0 | { suc: Nat };
 
@@ -126,7 +167,13 @@ const nats = (() => ({
     get 1 () { return { suc: nats[0] }; },
     get 2 () { return { suc: nats[1] }; },
     get 3 () { return { suc: nats[2] }; },
-    get 4 () { return { suc: nats[3] }; }
+    get 4 () { return { suc: nats[3] }; },
+    get 5 () { return { suc: nats[4] }; },
+    get 6 () { return { suc: nats[5] }; },
+    get 7 () { return { suc: nats[6] }; },
+    get 8 () { return { suc: nats[7] }; },
+    get 9 () { return { suc: nats[8] }; },
+    get 10 () { return { suc: nats[9] }; },
 } as const))();
 
 type Nats = typeof nats;
@@ -144,6 +191,18 @@ type NatAdd<N1 extends Nat, N2 extends Nat> =
 
 const nat4: NatAdd<Nats[1], Nats[3]> = nats[4];
 // const nat3: NatAdd<Nats[1], Nats[2]> = nats[4]; // does not compile
+
+type NatMultiply<N1 extends Nat, N2> =
+    N2 extends 0
+    ? 0
+    : N2 extends Nats[1]
+        ? N1
+        : N2 extends { suc: infer N3 }
+            ? NatAdd<N1, NatMultiply<N1, N3>>
+            : never;
+
+const natM4: NatMultiply<Nats[2], Nats[2]> = nats[4];
+const natM10: NatMultiply<Nats[2], Nats[5]> = nats[10];
 
 // subtraction
 
@@ -186,6 +245,11 @@ type NumGTE<N1 extends keyof Nats, N2 extends keyof Nats> =
 const isGTE: NumGTE<2, 1> = true;
 const notGTE: NumGTE<1, 2> = false;
 
+
+
+
+
+
 // ordering
 type AnyGTE<T1, T2> =
     T1 extends keyof Nats
@@ -214,10 +278,30 @@ const isAsc: IsOrdered<[ 1, 2, 3 ]> = true;
 const isDesc: IsOrdered<[ 3, 2, 1 ]> = true;
 const notOrdered: IsOrdered<[1, 3, 2]> = false;
 
-// first of
+
+
+
+// first of an ordered array
 type FirstOf<T extends any[]> = T extends [ infer T1, ...infer _ ] ? T1 : never;
 declare function first<T extends readonly any[]>(ns: T): IsOrdered<NoReadOnly<T>> extends true ? FirstOf<NoReadOnly<T>> : never;
 
 const m1 = first([ 1, 2, 3 ] as const);   // 1
 const m3 = first([ 3, 2, 1 ] as const);   // 3
 const m_ = first([ 3, 2, 3 ] as const);     // never
+
+type ExtraName<T> =
+    T extends `firstname: ${infer FirstName} lastname: ${infer LastName} age: ${infer Age}`
+    ? Age extends number 
+        ? { firstname: FirstName, lastname: LastName, age: Age }
+        : never
+    : never;
+
+declare function extractName<T extends string>(raw: T): ExtraName<T>;
+
+const fullName = extractName('firstname: Hackle lastname: Wayne age: 32');
+
+type ToOptional<T> = {
+    [K in keyof T]: undefined extends T[K] ? { K?: T[K] } : T[K]
+};
+
+type DuckTyped = { foo: 'foo', bar: 'bar' } extends { foo: 'foo' } ? true : false;
