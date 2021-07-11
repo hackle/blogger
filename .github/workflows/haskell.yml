@@ -22,6 +22,8 @@ jobs:
       with:
         path: |
           ~/.cabal/store
+          /home/runner/.stack
+          /var/lib/docker/
         key: ${{ runner.os }}-hacks-blogger-cabal-store
     - run: |
         mkdir -p build/src
