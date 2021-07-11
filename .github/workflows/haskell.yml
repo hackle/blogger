@@ -22,6 +22,7 @@ jobs:
       with:
         path: |
           ~/.cabal/store
+        key: ${{ runner.os }}-hacks-blogger-cabal-store
     - run: |
         mkdir -p build/src
         stack clean
