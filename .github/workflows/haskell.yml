@@ -19,7 +19,6 @@ jobs:
           ~/.cabal/store
           /home/runner/.stack
           .stack-work
-          /var/lib/docker/
         key: ${{ runner.os }}-hacks-blogger-cabal-store
     - uses: haskell/actions/setup@v1
       with:
