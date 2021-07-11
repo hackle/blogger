@@ -18,8 +18,7 @@ jobs:
         ghc-version: '8.10.3'
         enable-stack: true
         stack-version: 'latest'
-    - run:
-      |
+    - run: |
       mkdir -p build/src
       stack clean --docker
       stack build --docker
