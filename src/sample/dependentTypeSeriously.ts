@@ -176,7 +176,11 @@ const nats = (() => ({
     get 10 () { return { suc: nats[9] }; },
 } as const))();
 
+const nat11 = nats[11];
+
 type Nats = typeof nats;
+
+declare function addNat<N1 extends Nat, N2 extends Nat>(n1: N1, n2: N2): NatAdd<N1, N2>; 
 
 // addition
 
