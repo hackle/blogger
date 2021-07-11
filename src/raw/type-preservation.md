@@ -1,6 +1,6 @@
 Given a string value `"foo"`, how do we force it to be of literal type `"foo"`, not the more generic `string`?
 
-For the better or for the worse, in programming, it's not uncommon for the same value to be of different types. In nominally typed languages such as C#, `1` can be both `int` and `decimal` (with a bit of extra annotation), or two interfaces of the exact same shape are treated as different types, 
+For better or worse, in programming, it's not uncommon for the same value to appear as different types. For example, `1` can be either `int` and `decimal` in C# (sometimes with a bit of extra annotation), or as it's "nominally typed", two interfaces of the exact same shape are usually treated as different types.
 
 TypeScript has structural typing, which I guess suits the purpose of retrofitting types to the chaotic world of JavaScript. Being "structural" does not necessarily mean a value always has only one type. To the contrary, there are nuances to type annotations, especially with regards to literal types (which I consider a game changer). Understanding the nuances can help us preserve the right level of information to suit different purposes.
 
