@@ -12,7 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2   
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cabal/store
+          /home/runner/.stack
+          .stack-work
+          /var/lib/docker/
+        key: ${{ runner.os }}-hacks-blogger-cabal-store
     - uses: haskell/actions/setup@v1
       with:
         ghc-version: '8.10.3'
@@ -25,14 +33,6 @@ jobs:
         cp $(stack path --local-install-root)/bin/bootstrap build
         cp -rf ./src/raw ./build/src
         cd build && zip -r function.zip ./ && rm -rf src && rm bootstrap && cd ..
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cabal/store
-          /home/runner/.stack
-          .stack-work
-          /var/lib/docker/
-        key: ${{ runner.os }}-hacks-blogger-cabal-store
   
     - name: artifact
       uses: actions/upload-artifact@v2
