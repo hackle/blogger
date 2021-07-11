@@ -59,6 +59,7 @@ module Contents where
         , ("Self-referenced JSON?", "self-reference-json.md")
         , ("Also on Comonad and Conway's game of life", "conway-comonad.md")
         , ("Dependent Types in TypeScript, Seriously", "dependent-types-typescript-seriously.md")
+        , ("Literal type preservation with TypeScript", "type-preservation.md")
         ]
 
     about :: ContentEntry
