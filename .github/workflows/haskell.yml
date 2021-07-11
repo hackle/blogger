@@ -18,7 +18,6 @@ jobs:
         ghc-version: '8.10.3'
         enable-stack: true
         stack-version: 'latest'
-        key: ${{ runner.os }}-hacks-blogger-cabal-store
     - run: |
         mkdir -p build/src
         stack clean
@@ -32,6 +31,7 @@ jobs:
           ~/.cabal/store
           /home/runner/.stack
           /var/lib/docker/
+        key: ${{ runner.os }}-hacks-blogger-cabal-store
   
     - name: artifact
       uses: actions/upload-artifact@v2
