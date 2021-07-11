@@ -39,10 +39,25 @@ jobs:
         name: function.zip
         path: ./build
         
+  deploy:
+    name: Deploy
+    needs: build
+    environment: 
+      name: Production
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: fetch artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: function.zip
+        path: ./build
+        
     - name: serverless deploy
       uses: serverless/github-action@master
       with:
-        args: deploy function -f haskell --stage prod
+        args: deploy function -f haskell --stage dev
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
