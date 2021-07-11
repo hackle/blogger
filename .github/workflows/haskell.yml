@@ -18,12 +18,6 @@ jobs:
         ghc-version: '8.10.3'
         enable-stack: true
         stack-version: 'latest'
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cabal/store
-          /home/runner/.stack
-          /var/lib/docker/
         key: ${{ runner.os }}-hacks-blogger-cabal-store
     - run: |
         mkdir -p build/src
@@ -32,3 +26,15 @@ jobs:
         cp $(stack path --local-install-root)/bin/bootstrap build
         cp -rf ./src/raw ./build/src
         cd build && zip -r function.zip ./ && rm -rf src && rm bootstrap && cd ..
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cabal/store
+          /home/runner/.stack
+          /var/lib/docker/
+  
+    - name: artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: function.zip
+        path: ./build
