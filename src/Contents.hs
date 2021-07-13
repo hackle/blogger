@@ -60,6 +60,7 @@ module Contents where
         , ("Also on Comonad and Conway's game of life", "conway-comonad.md")
         , ("Dependent Types in TypeScript, Seriously", "dependent-types-typescript-seriously.md")
         , ("Literal type preservation with TypeScript", "type-preservation.md")
+        , ("A truly strongly-typed printf in TypeScript", "printf.md")
         ]
 
     about :: ContentEntry
