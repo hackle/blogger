@@ -78,7 +78,7 @@ Now we are ready for the strongly-typed `printf`.
 
 First thing first, let's agree on the terms: `%s, %d, %D` are called specifiers; the first string parameter to `printf` containing the specifiers is called the "format" or "template", to avoid confusion with the TypeScript type "template literal" let's call it "format". 
 
-First we declare the specifiers to be supported. This is done with a map type that maps specifiers to their corresponding types (I know! It's a tongue twister).
+Next we declare the specifiers to be supported. This is done with a map type that maps specifiers to their corresponding types (I know! It's a tongue twister).
 
 ```TypeScript
 type Specifiers = {
@@ -91,7 +91,7 @@ type Specifiers = {
 type Spec = keyof Specifiers;
 ```
 
-And using the technique we've seen above to locate the specifier in the format string, once found, add the corresponding type to the result array of types. This is done recursively until there is no more specifiers found.
+And using the techniques above, we can locate the specifier in the format string, once found, add the corresponding type to the result array of types. This is done recursively until there is no more specifiers found.
 
 ```TypeScript
 type Values<T extends string> = 
@@ -102,7 +102,7 @@ type Values<T extends string> =
     : [];
 ```
 
-Note it only works if we help the pattern matching by specifying the `%` symbol - my guess is otherwise it's hard to decide where to stop inferring `K` as it's sandwiched by two other inferences with no constraints or delimiters.
+Note it only works if we help the pattern matching by specifying the `%` symbol - my guess is otherwise it's hard to decide where to stop inferring `K`, as it's sandwiched by two other inferences with no constraints or delimiters. With `%` the specifier is "anchored", therefore easier to locate.
 
 A couple of iterations later we are able to ignore unsupported patterns, and account for edge cases like `%%s`. Below is the `printf` in action.
 
