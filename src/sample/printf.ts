@@ -11,19 +11,19 @@ type Values<T extends string> =
     T extends `${infer _}%${infer K}${infer Rest}`
     ? K extends Spec
         ? [ Specifiers[K], ...Values<Rest> ]
-        : Values<Rest>
+        : Values<`${K}${Rest}`>
     : [];
 
-declare function printf<T extends string>(format: T, ...values: Values<T>): string;
+type Formatted<T extends string> = 
+    T extends `${infer Head}%${infer K}${infer Tail}`
+    ? K extends Spec 
+        ? `${Head}${string}${Formatted<Tail>}`
+        : `${Head}%${Formatted<`${K}${Tail}`>}`
+    : T;
 
-const r = printf('this is a %s and it is %d %wyears old, right?%b %D %i %f', 'Hackle', 20, true, new Date());
+declare function printf<T extends string>(format: T, ...values: Values<T>): Formatted<T>;
 
-type Lazy2<T extends string> = 
-    T extends `${infer H1}${infer Rest}`
-    ? H1 extends 'a'|'b'
-        ? 'Caught'
-        : 'Missed'
-    : 'Missed';
+const r = printf('this is a %%s and it is %d %wyears old, right?%b %D %i %f', 'Hackle', 20, true, new Date());
 
 // const { foo, bar } = { foo: 'foo', bar: 1 };
 const [foo, bar] = ['foo', 'bar'];
