@@ -27,4 +27,3 @@ type DistributeArray<T> = T extends [u: infer U, ...v: infer V]
 var x: Distribute<[a: boolean, b: number]>;
 
 mapManyArray((a: string[], b: number[], c: Date[]) => true, ['a', 'b', 'c'], [ 1, 2, 3], [new Date()]);
-

@@ -24,4 +24,4 @@ extra-deps:
 - aws-lambda-haskell-runtime-2.0.1
 resolver: lts-13.25
 docker:
-  enable: true
+  enable: false
