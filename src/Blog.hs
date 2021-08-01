@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Blog where
 
@@ -20,6 +21,7 @@ import Control.Applicative
 import Template
 import Contents
 import Network.URI.Encode (encode)
+import Control.Monad.Reader
 
 type HtmlBody = H.Html
 type ArticleName = String
@@ -28,31 +30,71 @@ type ValidFilePath = FilePath
 type CurrentDirectory = FilePath
 type Styles = Html
 
-loadPage :: FilePath -> Maybe FilePath -> IO Text
-loadPage urlBase path = do
-        single <- loadArticle toLoad
-        renderPage toLoad urlBase $ mconcat (single:sharing:seeAlso:otherBlogEntries)
-        where
-          entry = path >>= \p -> List.find (\e -> eqSlug p e) siteContents
-          (latestArticle:_) = blogContents
-          toLoad = fromMaybe latestArticle entry
-          seeAlso = H.h4 "See also:"
-          sharing = H.p $ shareLinks toLoad
-          otherBlogEntries = List.map mkLink (List.filter (toLoad /=) blogContents)
-          mkLink :: ContentEntry -> H.Html
-          mkLink entry = do
-              H.a ! href (toValue $ getSlug entry) $ toMarkup (getTitle entry)
-              H.br
+data Env = Env {
+  currentDir :: FilePath
+  , urlBase :: FilePath
+  , currentArticle :: ContentEntry
+  , articleDir :: FilePath
+}
 
-articleDir :: IO FilePath
-articleDir = do
-  cd <- getCurrentDirectory
-  return $ cd ++ "/src/raw/"
+loadPage :: String -> CurrentDirectory -> Maybe ArticleName -> IO Text
+loadPage urlBase currentDir requested = do
+  let env = Env {
+    urlBase = urlBase
+    , currentArticle = findFileToLoad requested
+    , currentDir = currentDir
+    , articleDir = currentDir ++ "/src/raw/"
+  } 
+  html <- runReaderT renderPage env
+  return $ LT.toStrict (renderHtml html)
 
-mkArticlePath :: ArticleName -> IO FilePath
-mkArticlePath an = do
-  cd <- articleDir
-  return $ cd ++ an
+renderPage :: (MonadReader Env m, MonadIO m) => m H.Html
+renderPage = do
+    env <- ask
+    main <- loadArticle
+    styles <- loadStyles
+    idrisPrism <- loadIdrisPrism
+    toShare <- sharing
+    others <- otherBlogEntries
+    let toLoad = currentArticle env
+        base = toValue $ urlBase env
+        body = mconcat (main:toShare:seeAlso:others)
+    return $ fromTemplate toLoad base body styles idrisPrism
+
+findFileToLoad :: Maybe ArticleName -> ContentEntry
+findFileToLoad requested =
+  let found = requested >>= \r -> List.find (eqSlug r) siteContents
+  in  fromMaybe (List.head blogContents) found
+
+seeAlso = H.h4 "See also:"
+
+sharing :: (MonadReader Env m) => m H.Html 
+sharing = do 
+  env <- ask
+  let toLoad = currentArticle env
+  return $
+    H.p $ shareLinks toLoad
+
+shareLinks :: ContentEntry -> H.Html
+shareLinks ent = do
+    "Share on "
+    twitterLink ent
+    " "
+    facebookLink ent
+    " "
+    linkedInLink ent
+
+otherBlogEntries :: (MonadReader Env m, MonadIO m) => m [H.Html]
+otherBlogEntries = do
+  env <- ask
+  let current = currentArticle env
+  return $
+    List.map mkLink (List.filter (\e -> e /= current) blogContents)
+
+mkLink :: ContentEntry -> H.Html
+mkLink entry = do
+    H.a ! href (toValue $ getSlug entry) $ toMarkup (getTitle entry)
+    H.br
 
 markdownDef :: MarkdownSettings
 markdownDef = def { msBlockCodeRenderer = renderer }
@@ -60,30 +102,27 @@ markdownDef = def { msBlockCodeRenderer = renderer }
                                        Just l -> H.pre $ H.code H.! A.class_ (H.toValue $ "language-" `mappend` l) $ rendered
                                        Nothing -> H.pre $ H.code $ rendered
 
-loadArticle :: ContentEntry -> IO Html
-loadArticle entry = do
-  fp <- mkArticlePath $ getFile entry
-  content <- IOT.readFile fp
-  return $ mconcat [ pageTitle, markdown markdownDef content ] where
-    pageTitle = H.h1 $ toMarkup (getTitle entry)
+loadArticle :: (MonadReader Env m, MonadIO m) => m H.Html
+loadArticle = do
+  env <- ask
+  let entry = currentArticle env
+      articlePath = articleDir env ++ getFile entry
+      pageTitle = H.h1 $ toMarkup (getTitle entry)
+  content <- liftIO $ IOT.readFile articlePath
+  return $ mconcat [ pageTitle, markdown markdownDef content ]
+    
 
-renderPage :: ContentEntry -> String -> H.Html -> IO Text
-renderPage contentEntry base content = do
-    styles <- loadStyles
-    idrisPrism <- loadIdrisPrism
-    let html = fromTemplate contentEntry (toValue base) content styles idrisPrism
-    return $ LT.toStrict (renderHtml html)
-
-loadIdrisPrism :: IO Html
+loadIdrisPrism :: (MonadReader Env m, MonadIO m) => m H.Html
 loadIdrisPrism = loadFromCurrentDir "/src/raw/prism-idris.js"
 
-loadStyles :: IO Html
+loadStyles :: (MonadReader Env m, MonadIO m) => m H.Html
 loadStyles = loadFromCurrentDir "/src/raw/styles.css"
 
-loadFromCurrentDir :: FilePath -> IO Html
+loadFromCurrentDir :: (MonadReader Env m, MonadIO m) => FilePath -> m H.Html
 loadFromCurrentDir fp = do
-  cd <- getCurrentDirectory
-  body <- IOT.readFile (cd ++ fp)
+  env <- ask
+  let cd = currentDir env
+  body <- liftIO $ IOT.readFile (cd ++ fp)
   return $ toHtml body
 
 twitterLink :: ContentEntry -> H.Html
@@ -102,12 +141,3 @@ linkedInLink entry = do
     let lnk = "http://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwww.hacklewayne.com%2F" ++ getSlug entry
                 ++ "&title=" ++ encode (getTitle entry)
     H.a ! href (toValue lnk) $ "LinkedIn"
-
-shareLinks :: ContentEntry -> H.Html
-shareLinks ent = do
-    "Share on "
-    twitterLink ent
-    " "
-    facebookLink ent
-    " "
-    linkedInLink ent
