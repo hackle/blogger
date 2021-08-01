@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Blog where
 
@@ -34,8 +35,16 @@ data Env = Env {
   currentDir :: FilePath
   , urlBase :: FilePath
   , currentArticle :: ContentEntry
-  , articleDir :: FilePath
 }
+
+class Monad m => MonadBlog m where
+  readAFile :: String -> m LT.Text
+
+instance (MonadIO m) => MonadBlog (ReaderT Env m) where
+  readAFile file = do
+    env <- ask
+    let dir = currentDir env
+    liftIO $ IOT.readFile (dir ++ "/src/raw/" ++ file)
 
 loadPage :: String -> CurrentDirectory -> Maybe ArticleName -> IO Text
 loadPage urlBase currentDir requested = do
@@ -43,12 +52,11 @@ loadPage urlBase currentDir requested = do
     urlBase = urlBase
     , currentArticle = findFileToLoad requested
     , currentDir = currentDir
-    , articleDir = currentDir ++ "/src/raw/"
   } 
   html <- runReaderT renderPage env
   return $ LT.toStrict (renderHtml html)
 
-renderPage :: (MonadReader Env m, MonadIO m) => m H.Html
+renderPage :: (MonadBlog m, MonadReader Env m) => m H.Html
 renderPage = do
     env <- ask
     main <- loadArticle
@@ -60,6 +68,27 @@ renderPage = do
         base = toValue $ urlBase env
         body = mconcat (main:toShare:seeAlso:others)
     return $ fromTemplate toLoad base body styles idrisPrism
+
+loadArticle :: (MonadReader Env m, MonadBlog m) => m H.Html
+loadArticle = do
+  env <- ask
+  let entry = currentArticle env
+      articlePath = getFile entry
+      pageTitle = H.h1 $ toMarkup (getTitle entry)
+  content <- readAFile articlePath
+  return $ mconcat [ pageTitle, markdown markdownDef content ]
+
+loadIdrisPrism :: (MonadReader Env m, MonadBlog m) => m H.Html
+loadIdrisPrism = loadFromCurrentDir "prism-idris.js"
+
+loadStyles :: (MonadReader Env m, MonadBlog m) => m H.Html
+loadStyles = loadFromCurrentDir "styles.css"
+
+loadFromCurrentDir :: (MonadReader Env m, MonadBlog m) => FilePath -> m H.Html
+loadFromCurrentDir fp = do
+  env <- ask
+  body <- readAFile fp
+  return $ toHtml body
 
 findFileToLoad :: Maybe ArticleName -> ContentEntry
 findFileToLoad requested =
@@ -84,7 +113,7 @@ shareLinks ent = do
     " "
     linkedInLink ent
 
-otherBlogEntries :: (MonadReader Env m, MonadIO m) => m [H.Html]
+otherBlogEntries :: (MonadReader Env m) => m [H.Html]
 otherBlogEntries = do
   env <- ask
   let current = currentArticle env
@@ -101,29 +130,6 @@ markdownDef = def { msBlockCodeRenderer = renderer }
   where renderer lang (_,rendered) = case lang of
                                        Just l -> H.pre $ H.code H.! A.class_ (H.toValue $ "language-" `mappend` l) $ rendered
                                        Nothing -> H.pre $ H.code $ rendered
-
-loadArticle :: (MonadReader Env m, MonadIO m) => m H.Html
-loadArticle = do
-  env <- ask
-  let entry = currentArticle env
-      articlePath = articleDir env ++ getFile entry
-      pageTitle = H.h1 $ toMarkup (getTitle entry)
-  content <- liftIO $ IOT.readFile articlePath
-  return $ mconcat [ pageTitle, markdown markdownDef content ]
-    
-
-loadIdrisPrism :: (MonadReader Env m, MonadIO m) => m H.Html
-loadIdrisPrism = loadFromCurrentDir "/src/raw/prism-idris.js"
-
-loadStyles :: (MonadReader Env m, MonadIO m) => m H.Html
-loadStyles = loadFromCurrentDir "/src/raw/styles.css"
-
-loadFromCurrentDir :: (MonadReader Env m, MonadIO m) => FilePath -> m H.Html
-loadFromCurrentDir fp = do
-  env <- ask
-  let cd = currentDir env
-  body <- liftIO $ IOT.readFile (cd ++ fp)
-  return $ toHtml body
 
 twitterLink :: ContentEntry -> H.Html
 twitterLink entry = do
