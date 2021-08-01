@@ -58,16 +58,22 @@ loadPage urlBase currentDir requested = do
 
 renderPage :: (MonadBlog m, MonadReader Env m) => m H.Html
 renderPage = do
-    env <- ask
-    main <- loadArticle
     styles <- loadStyles
     idrisPrism <- loadIdrisPrism
-    toShare <- sharing
-    others <- otherBlogEntries
+    body <- articleBody
+    env <- ask
     let toLoad = currentArticle env
         base = toValue $ urlBase env
-        body = mconcat (main:toShare:seeAlso:others)
     return $ fromTemplate toLoad base body styles idrisPrism
+
+articleBody :: (MonadReader Env m, MonadBlog m) => m H.Html
+articleBody = do
+    env <- ask
+    main <- loadArticle
+    toShare <- sharing
+    others <- otherBlogEntries
+    return $ mconcat (main:toShare:seeAlso:others)
+
 
 loadArticle :: (MonadReader Env m, MonadBlog m) => m H.Html
 loadArticle = do
