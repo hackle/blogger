@@ -49,7 +49,88 @@ string MakeGreeting(string name)
 
 This might look obvious, but the difference between statements and expressions can be far-reaching: expression-driven code does not only stand well against code deletion, it is also intrinsically easier to compose and therefore reason with.
 
-## all code is not written equal
+Let's look at another example.
+
+```CSharp
+Response Handle()
+{
+    var request = new SomeRequest { ... };
+    EnrichRequest(request);     // not safe 
+    ValidateRequest(request);   // not safe
+    return SendRequest(request);
+}
+```
+
+Really, statements are poor defense against code deletion. It would be a different story if a conversion to expressions is carried out as below,
+
+```CSharp
+Response Handle()
+{
+    var request = new SomeRequest { ... };
+    FullRequest fullRequest = EnrichRequest(request);     // safe 
+    ValidRequest validRequest = ValidateRequest(fullRequest);   // safe
+    return SendRequest(validRequest);
+}
+```
+
+With a few descriptive types to restrict pre- and post-conditions, this is obviously safe from accidental deletion. There is a hidden fact here - expressions are easily chained together, so the above method can be turned into a one-liner.
+
+```CSharp
+Response Handle()
+{
+    return SendRequest(ValidateRequest(EnrichRequest(new SomeRequest { ... })));
+}
+```
+
+It's clear from the chained expression that none of middle steps can be removed, or we risk breaking the chain.
+
+The sharp-eyed reader would have noticed - there is no error handling. That indeed is a big problem for composition. In a language like C#, it's possible to maintain such pleasant style by allowing something fishy - throwing exceptions anywhere in the code. A more potent solution is available in the like of Haskell, where we can write,
+
+```Haskell
+handle :: Either Error Response
+handle = do
+    let request = SomeRequest { ... }
+    full    <- enrich request
+    valid   <- validate full
+    return $ send valid
+```
+
+## all code is not typed equal
+
+A good type system can be the strongest yet most economical defense against code deletion.
+
+For example, to create an object of getters from an object of primitive values in TypeScript, this is a valid solution,
+
+```TypeScript
+type Values = { foo: string, bar: number };
+const vals: Values = { 
+    foo: 'hello', 
+    bar: 88 
+};
+
+function toGetters(v: Values) {
+    return {
+        foo: () => v.foo,   // not safe
+        bar: () => v.bar    // not safe
+    };
+}
+```
+
+However, `toGetters` can not defend against accidental deletion as there are no constraints saying "there must be field foo and bar, both of type X".
+
+Full defense is available below,
+
+```TypeScript
+type Getters = { [K in keyof Values]: () => Values[K] };
+function toGettersSafe(v: Values): Getters {
+    return {
+        foo: () => v.foo,   // safe
+        bar: () => v.bar    // safe
+    };
+}
+```
+
+Deleting any of the "// safe" lines will result in a compiler error, as the `Getters` type ensures both "foo" and "bar" MUST be present in the return value.
 
 ## all code is not bound equal
 
@@ -68,3 +149,11 @@ It's not uncommon to see the use of so called "in-process messaging" architectur
 Imagine there is some sort of binding for the "query" to the "handler" to achieve some allegedly good "loose coupling". The problem is, one can now accidentally delete the binding, and no warning will be given until code is executed.
 
 By now you would have seen the pattern - smart late-binding for the sake of "loose coupling" is not always our best friend. In fact, anything that is so smart to elude the scrutiny of the compiler kind of defeats the purpose of using a statically checked language, and should be watched out for, if not actively rejected. Yes, I do mean it, IoC containers are bad.
+
+## in summary
+
+My preference is clear here: use expressions over statements; bind early, not late; use static over dynamic typing when there is a choice; and try to add stronger type constraints whenever possible.
+
+These are done not just for bias or aesthetics (it is essential, make no mistake), but also for good economics. We can get away with writing fewer tests, which is also code and need to be maintained. But more deeply, such alternatives are usually better defense against not just accidental code deletion, but also bad code and illegal state.
+
+After all, unit testing is not the only, let alone the best way to ensure correctness. It is a good last resort, albeit a bit heavy-handed, and should be reserved for cases of true complexity.

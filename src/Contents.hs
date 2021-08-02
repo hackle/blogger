@@ -1,5 +1,5 @@
 module Contents where
-    
+
 import Data.Char
 import Data.List.Extra (stripSuffix, words)
 import Data.Maybe (fromMaybe)
@@ -62,6 +62,7 @@ blogContents = reverse $ toEntry <$> [
     , ("Dependent Types in TypeScript, Seriously", "dependent-types-typescript-seriously.md")
     , ("Literal type preservation with TypeScript", "type-preservation.md")
     , ("A truly strongly-typed printf in TypeScript", "printf.md")
+    , ("MUST unit test! Or what if my code is deleted?", "what-if-my-code-is-deleted.md")
     ]
 
 about :: ContentEntry
