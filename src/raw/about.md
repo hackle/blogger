@@ -12,9 +12,12 @@ If you ever want to get in touch, this is my email address but reversed: moc.lia
 
 I am available for speaking at conferences, meetups or workplaces when there is genuine interest. Below are some of the current topics,
 
+## I fought the law and the law won
+A satirical account of introspection, thoughts, ideas and rant about how neglecting the inevitable in software development can lead to situations not exactly fun.
+
 ## Test cheap, code simple (also called "Pragmatic unit testing now!")
 
-This is a workshop that I can run for your team to introduce a few very simple ideas and techniques to make unit testing more useful, fun and practical.
+A workshop to introduce a few very simple ideas and techniques to make unit testing more useful, fun and practical.
 
 ## CBD programmers: Clearly Brutally Declaratively
 
@@ -24,15 +27,12 @@ A hands-on intro to declarative ways of thinking and programming.
 
 An brief introduction to problem solving with parsers when regular expressions get stretched.
 
-## Off on the right foot with React and TypeScript
+## React and TypeScript Thinker-Doers
 
-A full-day workshop to get you started properly and strongly with React and TypeScript, with a bias towards first-principle thinking.
+A series of 8 workshops to get you started properly and strongly with React and TypeScript, with a bias towards first-principle thinking.
 
-### A few things about unit testing
-Thinking about unit testing from first principle - and brace for the findings!
+## TypeScript Power-users
+A series of 4 workshops focussing on coding in functional style TypeScript.
 
-### Immutability for free! (use lens in TypeScript for the win)
+## Immutability for free! (use lens in TypeScript for the win)
 We look at the concept and implementation of lens, and see how it can be used in day-to-day scenarios for fun and profit.
-
-### You are but one key word away from functional programming
-An easy and practical way to get everyday Object-Oriented programmers into functional programming. No joke! You'll get it.
