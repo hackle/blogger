@@ -1,5 +1,8 @@
 For me this blog is not just some place I post my learnings and ideas, but also somewhere I can put them into practice. Here is a brief overview of what I used for this blog, and some notable facts.
 
+## Update August 3, 2021
+Tiredness with manually deploying this blog and keeping AWS credentials on my machine led me to bite the bullet and adopt GitHub Actions for building and publishing. I was pleasantly surprised how flat and smooth the learning curve is and I really appreciated the open-source integrations available for various aspects of the pipeline. Even for building a Haskell application. Sure it's a sign of prime time to come?
+
 ## Update April 12, 2020
 I've been procrastinating on switching this blog to using [aws-lambda-haskell-runtime](http://hackage.haskell.org/package/aws-lambda-haskell-runtime). Compared to [serverless-haskell](https://github.com/seek-oss/serverless-haskell), It has no dependency on node, and feels more "native" to me.
 
