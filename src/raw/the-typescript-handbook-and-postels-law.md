@@ -22,9 +22,9 @@ Feigned frustration (if not also sarcasm) aside, there are actually solid reason
 But first thing first, let me introduce the parties involved, they are,
 
 - the "Users" who will use my code,
-- and I am the "Author" who writes code (either to satisfy the needs of the "User", or to provide a functionality)
+- and I am the "Author" who writes code for the Users to use
 
-# a text-book `greet`
+# A text-book `greet`
 
 As the Author I write this function,
 
@@ -38,7 +38,7 @@ Seeing the type `greet(name: string): string`, the Users can happily call `conso
 
 # A real-life `greet`
 
-Real-life Users may have (they always do) a different requirement for making a greeting. Due to network latency (and maybe their excellent use of micro-services), building a greeting message can take indeterminate amount of time. As a friendly (and money-loving) Author I find that reasonable and am happy to oblige.
+Real-life Users may have (they always do) different requirements for making a greeting. Due to network latency (and maybe their excellent use of micro-services), building a greeting message can take indeterminate amount of time. As a friendly (and money-loving) Author I find that reasonable and am happy to oblige.
 
 ```TypeScript
 function greetReal(name: string, whenReady: (message: string) => void): void {
@@ -53,13 +53,14 @@ Seeing the new type `greetReal(name: string, whenReady: (message: string) => voi
 
 Now we can look at the recommendation from the handbook - all it says is, as the **Author** of `greetReal`, I should know VERY WELL there is a `message` to give back, and it's confusing and therefore bad design to use an optional `message?`. 
 
-In code it's even clearer than words, if we try it,
+In code it's possibly clearer than in word.
 
 ```TypeScript
 function greetReal(name: string, whenReady: (message?: string) => void): void {
     const message = `Hello ${name}`;
 
-    // by now I know for certain that I have a message, and it's not cool to say "I may have a message for you..."
+    // by now I know for certain that I have a message, 
+    // and it's not cool to say "I MAY have a message for you..."
     whenReady(message);
 }
 ```
@@ -67,18 +68,18 @@ function greetReal(name: string, whenReady: (message?: string) => void): void {
 One will argue - certainly there are times the Author is unsure if there is a message or not, for example, a greeting cannot be made if a dependent service fails.
 
 ```
-    const greeting: string | undefined = getTodaysGreetingFromUnreliableService();
+const greeting: string | undefined = getGreetingFromService();
 
-    // fails to get greeting
-    if (greeting == null) {
-        whenReady();
-    }
+// fails to get greeting
+if (greeting == null) {
+    whenReady();
+}
 
-    const message = `${greeting} ${name}`;
-    whenReady(message);
+const message = `${greeting} ${name}`;
+whenReady(message);
 ```
 
-This might be reasonable, but I would counter this should be better designed and handled with another call-back, such as 
+This might be reasonable, but I would counter it should be better designed and handled with another call-back, such as 
 
 ```TypeScript
 function greetReal(
@@ -88,11 +89,11 @@ function greetReal(
 ): void
 ```
 
-This will remind us of [the likes of `Promise`](http://definitelytyped.org/docs/es6-promises--es6-promises/classes/promise.html), which has `constructor(callback: (resolve: (result: R) => void, reject: (error: any) => void) => void): Promise`.
+A good reminder of [the likes of `Promise`](http://definitelytyped.org/docs/es6-promises--es6-promises/classes/promise.html), which has `constructor(callback: (resolve: (result: R) => void, reject: (error: any) => void) => void): Promise`.
 
 What about the original `greet`? If we try to express a failure case with the return type, it becomes `greet(name: string): string | undefined`. The Users can guess correctly that `undefined` indicates failure and handle it accordingly, however, I personally find the callback style expresses the intent of the Author more clearly.
 
-While passing functions / call-backs is not everyone's cup of tea, it does pose the question of expressivity, which I tried to explain in a previous post [Don't pattern match, just pass functions](dont-pattern-match-just-pass-function). (We'll agree case-splitting on `string | undefined` is a form of pattern matching).
+While passing functions / call-backs is not everyone's cup of tea, it does pose the question of expressivity, which I tried to explain in a previous post [Don't pattern match, just continue!](dont-pattern-match-just-pass-function). (We'll agree case-splitting on `string | undefined` is a form of pattern matching).
 
 # Leaving out `name`
 
@@ -100,13 +101,13 @@ Let's get back to the TypeScript handbook, which says
 
 > it’s always legal to provide a callback that accepts fewer arguments
 
-Which seems confusing too, so let's put it in code. 
+How is this possible? Let's put it in code. 
 
-To call `greet(name: string): string` the Users must provide a `name`, which is required, as in `greet('George')`.
+To recap, in order to call `greet(name: string): string` the Users must provide a `name`, which is required, as in `greet('George')`.
 
-On the other hand, to call `greetReal(name: string, whenReady: (message: string) => void): void`, the Handbook says it's also fine to write `greetReal('George', () => console.log("..."))`. Why? 
+On the other hand, to call `greetReal(name: string, whenReady: (message: string) => void): void`, the Handbook says it's "always legal" to write `greetReal('George', () => console.log("..."))`. Why? 
 
-One way to look at it, is if the `message` is not used at all, there is no reason to include it in the call-back. So these two are effectively the same.
+One way to look at it, is through the scenario when `message` is not used in the call-back, then there should be no need to include it as a parameter. Below we have two calls of `greetReal` that are effectively the same.
 
 ```TypeScript
 // message is not used at all
@@ -118,11 +119,13 @@ greetReal('George', () => console.log("I don't care"));
 
 The `message` is thrown away, a bit wasteful, but no harm is done. 
 
-You'll notice the same reasoning applies to any language, however, some languages may be more strict and require us to type out `(message: string)` although it's never used.
+You'll notice the same reasoning should apply to any language, however, some are more strict and require us to type out `(message: string)` even when it's never used.
 
 # Contra-variance
 
-Some readers must have noticed `message` is contra-variant to the call-back `(message: string) => void`, or it's in a *negative* position. This means to call `greetReal`, the Users can vary the type of `message` to be any more general types. As it's hard to find a good super type of `string` so let's change it up a little to use the typical `Tiger` which is a sub-type of `Animal`.
+Some readers must have noticed `message` is contra-variant to the call-back `(message: string) => void`, or it's in a *negative* position. This means to call `greetReal`, the Users can vary the type of `message` to be a more general type than `string`. 
+
+As it's hard to find a good super type for `string`, let's change the example up a little to use the typical `Tiger` which is a sub-type of `Animal`.
 
 ```TypeScript
 interface Animal { name: string };
@@ -134,9 +137,11 @@ function greetTiger(name: string, whenReady: (tiger: Tiger) => void): void {
 }
 ```
 
-Being contra-variant means it's possible to write `greetTiger('Howler', (tiger: Animal) => console.log(tiger.name))`. We are considering a `Tiger` as an `Animal` here, no harm done.
+Being contra-variant means it's possible to write `greetTiger('Howler', (tiger: Animal) => console.log(tiger.name))`. This may look strange at first, but all we are doing here is calling a `Tiger` an `Animal`, no harm done.
 
-How does this relate to `greetTiger('Howler', () => console.log('do not care'))`? They can be related if we are willing to take a stretch: any parameter that's not used at all can be considered of type `I don't care`, which is the super type of everything, not surprisingly, including `Tiger`. Now we can write `greetTiger('Howler', (tiger: I dont care) => console.log('do not care'));`. And if I don't care, I can certainly leave it out?
+How does this relate to `greetTiger('Howler', () => console.log('do not care'))`? 
+
+Well, they can be related if we are willing to take a stretch: any parameter that's not used at all can be considered of type `IDontCare`, which is the super type of everything. As `IDontCare` is a super type of `Animal`, just like `Animal` is a super type of `Tiger`,  we are free to write `greetTiger('Howler', (tiger: IDontCare) => console.log('do not care'));`, which by definition is equivalent to `greetTiger('Howler', () => console.log('do not care'));`.
 
 # Who calls?
 
@@ -144,15 +149,17 @@ Yet another angle is looking at who calls a function, the User or the Author?
 
 When the Author writes `greet(name: string): void`, it's for the Users to call `greet` by providing `name`. Plain and simple.
 
-Now the Author writes `function greetReal(name: string, whenReady: (message: string) => void): void`, again the Users call `greetReal` with a `name`, but they must also provide `whenReady`, which is a function that will be called by - you guessed it - the Author. It's the reverse!
+Now the Author writes `function greetReal(name: string, whenReady: (message: string) => void): void`, again the Users call `greetReal` with a `name`, but they must also provide `whenReady`, which is a function that will be called by - you guessed it - the Author. It's the other way around!
 
-Here is the deal: when PROVIDING values for parameters to call a function, it's always safe to provide values of MORE STRICT types, as such `Tiger` for `Animal`.
+Here is the deal: when PROVIDING values for parameters to call a function, it's always safe to provide values of MORE STRICT types, such as `Tiger` for `Animal`.
 
-On the other hand, when RECEIVING values for parameters, it's always safe to be loose, as in `(message: Animal) => void` for `(message: Tiger) => void`.
+On the other hand, when RECEIVING values for parameters, it's always safe to be loose, as in `(tiger: Animal) => void` for `(tiger: Tiger) => void`. Note the Users are on the RECEIVING end, as the `tiger` value will be PROVIDED by the Author. Let that sink in, it's key!
 
-This is famously phrased as [Postel's law](https://en.wikipedia.org/wiki/Robustness_principle).
+This constraint may look like a minder bender, but it's actually key to the design of good software, and it's famously phrased as [Postel's law](https://en.wikipedia.org/wiki/Robustness_principle).
 
 > be conservative in what you do, be liberal in what you accept from others
+
+(Notice the similarity to "be STRICT in what you PROVIDE, be LOOSE in what you RECEIVE"?)
 
 If you've made it this far, then it should come as no surprise this law is also stated as,
 
