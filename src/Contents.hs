@@ -63,6 +63,7 @@ blogContents = reverse $ toEntry <$> [
     , ("Literal type preservation with TypeScript", "type-preservation.md")
     , ("A truly strongly-typed printf in TypeScript", "printf.md")
     , ("On accidental code deletion as reason for unit testing", "what-if-my-code-is-deleted.md")
+    , ("The TypeScript Handbook, Optional Parameters and Postel's Law", "the-typescript-handbook-and-postels-law.md")
     ]
 
 about :: ContentEntry
