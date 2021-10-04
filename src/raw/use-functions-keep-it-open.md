@@ -1,4 +1,4 @@
-Dependency hell, a typical example of accidental complexity in software engineering, has annoyingly and unfortunately become some sort of "advanced knowledge". Solutions mostly focus on the consumers' side, varying from overly-specific, convoluted to hacky. A truly depressing state of affairs. 
+Dependency hell, a typical example of accidental complexity in software engineering, has annoyingly and unfortunately become some sort of "advanced problem". Solutions mostly focus on the consumers' side, varying from overly-specific, convoluted to hacky. A truly depressing state of affairs. 
 
 However, if we look further up the chain at when a library (or package) is designed and created, quite a lot of this annoyance can be solved trivially, and the solution is only so glaringly available and laughably simple. You have guessed, more often than not, "function" is the answer, again!
 
@@ -10,16 +10,16 @@ Say I made a lovely server side application A, which uses library B and library 
 - B uses D v2.0.0
 - C uses D v1.0.0
 
-If your package manager is not NPM who allows transitive dependencies to be hidden behind the direct dependency, but something like .Net that only allows a single version of D in the output, congratulations, you are in dependency hell.
+If your package manager is not NPM who allows transitive dependencies to be hidden behind the direct dependency, but something like .NET that only allows a single version of D in the output, congratulations, you are in dependency hell.
 
 # what's the REAL dependency
 
-The question to ask, is what is the real dependency? What's the functionality being used from A, B and C?
+The question to ask, is what is the REAL dependency? Or, what's the KEY functionality used by A, B and C?
 
 More often than not, the answer is simpler than expected: if D is used so much, it is possibly some sort of cross-cutting concern. Think about logging, error handling, HTTP call, or as an example, serialisation, which can be boiled down to a simple function.
 
 ```CSharp
-// no generics here as that on a lone Func value is actually hard!
+// no generics here as that on a lone Func value is actually hard
 Func<object, string> Serialize;
 ```
 
@@ -42,12 +42,12 @@ class LibB
     void SendHttpRequest()
     {
         var body = this._config.Serialize(dto);
-        // ... sends body via HTTP
+        // ... sends request with body via HTTP
     }
 }
 ```
 
-Now application A uses library B as,
+Now application A uses library B as below,
 
 ```CSharp
 var libD = new LibD();
@@ -68,9 +68,9 @@ var libC = new LibC(libBConfig);
 libC.Hurray();
 ```
 
-What has happened here? Surprisingly, `LibD` is only ever used in application A; library B and C each requires `Serialize` through their OWN configuration types, and are both free of library D. Dependency hell is no more!
+What has happened here? Surprisingly, `LibD` is only ever used in application A; library B and C each receives `Serialize` through its OWN configuration types, and are both free of direct dependency on library D. Dependency hell is no more!
 
-This is it, this is the trick. Pass dependencies in as function values.
+This is it, this is the trick! Pass dependencies in as function values.
 
 # is it first class?
 
@@ -104,20 +104,20 @@ class LibBConfig
 
 It simply wraps around `Serialize`, a field of type `Func<object, string>`. ANY function of this type can be assigned to `Serialize`, no matter what class or interface it lives in. That's why we could configure to use library D for library B and library C; in another word, `Serialize` is OPEN. If library B and library C both require `Func<object, string>`, there is no need to implement two interfaces; we simply pass along `LibD.Serialize`.
 
-Are interfaces first-class? Well, can a class conditionally implement an interface? Usually not. So NO is most likely the answer.
+Are interfaces first-class? From the angle of "implementing" an interface, usually, a class cannot conditionally implement an interface. So NO is most likely the answer.
 
 # recommendations
 
 If you are authoring a library, either for public or private use, think about library / package dependencies.
 
-Firstly, there should be rigour in deciding what should be considered a dependency? Is it foundational to the functionality? Or is it something the library **uses** and can be swapped out for something else?
+Firstly, there should be rigour in deciding what should be considered a dependency? Is it foundational to the functionality? Or is it non-essential, but something the library **uses** and can be swapped out for something else?
 
 Understanding once a dependency is introduced, the constraints can be carried on to the users, and can further constrain their options and make their lives hard.
 
 Think twice before you require your users,
 
 - to use a specific version of another library
-- not nearly as bad, to implement a interface to satisfy requirements
+- (not nearly as bad) to implement an interface to satisfy requirements
 - worst of all, to require the use of opinionated dependency injector / IoC container to wire up the interfaces and implementations in order to use the library
 
 Instead,
