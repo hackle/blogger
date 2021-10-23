@@ -1,4 +1,4 @@
-It's may seem obvious where unit tests should live, until we start looking at what options are available - and there come the pleasant surprises.
+It's may seem obvious where unit tests should live, until we start looking at the alternatives - and there come the pleasant surprises.
 
 For succinctness' sake, let's use "code" for "code under test".
 
@@ -7,16 +7,16 @@ For succinctness' sake, let's use "code" for "code under test".
 Having spent a lot of time on C#, I used to take it for granted that all tests, including unit tests, deserve their own separate project.
 
 This can look completely natural but sooner or later there will be awkwardness. Typically, 
-* the folder/file structure of the unit test project will mirror those projects being tested, if a file is moved/created in the source projects, so must it be in the test project
-* usually new dependencies in the source project will also come into the test project, and the dependencies must be kept in sync
-* for special tests (whether they are "unit tests" can be debated) that rely on the configurations of the "current" project being the startup/entry point, such configurations must also be available in the test project
+- the folder/file structure of the unit test project will mirror those projects being tested, if a file is moved/created in the source projects, so must it be in the test project
+- usually new dependencies in the source project will also come into the test project, and the dependencies must be kept in sync
+- for special tests (whether they are "unit tests" can be debated) that rely on the configurations of the "current" project being the startup/entry point, such configurations must also be available in the test project
 These symptoms are all some form of duplication. As the size of the projects grows, so do the symptoms and the burden of maintenance. 
 
 # test alongside code 
 When I worked on a front-end (AngularJS) codebase, it was pleasant to find unit tests (specs) are placed alongside code under test. This greatly increases the visibility and significance of tests in a codebase. These questions are answered trivially,
-* are there tests for `foo.js` == is there a `foo.spec.js` right next to it?
-* should I take unit testing seriously? Looks like I must - they are right in my face so they must be first-class!
-* is it easy to move both code and tests? Sure, they live right next to each other.
+- are there tests for `foo.js` == is there a `foo.spec.js` right next to it?
+- should I take unit testing seriously? Looks like I must - they are right in my face so they must be first-class!
+- is it easy to move both code and tests? Sure, they live right next to each other.
 
 Later I found it's also conventional to have a `__test__` folder within each folder to house tests. Such seemingly innocuous naming in effect pushes tests a step towards obscurity, and it's a form of separation so it can suffer from some of the symptoms as with separate projects.
 
@@ -54,13 +54,13 @@ def factorial(n):
     return result
 ```
 
-[Wikipedia](https://en.wikipedia.org/wiki/Doctest#Literate_programming_and_doctests) also lists out doctest implementation in other language. For example, Rustlang features [full supports](https://doc.rust-lang.org/1.7.0/book/testing.html#documentation-tests) plus a great summary,
+[Wikipedia](https://en.wikipedia.org/wiki/Doctest#Literate_programming_and_doctests) also lists out doctest implementation in other languages. For example, Rustlang features [full support](https://doc.rust-lang.org/1.7.0/book/testing.html#documentation-tests) plus a great summary,
 
 > Nothing is better than documentation with examples. Nothing is worse than examples that don't actually work...
 
-But Rustlang supports another alternative that's equally exciting...
+But Rustlang supports yet another alternative that's equally exciting...
 
-# Rust
+# Rust!
 
 Consider this idiomatic code snippet from the [documentation of Rust](https://doc.rust-lang.org/1.7.0/book/testing.html#the-tests-module),
 
@@ -100,19 +100,21 @@ public static class Ext
 }
 ```
 
-This really brings all the goodies together - code and test as one, and maintenance becomes a joy.
+This really brings all the goodies together - code and test as one, and maintenance becomes a joy. Why look elsewhere?!
 
 There are a few restrictions - for good reasons.
 
-* the method under test must be static
-* expose all input as parameters, and all output as return. Implicit input (as from constructors via popular "dependency injection") or output (side effects) won't play too nicely with this style. 
+- the method under test must be static
+- expose all input as parameters, and all output as return value. Implicit input (as from constructors via popular "dependency injection") or output (side effects) won't play too nicely with this style. 
 
 In another word, it's only possible with pure functions - which are the best type of code.
 
 But we need not restrict ourselves here. Putting tests (either inlined or as separate test suites) alongside classes under test affords us many extra benefits on top of those above,
 
-* test shares the same config (consider IoC, App / web config) as code because they live in the same assembly
-* no need to duplicate and manually keep dependencies in sync across multiple projects 
-* needing to run diagnostics (such as to check compatibility of running environments)? Ship your tests! Either to the server or to the library users. 
+- test shares the same config (consider IoC, App / web config) as code because they live in the same assembly
+- no need to duplicate and manually keep dependencies in sync across multiple projects 
+- needing to run diagnostics (such as to check compatibility of running environments)? Ship your tests! Either to the server or to the library users. 
 
-We get all these benefits without introducing new libraries or dependencies, just by bringing existing code and test much closer. Why not?
+One would argue the size of the package may increase with all tests being included. Sure thing if a few extra MBs really make a difference, as it may be for drivers, embedded or some systems software. But is it really the case for web, desktop or even mobile applications?
+
+We get all these benefits by bringing existing code and test closer, without introducing new libraries or dependencies. Why not?

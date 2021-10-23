@@ -66,7 +66,7 @@ blogContents = reverse $ toEntry <$> [
     , ("The TypeScript Handbook, Optional Parameters and Postel's Law", "the-typescript-handbook-and-postels-law.md")
     , ("Linq is Lazier, not by too much, just within Range", "linq-gets-lazier.md")
     , ("Dependency hell? Not if we use functions! For library authors", "use-functions-keep-it-open.md")
-    , ("Your tests may belong else where", "where-have-all-the-tests-gone.md")
+    , ("Your tests may belong elsewhere", "where-have-all-the-tests-gone.md")
     ]
 
 about :: ContentEntry
