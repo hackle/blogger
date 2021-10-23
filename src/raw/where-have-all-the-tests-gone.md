@@ -7,13 +7,16 @@ For succinctness' sake, let's use "code" for "code under test".
 Having spent a lot of time on C#, I used to take it for granted that all tests, including unit tests, deserve their own separate project.
 
 This can look completely natural but sooner or later there will be awkwardness. Typically, 
+
 - the folder/file structure of the unit test project will mirror those projects being tested, if a file is moved/created in the source projects, so must it be in the test project
 - usually new dependencies in the source project will also come into the test project, and the dependencies must be kept in sync
 - for special tests (whether they are "unit tests" can be debated) that rely on the configurations of the "current" project being the startup/entry point, such configurations must also be available in the test project
+
 These symptoms are all some form of duplication. As the size of the projects grows, so do the symptoms and the burden of maintenance. 
 
 # test alongside code 
 When I worked on a front-end (AngularJS) codebase, it was pleasant to find unit tests (specs) are placed alongside code under test. This greatly increases the visibility and significance of tests in a codebase. These questions are answered trivially,
+
 - are there tests for `foo.js` == is there a `foo.spec.js` right next to it?
 - should I take unit testing seriously? Looks like I must - they are right in my face so they must be first-class!
 - is it easy to move both code and tests? Sure, they live right next to each other.
